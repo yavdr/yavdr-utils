@@ -1,0 +1,17 @@
+#!/bin/bash
+
+touch /var/lib/yavdrdb.hdf
+for i in /usr/share/yavdr/defaults/*.hdf; do
+  while read LINE ; do 
+	dbset "$LINE"
+  done < $i
+done
+
+language=`echo $LANG | cut -d_ -f1`
+if [ -f /usr/lib/yavdrweb/static/locale/$language.js ]; then 
+  dbset "webfrontend.language=$language"
+else 
+  dbset "webfrontend.language=en"
+fi
+
+exit 0
