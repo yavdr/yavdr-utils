@@ -1,0 +1,5 @@
+description     "Xterm Daemon"
+author          "Steffen Barszus <steffenbpunkt@gmail.com>"
+
+exec su -c "DISPLAY=:1 xterm -e su <?cs var:user ?>" vdr
+
