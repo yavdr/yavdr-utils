@@ -1,0 +1,10 @@
+eval ulimit -c unlimited
+
+su -c "python /usr/share/xbmc/FEH.py --standalone --lircdev /var/run/lirc/lircd" vdr
+RET=$?
+if [ $RET -ne 0 ]; then
+  exit $RET
+fi
+
+exec su -c "/usr/lib/xbmc/xbmc.bin --standalone --lircdev /var/run/lirc/lircd" vdr
+end script
