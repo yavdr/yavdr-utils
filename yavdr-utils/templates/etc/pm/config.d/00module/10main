@@ -1,3 +1,0 @@
-SLEEP_MODULE="<?cs var:system.sleep.module ?>"
-ADD_PARAMETERS="<?cs var:system.sleep.options ?>"
-

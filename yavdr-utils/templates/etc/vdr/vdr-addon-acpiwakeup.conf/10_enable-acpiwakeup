@@ -1,3 +1,0 @@
-# Activate/deactivate ACPIWakeup with yes/no:
-ACPI_ENABLED=<?cs if:system.wakeup.method == "acpi" ?>"yes"<?cs else ?>"no"<?cs /if ?>
-
