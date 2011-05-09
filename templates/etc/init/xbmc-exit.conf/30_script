@@ -1,0 +1,18 @@
+script
+
+logger -t "XBMC" "XBMC exit with exit status $EXIT_STATUS, $EXIT_SIGNAL, ENV: $(env) ."
+case $EXIT_STATUS in
+    64|66)
+	<?cs if:(vdr.backend == "disabled") ?>
+        poweroff
+        <?cs else ?>
+        svdrpsend HITK Power || /bin/true
+	<?cs /if ?>
+        ;;
+    *)
+        initctl emit reset-display-rate
+        initctl emit vdr-frontend-restart
+        ;;
+esac
+
+end script
