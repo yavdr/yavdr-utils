@@ -2,15 +2,17 @@
 
 CARD="`cat /proc/asound/cards | grep "\[NVidia" | cut -b2`"
 
-amixer set -q 'Master' unmute
-amixer set -q 'IEC958' unmute
-amixer set -q 'IEC958,1' unmute
-amixer set -q 'PCM' unmute
+amixer set -q 'Master' unmute &> /dev/null
+amixer set -q 'IEC958' unmute &> /dev/null
+amixer set -q 'IEC958,1' unmute &> /dev/null
+amixer set -q 'PCM' unmute &> /dev/null
 
-amixer set -q -c$CARD 'IEC958' unmute
-amixer set -q -c$CARD 'IEC958,1' unmute
-amixer set -q -c$CARD 'IEC958,2' unmute
-amixer set -q -c$CARD 'IEC958,3' unmute
+if [ -n "$CARD" ]; then
+amixer set -q -c$CARD 'IEC958' unmute &> /dev/null
+amixer set -q -c$CARD 'IEC958,1' unmute &> /dev/null
+amixer set -q -c$CARD 'IEC958,2' unmute &> /dev/null 
+amixer set -q -c$CARD 'IEC958,3' unmute &> /dev/null
+fi
 
 alsactl store
 
