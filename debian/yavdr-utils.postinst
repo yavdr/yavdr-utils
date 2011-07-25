@@ -28,6 +28,9 @@ case "$1" in
                 vdr-plugin-mplayer-trigger)
                     signal-event mplayer-plugin
                     ;;
+                vdr-plugin-picselshow-trigger)
+                    signal-event picselshow-plugin
+                    ;;
                 vdr-plugin-yaepghd-trigger)
                     signal-event yaepghd-plugin
                     ;;
