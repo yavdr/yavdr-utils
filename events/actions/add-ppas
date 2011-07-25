@@ -13,6 +13,12 @@ deb-src http://ppa.launchpad.net/yavdr/testing-vdr/ubuntu natty main
 deb-src http://ppa.launchpad.net/yavdr/testing-xbmc/ubuntu natty main
 deb-src http://ppa.launchpad.net/yavdr/testing-yavdr/ubuntu natty main
 EOF
+
+cat <<EOF >/etc/apt/sources.list.d/ubuntu-partner.list
+deb http://archive.canonical.com/ubuntu natty partner
+deb-src http://archive.canonical.com/ubuntu natty partner
+EOF
+
 cat <<EOF | apt-key add -
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: SKS 1.0.10

@@ -25,6 +25,15 @@ case "$1" in
                 yavdr-addons-update)
 	            signal-event addons-update
                     ;;
+                vdr-plugin-mplayer-trigger)
+                    signal-event mplayer-plugin
+                    ;;
+                vdr-plugin-picselshow-trigger)
+                    signal-event picselshow-plugin
+                    ;;
+                vdr-plugin-yaepghd-trigger)
+                    signal-event yaepghd-plugin
+                    ;;
             esac
         done
 	;;
