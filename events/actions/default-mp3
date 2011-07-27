@@ -6,4 +6,4 @@ fi
 
 export LANG
 
-process-template /etc/vdr/plugins/musicsources.conf
+process-template /etc/vdr/plugins/mp3sources.conf
