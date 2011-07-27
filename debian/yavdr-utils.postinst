@@ -37,7 +37,9 @@ case "$1" in
                vdr-plugin-mp3-trigger)
                     signal-event mp3-plugin
                     ;;
-
+               vdr-plugin-music-trigger)
+                    signal-event music-plugin
+                    ;;
             esac
         done
 	;;

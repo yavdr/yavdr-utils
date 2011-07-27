@@ -4,3 +4,4 @@ interest vdr-plugin-yaepghd-trigger
 interest vdr-plugin-mplayer-trigger
 interest vdr-plugin-picselshow-trigger
 interest vdr-plugin-mp3-trigger
+interest vdr-plugin-music-trigger
