@@ -31,6 +31,9 @@ case "$1" in
                 vdr-plugin-picselshow-trigger)
                     signal-event picselshow-plugin
                     ;;
+                vdr-plugin-image-trigger)
+                    signal-event image-plugin
+                    ;;
                 vdr-plugin-yaepghd-trigger)
                     signal-event yaepghd-plugin
                     ;;
