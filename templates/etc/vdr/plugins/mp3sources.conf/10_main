@@ -1,4 +1,1 @@
-/media/<?cs var:_("Video") ?>/;<?cs var:_("Video") ?>;0
-/srv/vdr/video.00;VDR-<?cs var:_("Recordings") ?>;0
-/var/lib/vdr-plugin-mplayer/DVD-VCD;DVD oder VCD;0
-/media/cdrom;CDROM;1
+/media/<?cs var:_("Music") ?>/;<?cs var:_("Music") ?>;0;*.mp3/*.ogg/*.wav/*.MP3/*.OGG/*.WAV/*.m3u/*.M3U/*.pls/*.PLS
