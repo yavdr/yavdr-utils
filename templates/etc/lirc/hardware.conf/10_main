@@ -17,7 +17,7 @@ TRANSMITTER_LIRCD_CONF=""
 TRANSMITTER_LIRCD_ARGS=""
 
 #Enable lircd
-START_LIRCD="<?cs if:system.remote.lirc.active = "1" ?>true<?cs else ?>false<?cs /if ?>"
+START_LIRCD="<?cs if:system.remote.lirc.active == "1" ?>true<?cs else ?>false<?cs /if ?>"
 
 #Don't start lircmd even if there seems to be a good config file
 #START_LIRCMD="false"
