@@ -19,7 +19,7 @@ else
 fi 
 
  
-if grep -q "^REMOTE_MODULES.*lirc_serial.*" ; then 
+if grep -q "^REMOTE_MODULES.*lirc_serial.*" /etc/lirc/hardware.conf ; then 
    rmmod lirc_serial
    start setserial-minimal
    modprobe lirc_serial
