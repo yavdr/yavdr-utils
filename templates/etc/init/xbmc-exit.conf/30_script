@@ -10,8 +10,8 @@ case $EXIT_STATUS in
 	<?cs /if ?>
         ;;
     *)
-        initctl emit reset-display-rate
-        initctl emit vdr-frontend-restart
+        signal-event reset-display-rate
+        signal-event vdr-frontend-restart
         ;;
 esac
 
