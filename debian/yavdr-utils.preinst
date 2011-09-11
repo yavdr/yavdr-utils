@@ -15,4 +15,6 @@ if [ install = "$1" -o upgrade = "$1" ]; then
       --divert /usr/share/polkit-1/actions/org.freedesktop.policykit.policy.dontremove /usr/share/polkit-1/actions/org.freedesktop.policykit.policy
    dpkg-divert --package yavdr-utils --add --rename \
       --divert /usr/share/vdr-plugin-mplayer/mplayer.dontremove /usr/share/vdr-plugin-mplayer/mplayer
+   dpkg-divert --package yavdr-utils --add --rename \
+      --divert /etc/tntnet/tntnet.properties.dontremove /etc/tntnet/tntnet.properties
 fi
