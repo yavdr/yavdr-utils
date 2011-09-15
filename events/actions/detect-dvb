@@ -76,21 +76,8 @@ elif check_usb "9022:d482" || check_usb "9022:d481"; then
   SOURCE="SAT"
   DRIVER="s2-liplianin-dkms"
 
-elif check_usb "1c73:861f"; then
-  DRIVER="v4l-dvb-dkms"
-
 # DVBWorld DVB-S2 PCIE2006
 elif check_pci "1ADE:2032"; then
-  SOURCE="SAT"
-  DRIVER="s2-liplianin-dkms"
-
-# TT 3600 USB
-elif check_usb "0b48:3007" || check_usb "0b48:300A"; then
-  SOURCE="SAT"
-  DRIVER="s2-liplianin-dkms"
-
-# Pinnacle Systems, Inc. [hex] PCTV Sat HDTV Pro BDA Device
-elif check_usb "2304:021f"; then
   SOURCE="SAT"
   DRIVER="s2-liplianin-dkms"
 
@@ -100,6 +87,22 @@ elif check_pci "d470:9022"; then
   DRIVER="s2-liplianin-dkms"
 
 # dann erkenne v4l-dvb-dkms wenn kein s2
+# Anysee
+elif check_usb "1c73:861f"; then
+  DRIVER="v4l-dvb-dkms"
+
+# TT 3600 USB
+elif check_usb "0b48:3007" || check_usb "0b48:300A"; then
+  SOURCE="SAT"
+  DRIVER="v4l-dvb-dkms" # sollte im neuen v4l auch drinne sein
+#  DRIVER="s2-liplianin-dkms"
+
+# Pinnacle Systems, Inc. [hex] PCTV Sat HDTV Pro BDA Device
+elif check_usb "2304:021f"; then
+  SOURCE="SAT"
+  DRIVER="v4l-dvb-dkms" # sollte im neuen v4l auch drinne sein
+#  DRIVER="s2-liplianin-dkms"
+
 # Hauppauge WinTV-NOVA-HD-S2
 elif check_pci "14f1:8800"; then
   SOURCE="SAT" 
