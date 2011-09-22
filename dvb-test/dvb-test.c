@@ -18,6 +18,7 @@ struct tDvbParameterMap {
 
 static int wait = 0;
 static int syslog = 0;
+static int quiet = 0;
 
 const struct tDvbParameterMap ModulationValues[] = { { 16, QAM_16, "QAM16" }, {
 		32, QAM_32, "QAM32" }, { 64, QAM_64, "QAM64" }, { 128, QAM_128,
@@ -76,22 +77,22 @@ int main(int argc, char *argv[]) {
 	while (1) {
 		int longindex = 0;
 
-		static struct option longopts[] = { { "wait", 0, &wait, 1 }, {
-				"syslog", 0, &syslog, 1 }, { 0, 0, 0, 0 } };
+		static struct option longopts[] = { { "wait", 0, &wait, 1 }, { "quiet",
+				0, &quiet, 1 }, { "syslog", 0, &syslog, 1 }, { 0, 0, 0, 0 } };
 
-		if ((c = getopt_long(argc, argv, "", longopts, &longindex)) == -1)
+		if ((c = getopt_long(argc, argv, "wsq", longopts, &longindex)) == -1)
 			break;
 
 	}
 	if (optind < argc) {
 		for (i = optind; i < argc; i++) {
-			printf("checking : %s\n", argv[i]);
+			if (quiet == 0)
+				printf("checking : %s\n", argv[i]);
 
 			do {
 				if (access(argv[i], F_OK) == 0) {
-					printf("start open");
 					int fd_frontend = open(argv[i], O_RDONLY);
-					printf("end open");
+
 					if (fd_frontend >= 0) {
 						if (ioctl(fd_frontend, FE_GET_INFO, &frontendInfo) >= 0) {
 							switch (frontendInfo.type) {
@@ -123,54 +124,84 @@ int main(int argc, char *argv[]) {
 								char *p = Modulations;
 								if (frontendInfo.caps & FE_CAN_QPSK) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QPSK, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QPSK,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_QAM_16) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QAM_16, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QAM_16,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_QAM_32) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QAM_32, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QAM_32,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_QAM_64) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QAM_64, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QAM_64,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_QAM_128) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QAM_128, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QAM_128,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_QAM_256) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											QAM_256, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(QAM_256,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_8VSB) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											VSB_8, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(VSB_8,
+													ModulationValues));
 								}
 								if (frontendInfo.caps & FE_CAN_16VSB) {
 									numProvidedSystems++;
-									p += sprintf(p, ",%s", MapToUserString(
-											VSB_16, ModulationValues));
+									p += sprintf(
+											p,
+											",%s",
+											MapToUserString(VSB_16,
+													ModulationValues));
 								}
 								//if (frontendInfo.caps & FE_CAN_TURBO_FEC){numProvidedSystems++; p += sprintf(p, ",%s", "TURBO_FEC"); }
 								if (p != Modulations)
 									p = Modulations + 1; // skips first ','
-								else
+								else {
 									p = (char *) "unknown modulations";
-								printf(
-										"frontend %s provides %s with %s (\"%s\")\n",
-										argv[i], DeliverySystems[frontendType],
-										p, frontendInfo.name);
+								}
 
+								if (quiet == 0)
+									printf(
+											"frontend %s provides %s with %s (\"%s\")\n",
+											argv[i],
+											DeliverySystems[frontendType], p,
+											frontendInfo.name);
+								else
+									printf("%s\n",
+											DeliverySystems[frontendType]);
 							}
 						}
 						printf("frontend %s is ready\n", argv[i]);
