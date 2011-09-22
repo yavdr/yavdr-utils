@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 		static struct option longopts[] = { { "wait", 0, &wait, 1 }, { "quiet",
 				0, &quiet, 1 }, { "syslog", 0, &syslog, 1 }, { 0, 0, 0, 0 } };
 
-		if ((c = getopt_long(argc, argv, "wsq", longopts, &longindex)) == -1)
+		if ((c = getopt_long(argc, argv, "", longopts, &longindex)) == -1)
 			break;
 
 	}
@@ -204,12 +204,12 @@ int main(int argc, char *argv[]) {
 											DeliverySystems[frontendType]);
 							}
 						}
-						printf("frontend %s is ready\n", argv[i]);
+						if (quiet == 0) printf("frontend %s is ready\n", argv[i]);
 					} else {
-						printf("frontend %s not ready\n", argv[i]);
+						if (quiet == 0) printf("frontend %s not ready\n", argv[i]);
 					}
 				} else {
-					printf("access to frontend %s denied\n", argv[i]);
+					fprintf(stderr, "access to frontend %s denied\n", argv[i]);
 				}
 			} while (wait == 1);
 		}
