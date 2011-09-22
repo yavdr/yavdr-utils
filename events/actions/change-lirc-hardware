@@ -2,7 +2,6 @@
 
 LIRCD_CONF="$(dbget system.remote.lirc.receiver.lircd_conf)"
 
-
 if [ "$(dbget system.remote.lirc.active)" = "1" ]; then
   if [ -n "$LIRCD_CONF" ]; then
     rm -f /etc/lirc/lircd.conf
@@ -14,14 +13,12 @@ if [ "$(dbget system.remote.lirc.active)" = "1" ]; then
   elif [ -L /etc/lirc/lircd.conf ]; then 
     rm -f /etc/lirc/lircd.conf
   fi
-else 
-  rm -f /etc/modprobe.d/lirc-serial.conf
-fi 
-
+fi
  
 if grep -q "^REMOTE_MODULES.*lirc_serial.*" /etc/lirc/hardware.conf ; then 
    rmmod lirc_serial
    start setserial-minimal
    modprobe lirc_serial
+else 
+   rm -f /etc/modprobe.d/lirc-serial.conf 
 fi 
-
