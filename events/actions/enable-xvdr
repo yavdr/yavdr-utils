@@ -9,60 +9,60 @@ export LANG
 mkdir -p /var/lib/vdr/.xbmc/userdata/Database/
 
 
-sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV12.db<<EOF
+sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV16.db<<EOF
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE version (idVersion integer, iCompressCount integer);
 INSERT INTO "version" VALUES(12,0);
 
 CREATE TABLE clients (idClient integer primary key, sName    varchar(64), sUid     varchar(32));
-INSERT INTO "clients" VALUES(1,'VDR VNSI Client','pvr.vdr.vnsi');
+INSERT INTO "clients" VALUES(1,'VDR XVDR Client','pvr.vdr.xvdr');
 
 CREATE TABLE channels (
-   idChannel            integer primary key, 
-   iUniqueId            integer, bIsRadio             bool, 
-   bIsHidden            bool, sIconPath            varchar(255), 
-   sChannelName         varchar(64), bIsVirtual           bool, 
-   bEPGEnabled          bool, sEPGScraper          varchar(32), 
-   iLastWatched         integer,iClientId            integer, 
-   iClientChannelNumber integer, sInputFormat         varchar(32), 
+   idChannel            integer primary key,
+   iUniqueId            integer, bIsRadio             bool,
+   bIsHidden            bool, sIconPath            varchar(255),
+   sChannelName         varchar(64), bIsVirtual           bool,
+   bEPGEnabled          bool, sEPGScraper          varchar(32),
+   iLastWatched         integer,iClientId            integer,
+   iClientChannelNumber integer, sInputFormat         varchar(32),
    sStreamURL           varchar(255), iEncryptionSystem    integer);
 
 CREATE TABLE channelgroups (
    idGroup    integer primary key,
-   bIsRadio   bool, 
+   bIsRadio   bool,
    sName      varchar(64),
    iSortOrder integer);
 
 INSERT INTO "channelgroups" VALUES(1,1,'All radio channels',0);
 
 CREATE TABLE map_channelgroups_channels (
-  idChannel      integer, 
-  idGroup        integer, 
+  idChannel      integer,
+  idGroup        integer,
   iChannelNumber integer);
 
 CREATE TABLE channelsettings (
-  idChannel            integer primary key, 
-  iInterlaceMethod     integer, 
-  iViewMode            integer, 
-  fCustomZoomAmount    float, 
-  fPixelRatio          float, 
-  iAudioStream         integer, 
+  idChannel            integer primary key,
+  iInterlaceMethod     integer,
+  iViewMode            integer,
+  fCustomZoomAmount    float,
+  fPixelRatio          float,
+  iAudioStream         integer,
   iSubtitleStream      integer,
-  fSubtitleDelay       float, 
-  bSubtitles           bool, 
-  fBrightness          float, 
-  fContrast            float, 
+  fSubtitleDelay       float,
+  bSubtitles           bool,
+  fBrightness          float,
+  fContrast            float,
   fGamma               float,
-  fVolumeAmplification float, 
-  fAudioDelay          float, 
-  bOutputToAllSpeakers bool, 
-  bCrop                bool, 
-  iCropLeft            integer, 
-  iCropRight           integer, 
-  iCropTop             integer, 
-  iCropBottom          integer, 
-  fSharpness           float, 
+  fVolumeAmplification float,
+  fAudioDelay          float,
+  bOutputToAllSpeakers bool,
+  bCrop                bool,
+  iCropLeft            integer,
+  iCropRight           integer,
+  iCropTop             integer,
+  iCropBottom          integer,
+  fSharpness           float,
   fNoiseReduction      float);
 
 CREATE INDEX idx_channels_iClientId on channels(iClientId);
@@ -82,7 +82,7 @@ BEGIN TRANSACTION;
 CREATE TABLE version (idVersion integer, iCompressCount integer);
 INSERT INTO "version" VALUES(15,0);
 CREATE TABLE pvrenabled (id integer primary key, addonID text);
-INSERT INTO "pvrenabled" VALUES(1,'pvr.vdr.vnsi');
+INSERT INTO "pvrenabled" VALUES(1,'pvr.vdr.xvdr');
 CREATE UNIQUE INDEX idxPVREnabled ON pvrenabled(addonID);
 COMMIT;
 EOF
