@@ -70,11 +70,6 @@ if check_usb "9022:d660"; then
   SOURCE="SAT"
   DRIVER="s2-liplianin-dkms"
 
-# TeVii S480
-elif check_usb "9022:d482" || check_usb "9022:d481"; then
-  SOURCE="SAT"
-  DRIVER="s2-liplianin-dkms"
-
 # DVBWorld DVB-S2 PCIE2006
 elif check_pci "1ADE:2032"; then
   SOURCE="SAT"
@@ -88,6 +83,11 @@ elif check_pci "d470:9022"; then
 # dann erkenne v4l-dvb-dkms wenn kein s2
 # Anysee
 elif check_usb "1c73:861f"; then
+  DRIVER="v4l-dvb-dkms"
+
+# TeVii S480
+elif check_usb "9022:d482" || check_usb "9022:d481"; then
+  SOURCE="SAT"
   DRIVER="v4l-dvb-dkms"
 
 # TT 3600 USB
