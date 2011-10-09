@@ -16,7 +16,7 @@ NEW
 
 - autogenerate custom EDID
 - disabled webfrontend if vdr is disappeared
-- changed pvr-client in xbmc to vnsi (default enabled)
+- changed pvr-client in xbmc to xvdr (default enabled)
 - plugable webfrontend
 - hidecursor-patch in sxfe (replaces unclutter)
 - yavdrpackage installer (install yavdr-addons and vdr-plugins over webfrontend)
