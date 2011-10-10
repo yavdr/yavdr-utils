@@ -9,72 +9,72 @@ export LANG
 mkdir -p /var/lib/vdr/.xbmc/userdata/Database/
 
 
-sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV16.db<<EOF
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
-CREATE TABLE version (idVersion integer, iCompressCount integer);
-INSERT INTO "version" VALUES(12,0);
-
-CREATE TABLE clients (idClient integer primary key, sName    varchar(64), sUid     varchar(32));
-INSERT INTO "clients" VALUES(1,'VDR XVDR Client','pvr.vdr.xvdr');
-
-CREATE TABLE channels (
-   idChannel            integer primary key,
-   iUniqueId            integer, bIsRadio             bool,
-   bIsHidden            bool, sIconPath            varchar(255),
-   sChannelName         varchar(64), bIsVirtual           bool,
-   bEPGEnabled          bool, sEPGScraper          varchar(32),
-   iLastWatched         integer,iClientId            integer,
-   iClientChannelNumber integer, sInputFormat         varchar(32),
-   sStreamURL           varchar(255), iEncryptionSystem    integer);
-
-CREATE TABLE channelgroups (
-   idGroup    integer primary key,
-   bIsRadio   bool,
-   sName      varchar(64),
-   iSortOrder integer);
-
-INSERT INTO "channelgroups" VALUES(1,1,'All radio channels',0);
-
-CREATE TABLE map_channelgroups_channels (
-  idChannel      integer,
-  idGroup        integer,
-  iChannelNumber integer);
-
-CREATE TABLE channelsettings (
-  idChannel            integer primary key,
-  iInterlaceMethod     integer,
-  iViewMode            integer,
-  fCustomZoomAmount    float,
-  fPixelRatio          float,
-  iAudioStream         integer,
-  iSubtitleStream      integer,
-  fSubtitleDelay       float,
-  bSubtitles           bool,
-  fBrightness          float,
-  fContrast            float,
-  fGamma               float,
-  fVolumeAmplification float,
-  fAudioDelay          float,
-  bOutputToAllSpeakers bool,
-  bCrop                bool,
-  iCropLeft            integer,
-  iCropRight           integer,
-  iCropTop             integer,
-  iCropBottom          integer,
-  fSharpness           float,
-  fNoiseReduction      float);
-
-CREATE INDEX idx_channels_iClientId on channels(iClientId);
-CREATE INDEX idx_channels_iLastWatched on channels(iLastWatched);
-CREATE INDEX idx_channels_bIsRadio on channels(bIsRadio);
-CREATE INDEX idx_channels_bIsHidden on channels(bIsHidden);
-CREATE INDEX idx_channelgroups_bIsRadio on channelgroups(bIsRadio);
-CREATE UNIQUE INDEX idx_idChannel_idGroup on map_channelgroups_channels(idChannel, idGroup);
-CREATE INDEX idx_idGroup_iChannelNumber on map_channelgroups_channels(idGroup, iChannelNumber);
-
-COMMIT;
-EOF
+#sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV16.db<<EOF
+#PRAGMA foreign_keys=OFF;
+#BEGIN TRANSACTION;
+#CREATE TABLE version (idVersion integer, iCompressCount integer);
+#INSERT INTO "version" VALUES(12,0);
+#
+#CREATE TABLE clients (idClient integer primary key, sName    varchar(64), sUid     varchar(32));
+#INSERT INTO "clients" VALUES(1,'VDR XVDR Client','pvr.vdr.xvdr');
+#
+#CREATE TABLE channels (
+#   idChannel            integer primary key,
+#   iUniqueId            integer, bIsRadio             bool,
+#   bIsHidden            bool, sIconPath            varchar(255),
+#   sChannelName         varchar(64), bIsVirtual           bool,
+#   bEPGEnabled          bool, sEPGScraper          varchar(32),
+#   iLastWatched         integer,iClientId            integer,
+#   iClientChannelNumber integer, sInputFormat         varchar(32),
+#   sStreamURL           varchar(255), iEncryptionSystem    integer);
+#
+#CREATE TABLE channelgroups (
+#   idGroup    integer primary key,
+#   bIsRadio   bool,
+#   sName      varchar(64),
+#   iSortOrder integer);
+#
+#INSERT INTO "channelgroups" VALUES(1,1,'All radio channels',0);
+#
+#CREATE TABLE map_channelgroups_channels (
+#  idChannel      integer,
+#  idGroup        integer,
+#  iChannelNumber integer);
+#
+#CREATE TABLE channelsettings (
+#  idChannel            integer primary key,
+#  iInterlaceMethod     integer,
+#  iViewMode            integer,
+#  fCustomZoomAmount    float,
+#  fPixelRatio          float,
+#  iAudioStream         integer,
+#  iSubtitleStream      integer,
+#  fSubtitleDelay       float,
+#  bSubtitles           bool,
+#  fBrightness          float,
+#  fContrast            float,
+#  fGamma               float,
+#  fVolumeAmplification float,
+#  fAudioDelay          float,
+#  bOutputToAllSpeakers bool,
+#  bCrop                bool,
+#  iCropLeft            integer,
+#  iCropRight           integer,
+#  iCropTop             integer,
+#  iCropBottom          integer,
+#  fSharpness           float,
+#  fNoiseReduction      float);
+#
+#CREATE INDEX idx_channels_iClientId on channels(iClientId);
+#CREATE INDEX idx_channels_iLastWatched on channels(iLastWatched);
+#CREATE INDEX idx_channels_bIsRadio on channels(bIsRadio);
+#CREATE INDEX idx_channels_bIsHidden on channels(bIsHidden);
+#CREATE INDEX idx_channelgroups_bIsRadio on channelgroups(bIsRadio);
+#CREATE UNIQUE INDEX idx_idChannel_idGroup on map_channelgroups_channels(idChannel, idGroup);
+#CREATE INDEX idx_idGroup_iChannelNumber on map_channelgroups_channels(idGroup, iChannelNumber);
+#
+#COMMIT;
+#EOF
 
 #sqlite3  /var/lib/vdr/.xbmc/userdata/Database/Addons15.db<<EOF
 #PRAGMA foreign_keys=OFF;
