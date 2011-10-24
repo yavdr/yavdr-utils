@@ -11,7 +11,7 @@ case $EXIT_STATUS in
         ;;
     *)
         signal-event reset-display-rate
-        signal-event vdr-frontend-restart
+        initctl emit vdr-frontend-restart
         ;;
 esac
 
