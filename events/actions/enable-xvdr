@@ -7,7 +7,7 @@ fi
 export LANG
 
 mkdir -p /var/lib/vdr/.xbmc/userdata/Database/
-
+mkdir -p /var/lib/vdr/.xbmc/userdata/keymaps
 
 #sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV16.db<<EOF
 #PRAGMA foreign_keys=OFF;
@@ -93,5 +93,5 @@ chown -R vdr:vdr /var/lib/vdr/.xbmc
 process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/sources.xml
 process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/Lircmap.xml
 process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/guisettings.xml
-
+process-template --owner vdr --group vdr /var/lib/vdr/.xbmc/userdata/keymaps/remote.xml
 
