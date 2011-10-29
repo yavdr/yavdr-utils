@@ -12,7 +12,7 @@
 		<green>KEY_GREEN</green>
 		<yellow>KEY_YELLOW</yellow>
 		<blue>KEY_BLUE</blue>
-		<zero>KEY_NUMERIC_0</zero>
+		<zero>KEY_0</zero>
 		<one>KEY_1</one>
 		<two>KEY_2</two>
 		<three>KEY_3</three>
