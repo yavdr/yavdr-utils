@@ -1,0 +1,7 @@
+
+INDEXFILE=$1/index
+
+if [ -e $INDEXFILE ] ; then
+    rm $INDEXFILE
+fi
+
