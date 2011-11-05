@@ -1,0 +1,12 @@
+<?cs if:(system.x11.dualhead.enabled != "1") ?>
+export __GL_SYNC_DISPLAY_DEVICE=`/usr/bin/dbget system.x11.display.0.device`
+<?cs else ?>
+DISP_DEV0=<?cs var:system.x11.display.0.device ?>
+DISP_DEV1=<?cs var:system.x11.display.1.device ?>
+
+if [ "$(dbget vdr.tempdisplay)" = "" ]; then 
+   export __GL_SYNC_DISPLAY_DEVICE=${DISP_DEV0}
+else
+   export __GL_SYNC_DISPLAY_DEVICE=${DISP_DEV1}
+fi 
+<?cs /if ?>

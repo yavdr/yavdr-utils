@@ -23,4 +23,7 @@ env HOME=/var/lib/vdr
 #env XINE_BUFFER_LOG=1
 env USE_AUTOCROP=0
 export USE_AUTOCROP
+
+script
+export DISPLAY=:1`dbget vdr.tempdisplay`
 <?cs /if ?>

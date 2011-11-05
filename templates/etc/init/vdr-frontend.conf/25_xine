@@ -1,6 +1,4 @@
 <?cs if:(vdr.frontend == "xine") ?> 
-script
-export DISPLAY=:1`dbget vdr.tempdisplay`
 
 #ASPECT_RATIO="anamorphic"
 GEOMETRY=`xrandr | grep "\*" | cut -d" " -f4`

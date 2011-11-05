@@ -1,0 +1,1 @@
+<?cs if:(?system.hardware.alsa.hdmi.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.hdmi.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>

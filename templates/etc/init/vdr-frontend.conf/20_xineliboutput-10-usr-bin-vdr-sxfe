@@ -1,0 +1,2 @@
+exec start-stop-daemon --start --exec /usr/bin/vdr-sxfe --user vdr --chuid vdr \
+-- $HUDOPTS $XINELIBOUTPUTOPTS $CONFIG xvdr://127.0.0.1:37890 &> /tmp/vdr-frontend.log
