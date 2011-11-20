@@ -48,13 +48,13 @@ int setup_uinputfd(const char *name)
     int key;
     struct uinput_user_dev dev;
     
-    fd = open("/dev/input/uinput", O_WRONLY);
+    fd = open("/dev/input/uinput", O_WRONLY | O_NDELAY);
     if(fd == -1)
     {
-        fd = open("/dev/uinput", O_WRONLY);
+        fd = open("/dev/uinput", O_WRONLY | O_NDELAY);
         if(fd == -1)
         {
-            fd = open("/dev/misc/uinput", O_WRONLY);
+            fd = open("/dev/misc/uinput", O_WRONLY | O_NDELAY);
             if(fd == -1)
             {
                 syslog(LOG_ERR, "could not open uinput: %m");
@@ -64,10 +64,11 @@ int setup_uinputfd(const char *name)
     }
     memset(&dev, 0, sizeof(dev));
     strncpy(dev.name, name, sizeof(dev.name));
-    dev.name[sizeof(dev.name)-1] = 0;
-    if (write(fd, &dev, sizeof(dev)) != sizeof(dev) ||
-       ioctl(fd, UI_SET_EVBIT, EV_KEY) != 0 ||
-       ioctl(fd, UI_SET_EVBIT, EV_REP) != 0) {
+    dev.id.version = 4;
+    dev.id.bustype = BUS_USB;
+
+    if (ioctl(fd, UI_SET_EVBIT, EV_KEY) != 0 ||
+        ioctl(fd, UI_SET_EVBIT, EV_REP) != 0) {
         goto setup_error;
     }
 
@@ -76,6 +77,10 @@ int setup_uinputfd(const char *name)
         {
             goto setup_error;
         }
+    }
+
+    if (write(fd, &dev, sizeof(dev)) != sizeof(dev)) {
+        goto setup_error;
     }
 
     if (ioctl(fd, UI_DEV_CREATE) != 0) {
@@ -105,7 +110,7 @@ int main(int argc, char *argv[])
     char olddevice[100] = "";
     struct input_event event;
 
-    uinputfd = setup_uinputfd("lircd");
+    uinputfd = setup_uinputfd("irserver2uinput");
     if (uinputfd != -1) {
         if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
             syslog(LOG_ERR, "socket %m");
@@ -127,14 +132,12 @@ int main(int argc, char *argv[])
 
             syslog(LOG_ERR, "Connected.");
 
-            memset(&event, 0, sizeof(event));
-            event.type = EV_KEY;
-
             while (TRUE) {
                 fd_set rfds;
                 int retval;
                 int presskey = FALSE;
                 int releasekey = FALSE;
+                linux_input_code input_code;
 
                 FD_ZERO(&rfds);
                 FD_SET(s, &rfds);
@@ -192,7 +195,12 @@ int main(int argc, char *argv[])
                     presskey = FALSE;
                 }
  
+                memset(&event, 0, sizeof(event));
+                gettimeofday(&event.time, NULL);
+                event.type = EV_KEY;
+
                 if (releasekey) {
+                    event.code = input_code;
                     event.value = 0;
                     if (write(uinputfd, &event, sizeof(event)) != sizeof(event)) {
                         syslog(LOG_ERR, "writing to uinput failed");
@@ -204,7 +212,6 @@ int main(int argc, char *argv[])
                 }
 
                 if (presskey) {
-                    linux_input_code input_code;
 
                     if (get_input_code(key, &input_code) != -1) {
                         event.code = input_code;
@@ -218,6 +225,12 @@ int main(int argc, char *argv[])
                         presskey = FALSE;
                     }
                 }
+                memset(&event, 0, sizeof(event));
+                gettimeofday(&event.time, NULL);
+                event.type = EV_SYN;
+                event.code = SYN_REPORT;
+                event.value = 0;
+                write(uinputfd, &event, sizeof(event));
             }
         }
         close(s);
