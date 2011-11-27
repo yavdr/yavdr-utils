@@ -1,6 +1,4 @@
-	<remote device="linux-input-layer">
-	<altname>cx23885_remote</altname>
-	<altname>devinput</altname>
+	<remote device="devinput">
 		<up>KEY_UP</up>
 		<down>KEY_DOWN</down>
                 <menu>KEY_MENU</menu>
