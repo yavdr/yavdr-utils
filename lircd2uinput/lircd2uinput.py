@@ -38,109 +38,107 @@ class Lirc2uinput:
         self.repeat_num = 0
         self.timestamp = datetime.datetime.now()
         self.events = (
-                uinput.KEY_UP,
-                uinput.KEY_DOWN,
-                uinput.KEY_MENU,
-                uinput.KEY_OK,
-                uinput.KEY_ESC,
-                uinput.KEY_LEFT,
-                uinput.KEY_RIGHT,
-                uinput.KEY_RED,
-                uinput.KEY_GREEN,
-                uinput.KEY_YELLOW,
-                uinput.KEY_BLUE,
-                uinput.KEY_0,
-                uinput.KEY_1,
-                uinput.KEY_2,
-                uinput.KEY_3,
-                uinput.KEY_4,
-                uinput.KEY_5,
-                uinput.KEY_6,
-                uinput.KEY_7,
-                uinput.KEY_8,
-                uinput.KEY_9,
-                uinput.KEY_INFO,
-                uinput.KEY_PLAY,
-                uinput.KEY_PAUSE,
-                uinput.KEY_STOP,
-                uinput.KEY_RECORD,
-                uinput.KEY_FASTFORWARD,
-                uinput.KEY_REWIND,
-                uinput.KEY_NEXT,
-                uinput.KEY_BACK,
-                uinput.KEY_POWER2,
-                uinput.KEY_CHANNELUP,
-                uinput.KEY_CHANNELDOWN,
-                uinput.KEY_PREVIOUS,
-                uinput.KEY_VOLUMEUP,
-                uinput.KEY_VOLUMEDOWN,
-                uinput.KEY_MUTE,
-                uinput.KEY_SUBTITLE,
-                uinput.KEY_EPG,
-                uinput.KEY_CHANNEL,
-                uinput.KEY_FAVORITES,
-                uinput.KEY_MODE,
-                uinput.KEY_TIME,
-                uinput.KEY_PVR,
-                uinput.KEY_SETUP,
-                uinput.KEY_TEXT,
-                uinput.KEY_PROG1,
-                uinput.KEY_PROG2,
-                uinput.KEY_PROG3,
-                uinput.KEY_PROG4,
-                uinput.KEY_AUDIO,
-                uinput.KEY_VIDEO,
-                #uinput.KEY_IMAGES, # undefined key within python-uinput, to be replaced by KEY_CAMERA for example
-                uinput.KEY_FN,
-                uinput.KEY_SCREEN
+            uinput.KEY_UP,
+            uinput.KEY_DOWN,
+            uinput.KEY_MENU,
+            uinput.KEY_OK,
+            uinput.KEY_ESC,
+            uinput.KEY_LEFT,
+            uinput.KEY_RIGHT,
+            uinput.KEY_RED,
+            uinput.KEY_GREEN,
+            uinput.KEY_YELLOW,
+            uinput.KEY_BLUE,
+            uinput.KEY_0,
+            uinput.KEY_1,
+            uinput.KEY_2,
+            uinput.KEY_3,
+            uinput.KEY_4,
+            uinput.KEY_5,
+            uinput.KEY_6,
+            uinput.KEY_7,
+            uinput.KEY_8,
+            uinput.KEY_9,
+            uinput.KEY_INFO,
+            uinput.KEY_PLAY,
+            uinput.KEY_PAUSE,
+            uinput.KEY_STOP,
+            uinput.KEY_RECORD,
+            uinput.KEY_FASTFORWARD,
+            uinput.KEY_REWIND,
+            uinput.KEY_NEXT,
+            uinput.KEY_BACK,
+            uinput.KEY_POWER2,
+            uinput.KEY_CHANNELUP,
+            uinput.KEY_CHANNELDOWN,
+            uinput.KEY_PREVIOUS,
+            uinput.KEY_VOLUMEUP,
+            uinput.KEY_VOLUMEDOWN,
+            uinput.KEY_MUTE,
+            uinput.KEY_SUBTITLE,
+            uinput.KEY_EPG,
+            uinput.KEY_CHANNEL,
+            uinput.KEY_FAVORITES,
+            uinput.KEY_MODE,
+            uinput.KEY_TIME,
+            uinput.KEY_PVR,
+            uinput.KEY_SETUP,
+            uinput.KEY_TEXT,
+            uinput.KEY_PROG1,
+            uinput.KEY_PROG2,
+            uinput.KEY_PROG3,
+            uinput.KEY_PROG4,
+            uinput.KEY_AUDIO,
+            uinput.KEY_VIDEO,
+            #uinput.KEY_IMAGES, # undefined key within python-uinput, to be replaced by KEY_CAMERA for example
+            uinput.KEY_FN,
+            uinput.KEY_SCREEN
             )
         self.device = uinput.Device(self.events, uinput_name)
 
     def get_gap(self,repeat_num):
         if self.current_gap > self.min_gap:
-          new_gap = self.current_gap - self.gap_delta
+            new_gap = self.current_gap - self.gap_delta
         else:
-          pass
+            pass
         return self.current_gap
     
     def send_key(self,key):
         #print keycmd
+        keycmd = eval('uinput.%s'%(key.replace("_up","")))
+        now = datetime.datetime.now()
         if key.endswith("_up"):
-          #print "released %s"%(key[:-3])
-          keycmd = eval('uinput.%s'%(key[:-3]))
-          self.device.emit(keycmd, 0)
-          self.repeat_num = 0
-          self.timestamp = datetime.datetime.now()
-          self.current_gap = self.max_gap
-        else:
-          keycmd = eval('uinput.%s'%(key))
-          #print "pressed %s %s times"%(key,self.repeat_num)
-          if self.lastkey == keycmd:
-            #print (self.timestamp - datetime.datetime.now()).microseconds
-           
-            if (datetime.datetime.now() - self.timestamp).microseconds < self.current_gap:
-                #print (self.timestamp - datetime.datetime.now()).microseconds
+            print "released %s"%(key[:-3])
+            #keycmd = eval('uinput.%s'%(key.replace("_up","")))
+            self.device.emit(keycmd, 0)
+            self.repeat_num = 0
+            self.timestamp = datetime.datetime.now()
+            self.current_gap = self.max_gap
+        elif self.lastkey == keycmd:
+            if (now - self.timestamp).microseconds < self.current_gap:
                 #print "Passing keypress... too early"#"repeated %s %s times"%(key,self.repeat)
-                pass  
-	        else:
-              if self.repeat_num >= self.wait_repeats:
-                self.current_gap = self.get_gap(self.repeat_num)
-              else:
-                pass
-                
-              #print "Repeated keypress"  
-              self.device.emit(keycmd, 1)
-              self.device.emit(keycmd, 0)
-              self.timestamp = datetime.datetime.now()
-              
-            self.repeat_num += 1
-          else:
+                pass     
+            else:
+                #print "Repeated keypress"
+                if self.repeat_num >= self.wait_repeats:
+                    self.current_gap = self.get_gap(self.repeat_num)
+                else:
+                    pass
+                self.device.emit(keycmd, 1)
+                self.device.emit(keycmd, 0)
+                self.timestamp = datetime.datetime.now()
+                self.repeat_num += 1
+
+        else:
             #print "first keypress"
             self.device.emit(keycmd, 1)
             self.device.emit(keycmd, 0)
             self.timestamp = datetime.datetime.now()
+            self.current_gap = self.max_gap
+            self.repeat_num = 0
+
         self.lastkey=keycmd
-        #print (self.timestamp - datetime.datetime.now()).microseconds
+
 
 class main:
     """Listens to LIRC's domain socket and calls a method each time an
@@ -149,11 +147,11 @@ class main:
         parser = Options()
         self.options = parser.get_opts()
         if not self.options.lircd_socket:
-          # use /var/run/lirc/lircd.<pidof lircd> as socket 
-	  pid = int(subprocess.check_output(['pidof', "lircd"]))
-          self.socket_path =  "/var/run/lirc/lircd.%s"%(pid)
+            # use /var/run/lirc/lircd.<pidof lircd> as socket 
+            pid = int(subprocess.check_output(['pidof', "lircd"]))
+            self.socket_path =  "/var/run/lirc/lircd.%s"%(pid)
         else:
-          self.socket_path = self.options.lircd_socket
+            self.socket_path = self.options.lircd_socket
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.uinputdev = Lirc2uinput(options=self.options)
 
@@ -181,10 +179,10 @@ class Options:
         self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
                   help="number of repeats before using accelerated keypresses (default = 2)", metavar="WAIT_REPEATS")
         self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
-                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed.",
+                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed",
                     metavar="ACCELERATION")
         self.parser.add_option("-s", "--lircd-socket", dest="lircd_socket", default=None,
-                  help="choose lircd socket to listen on. If omitted /var/run/lirc/lircd.$(pidof lircd) will be used.", metavar="LIRCD_SOCKET")
+                  help="choose lircd socket to listen on", metavar="LIRCD_SOCKET")
     def get_opts(self):
         (options, args) = self.parser.parse_args()
         return options
@@ -193,4 +191,3 @@ class Options:
 if __name__ == "__main__":
     vlirc = main()
     vlirc.listen2socket()
-
