@@ -100,16 +100,16 @@ class Lirc2uinput:
         if self.current_gap > self.min_gap:
             new_gap = self.current_gap - self.gap_delta
         else:
+            #print "minimum gap reached"
             pass
         return self.current_gap
     
     def send_key(self,key):
-        #print keycmd
         keycmd = eval('uinput.%s'%(key.replace("_up","")))
+        #print keycmd
         now = datetime.datetime.now()
         if key.endswith("_up"):
             print "released %s"%(key[:-3])
-            #keycmd = eval('uinput.%s'%(key.replace("_up","")))
             self.device.emit(keycmd, 0)
             self.repeat_num = 0
             self.timestamp = datetime.datetime.now()
