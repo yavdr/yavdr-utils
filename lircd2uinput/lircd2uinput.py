@@ -8,7 +8,7 @@
 # git clone git://github.com/tuomasjjrasanen/python-uinput.git
 # cd python-uinput
 # git clone git://github.com/tuomasjjrasanen/libsuinput.git
-# sudo python setup.py
+# sudo python setup.py install
 #
 ###
 #
