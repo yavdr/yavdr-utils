@@ -10,7 +10,7 @@ Fetch the code for python-uinput from git repository:
  sudo python setup.py
 
 This script must be run as superuser or with sufficent rights to create an uinput device and exspects a lircd socket under /var/run/lirc/lircd.$(pidof lircd) if none is given by --lircd-socket /PATH/TO/LIRCD_SOCKET
-lircd must not be startet with --uinput, but with --release="_up"
+lircd must not be startet with --uinput, but may be started with --release="_up".
 
 Example Upstart-script:
 
