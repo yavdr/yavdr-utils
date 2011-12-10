@@ -1,5 +1,4 @@
 description     "Xterm Daemon"
 author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 
-exec su -c "DISPLAY=:1 xterm -e su <?cs var:user ?>" vdr
-
+exec su -c "DISPLAY=:1 xterm -fa 'Mono' -fs 11 -e su <?cs var:user ?>" vdr
