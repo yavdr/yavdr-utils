@@ -90,7 +90,7 @@ class Lirc2uinput:
             uinput.KEY_PROG4,
             uinput.KEY_AUDIO,
             uinput.KEY_VIDEO,
-            #uinput.KEY_IMAGES, # undefined key within python-uinput, to be replaced by KEY_CAMERA for example
+            (1, 442), # workarount for uinput.KEY_IMAGES, which is an undefined key within python-uinput
             uinput.KEY_FN,
             uinput.KEY_SCREEN
             )
