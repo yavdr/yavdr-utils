@@ -34,7 +34,6 @@ if [ "$(dbget vdr.backend)" = "xineliboutput" ]; then
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
   disable_plugin "dummydevice"
-  disable_plugin "control"
   enable_plugin "\*dynamite"
 
 elif [ "$(dbget vdr.backend)" = "xine" ]; then
@@ -52,7 +51,6 @@ elif [ "$(dbget vdr.backend)" = "xine" ]; then
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
   disable_plugin "dummydevice"
-  disable_plugin "control"
   enable_plugin "\*dynamite"
 
 
@@ -73,7 +71,6 @@ elif [ "$(dbget vdr.backend)" = "streaming" ]; then
   disable_plugin "yaepghd"
   disable_plugin "extrecmenu"
   disable_plugin "suspendoutput"
-  enable_plugin "control"
   enable_plugin "\*dynamite"
 
 elif [ "$(dbget vdr.backend)" = "hdff" ] || [ "$(dbget vdr.backend)" = "sdff" ]; then
@@ -95,7 +92,6 @@ elif [ "$(dbget vdr.backend)" = "hdff" ] || [ "$(dbget vdr.backend)" = "sdff" ];
   enable_plugin "yaepghd"
   enable_plugin "extrecmenu"
   enable_plugin "suspendoutput"
-  disable_plugin "control"
   disable_plugin "pvr350"
   enable_plugin "\*dynamite"
 
@@ -112,7 +108,6 @@ fi
   disable_plugin "dummydevice"
   disable_plugin "xine"
   disable_plugin "xineliboutput"
-  disable_plugin "control"
   enable_plugin "iptv"
   enable_plugin "\*dynamite"
   enable_plugin "lcdproc"
