@@ -3,5 +3,5 @@
 if [ "x$(dbget vdr.tempdisplay)" = "x" ]; then
   dbset "vdr.tempdisplay=.1"
 else
-  dbremove "vdr.tempdisplay="
+  dbremove "vdr.tempdisplay"
 fi
