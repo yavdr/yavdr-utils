@@ -5,7 +5,7 @@ description     "yavdr-frontend"
 author          "Gerald Dachs <gda@dachsweb.de>"
 
 <?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" || vdr.frontend == "xine") ?>
-start on ((started vdr and stopped openbox-tools) or vdr-frontend-restart or resume)
+start on ((started vdr and (stopped openbox-tools or desktop-session-start)) or vdr-frontend-restart or resume)
 stop on stopping vdr or suspend or stopping openbox
 
 nice -10
