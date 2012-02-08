@@ -121,7 +121,7 @@ if [ -n "$DRIVER" ]; then
 fi
 
 # detect: Sundtek Sticks
-if check_usb "eb1a:5"; then
+if check_usb "eb1a:5" || avahi-browse _dvb._tcp -t -l -v -p -r | grep -q "^=;"; then
   apt-get install -y yavdr-hardware-sundtek
 fi
 
