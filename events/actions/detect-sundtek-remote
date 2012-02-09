@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# detect: Sundtek Sticks
+if avahi-browse _dvb._tcp -t -l -v -p -r | grep -q "^=;"; then
+  apt-get install -y --force-yes yavdr-hardware-sundtek
+fi
+
