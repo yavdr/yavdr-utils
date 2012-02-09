@@ -116,9 +116,10 @@ fi
 #echo $DRIVER
 
 # install driver
-if [ -n "$DRIVER" ]; then
-  apt-get install -y $DRIVER
-fi
+#if [ -n "$DRIVER" ]; then
+#  apt-get install -y $DRIVER
+#fi
+apt-get install linux-media-dkms
 
 # detect: Sundtek Sticks
 if check_usb "eb1a:5"; then
