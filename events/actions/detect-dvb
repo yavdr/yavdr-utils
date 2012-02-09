@@ -64,7 +64,7 @@ fi
 # erkenne nun nach priorität treiber vorraussetzungen
 ############################################################################################################
 # erkenne s2-liplianin
-	
+
 # DVBWorld DVB-S2 PCIE2006
 if check_pci "1ADE:2032"; then
   SOURCE="SAT"
@@ -121,7 +121,7 @@ if [ -n "$DRIVER" ]; then
 fi
 
 # detect: Sundtek Sticks
-if check_usb "eb1a:5" || avahi-browse _dvb._tcp -t -l -v -p -r | grep -q "^=;"; then
+if check_usb "eb1a:5"; then
   apt-get install -y yavdr-hardware-sundtek
 fi
 
