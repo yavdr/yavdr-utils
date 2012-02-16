@@ -1,15 +1,13 @@
 Source: yavdr-utils
-Section: misc
+Section: base
 Priority: extra
 Maintainer: Gerald Dachs <gda@dachsweb.de>
 Build-Depends: debhelper (>= 7), clearsilver-dev
 Standards-Version: 3.9.1
-Homepage: http://yavdr.origo.ethz.ch/
 
 Package: yavdr-utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, sqlite3, ir-keytable, python-uinput, avahi-utils
-Suggests: lirc
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: yavdr-startup
 Description: Utilities and WEB front end for yaVDR
  Utilities and WEB front end for yaVDR (yet another VDR) a VDR distribution
