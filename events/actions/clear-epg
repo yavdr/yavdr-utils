@@ -1,3 +1,0 @@
-#!/bin/bash
-
-vdr-dbus-send /EPG epg.ClearEPG

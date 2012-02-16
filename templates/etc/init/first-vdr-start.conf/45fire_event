@@ -1,2 +1,0 @@
-  /usr/bin/signal-event first-vdr-start || /bin/true
-  sleep 5

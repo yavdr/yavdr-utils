@@ -1,2 +1,0 @@
-<?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" || vdr.frontend == "xine" ) ?>
-    <menu name=<?cs call:quote(_("Applications")) ?>>

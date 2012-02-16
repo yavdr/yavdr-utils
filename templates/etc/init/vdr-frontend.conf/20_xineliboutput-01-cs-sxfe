@@ -1,1 +1,0 @@
-<?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" ) ?>

@@ -1,1 +1,0 @@
-<?cs if:system.remote.lirc.active == "1" ?>#<?cs /if ?>manual

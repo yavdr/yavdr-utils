@@ -1,4 +1,0 @@
-    Option         "Composite" <?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" ) && system.x11.hud== "1" ?>"on"<?cs else ?>"Disable"<?cs /if ?>
-
-
-
