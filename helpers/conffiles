@@ -1,0 +1,19 @@
+install_conffile()
+{
+  PACKAGE=$1
+  CONFFILE=$2
+
+  dpkg-divert --add --package $PACKAGE --rename \
+    --divert $CONFFILE.distrib $CONFFILE
+      [ \! -e $CONFFILE -o -L $CONFFILE ] && ln -sf /etc/yavdr/conffiles$CONFFILE $CONFFILE
+}
+
+remove_conffile()
+{
+  PACKAGE=$1
+  CONFFILE=$2
+
+    [ -L $CONFFILE ] && rm $CONFFILE
+    dpkg-divert --remove --package $PACKAGE --rename \
+      --divert $CONFFILE.distrib $CONFFILE
+}
