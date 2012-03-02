@@ -2,6 +2,7 @@
 
 process-template --mode 775 /etc/init.d/force-fsck
 process-template --mode 775 /etc/init.d/yavdr-shutdown
+process-template --mode 775 /etc/init.d/nfs-kernel-server
 
 # Symlinks erstellen, die beim Shutdown ausgeführt werden:
 ln -sf /etc/init.d/force-fsck /etc/rc0.d/S61force-fschk
