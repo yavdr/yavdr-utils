@@ -37,63 +37,13 @@ class Lirc2uinput:
         self.current_gap = self.max_gap
         self.repeat_num = 0
         self.timestamp = datetime.datetime.now()
-        self.events = (
-            uinput.KEY_UP,
-            uinput.KEY_DOWN,
-            uinput.KEY_MENU,
-            uinput.KEY_OK,
-            uinput.KEY_ESC,
-            uinput.KEY_LEFT,
-            uinput.KEY_RIGHT,
-            uinput.KEY_RED,
-            uinput.KEY_GREEN,
-            uinput.KEY_YELLOW,
-            uinput.KEY_BLUE,
-            uinput.KEY_0,
-            uinput.KEY_1,
-            uinput.KEY_2,
-            uinput.KEY_3,
-            uinput.KEY_4,
-            uinput.KEY_5,
-            uinput.KEY_6,
-            uinput.KEY_7,
-            uinput.KEY_8,
-            uinput.KEY_9,
-            uinput.KEY_INFO,
-            uinput.KEY_PLAY,
-            uinput.KEY_PAUSE,
-            uinput.KEY_STOP,
-            uinput.KEY_RECORD,
-            uinput.KEY_FASTFORWARD,
-            uinput.KEY_REWIND,
-            uinput.KEY_NEXT,
-            uinput.KEY_BACK,
-            uinput.KEY_POWER2,
-            uinput.KEY_CHANNELUP,
-            uinput.KEY_CHANNELDOWN,
-            uinput.KEY_PREVIOUS,
-            uinput.KEY_VOLUMEUP,
-            uinput.KEY_VOLUMEDOWN,
-            uinput.KEY_MUTE,
-            uinput.KEY_SUBTITLE,
-            uinput.KEY_EPG,
-            uinput.KEY_CHANNEL,
-            uinput.KEY_FAVORITES,
-            uinput.KEY_MODE,
-            uinput.KEY_TIME,
-            uinput.KEY_PVR,
-            uinput.KEY_SETUP,
-            uinput.KEY_TEXT,
-            uinput.KEY_PROG1,
-            uinput.KEY_PROG2,
-            uinput.KEY_PROG3,
-            uinput.KEY_PROG4,
-            uinput.KEY_AUDIO,
-            uinput.KEY_VIDEO,
-            (1, 442), # workarount for uinput.KEY_IMAGES, which is an undefined key within python-uinput (with standard natty kernel)
-            uinput.KEY_FN,
-            uinput.KEY_SCREEN
-            )
+        self.events = []
+        # add all defined KEY_.* to supported key events
+        for element in dir(uinput):
+          if element.startswith("KEY_"):
+            self.events.append(eval("uinput.%s"%element))
+            #print "uinput.%s"%element
+        # create uinput device
         self.device = uinput.Device(self.events, uinput_name)
         self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
 
