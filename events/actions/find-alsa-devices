@@ -18,7 +18,8 @@ elif [ $(LANG=C aplay -l | grep -i $INTERFACE | wc -l) -eq 4 ]; then
   ELD="`grep -e "monitor_present.*1$" /proc/asound/card${CARD}/eld* | cut -d":" -f1`"
   if [ "x$ELD" != "x" ]; then
     ELD=${ELD#*\#} ; ELD=${ELD//.*}
-    DEVICE=$(grep -e "^ *Device:.*" /proc/asound/card$CARD/codec\#${ELD})
+    #DEVICE=$(grep -e "^ *Device:.*" /proc/asound/card$CARD/codec\#${ELD})
+    DEVICE=$(grep -e ".*ELD.*" /proc/asound/card$CARD/codec\#${ELD})
     DEVICE=${DEVICE#*device=}
 
     # put them into db
