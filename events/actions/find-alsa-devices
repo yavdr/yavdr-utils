@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -f /etc/asound.conf
 for INTERFACE in hdmi digital analog ; do
 CARD=""
 DEVICE=""
