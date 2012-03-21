@@ -29,3 +29,21 @@ script
 exec /usr/bin/python /usr/bin/lircd2uinput.py
 end script
 
+TODO: modify keyname contentation to support irserver's lower case keynames:
+
+keycmd = eval('uinput.%s'%(key.replace("_up","")))
+
+### example Lirc/Activylirc: 	KEY_OK
+### example irserver:		key_ok
+
+def get_cleanKeyname(self, key):
+  if key[1].islower():
+    keycmd = eval('uinput.%s'%(key.upper())
+  else:
+    keycmd = eval('uinput.%s'%(key.replace('_up','')))
+    # '_up' ist a suffix added by lircd to keynames optionally to signal a key release
+  return keycmd
+
+keycmd = get_cleanKeyname(key)
+  
+
