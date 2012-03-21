@@ -44,6 +44,18 @@ def get_cleanKeyname(self, key):
     # '_up' ist a suffix added by lircd to keynames optionally to signal a key release
   return keycmd
 
-keycmd = get_cleanKeyname(key)
+    def send_key(self,key):
+        #keycmd = eval('uinput.%s'%(key.replace("_up","")))
+        #print keycmd
+        now = datetime.datetime.now()
+
+        keycmd = get_cleanKeyname(key)
+
+        if key.endswith("_up") and key[1].isupper():
+            print "released %s"%(key[:-3])
+            self.device.emit(keycmd, 0)
+            self.repeat_num = 0
+            self.timestamp = datetime.datetime.now()
+            self.current_gap = self.max_gap
   
 
