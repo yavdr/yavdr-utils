@@ -39,9 +39,23 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE version (idVersion integer, iCompressCount integer);
 INSERT INTO "version" VALUES(15,0);
-CREATE TABLE enabled (id integer primary key, addonID text);
-INSERT INTO "enabled" VALUES(1,'pvr.vdr.xvdr');
-CREATE UNIQUE INDEX idxEnabled ON enabled(addonID);
+CREATE TABLE disabled (id integer primary key, addonID text);
+INSERT INTO "disabled" VALUES(1,'pvr.vdr.vnsi');
+INSERT INTO "disabled" VALUES(2,'pvr.mythtv');
+INSERT INTO "disabled" VALUES(3,'pvr.demo');
+INSERT INTO "disabled" VALUES(5,'pvr.team-mediaportal.tvserver');
+INSERT INTO "disabled" VALUES(6,'pvr.hts');
+CREATE TABLE broken (id integer primary key, addonID text, reason text);
+INSERT INTO "broken" VALUES(1,'skin.simplicity','Dependencies not met');
+CREATE TABLE blacklist (id integer primary key, addonID text, version text);
+CREATE INDEX idxAddon ON addon(addonID);
+CREATE INDEX idxAddonExtra ON addonextra(id);
+CREATE INDEX idxDependencies ON dependencies(id);
+CREATE UNIQUE INDEX ix_addonlinkrepo_1 ON addonlinkrepo ( idAddon, idRepo );
+CREATE UNIQUE INDEX ix_addonlinkrepo_2 ON addonlinkrepo ( idRepo, idAddon );
+CREATE UNIQUE INDEX idxDisabled ON disabled(addonID);
+CREATE UNIQUE INDEX idxBroken ON broken(addonID);
+CREATE UNIQUE INDEX idxBlack ON blacklist(addonID);
 COMMIT;
 EOF
 
