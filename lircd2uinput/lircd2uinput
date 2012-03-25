@@ -18,8 +18,6 @@
 import syslog
 import string
 import socket
-import time
-import threading
 import gobject
 import sys
 import uinput
@@ -128,7 +126,7 @@ class main:
             except IOError:
                 self.Dbg.log(syslog.LOG_ERR, 'Error reading PID for lircd, I will sleep 1 second and exit this script')
                 time.sleep(1)
-                exit()
+                sys.exit("socket not found")
             finally:
                 self.Dbg.log('lircd_socket = %s'%(self.socket_path))
         else:
