@@ -35,7 +35,6 @@ if [ "$(dbget vdr.backend)" = "xineliboutput" ]; then
   enable_plugin "suspendoutput"
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
-  disable_plugin "dummydevice"
   enable_plugin "\*dynamite"
 
 elif [ "$(dbget vdr.backend)" = "xine" ]; then
@@ -54,7 +53,6 @@ elif [ "$(dbget vdr.backend)" = "xine" ]; then
   enable_plugin "suspendoutput"
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
-  disable_plugin "dummydevice"
   enable_plugin "\*dynamite"
 
 elif [ "$(dbget vdr.backend)" = "softhddevice" ]; then
@@ -67,14 +65,14 @@ elif [ "$(dbget vdr.backend)" = "softhddevice" ]; then
   disable_plugin "xine"
   disable_plugin "xineliboutput"
   enable_plugin "softhddevice"  
-  disable_plugin "lcdproc"
-  disable_plugin "imonlcd"
-  disable_plugin "iptv"
-  disable_plugin "text2skin"
-  disable_plugin "menuorg"
-  disable_plugin "yaepghd"
-  disable_plugin "extrecmenu"
-  disable_plugin "suspendoutput"
+  enable_plugin "iptv"
+  enable_plugin "text2skin"
+  enable_plugin "menuorg"
+  enable_plugin "yaepghd"
+  enable_plugin "extrecmenu"
+  enable_plugin "suspendoutput"
+  enable_plugin "imonlcd"
+  enable_plugin "lcdproc"
   enable_plugin "\*dynamite"
 
 elif [ "$(dbget vdr.backend)" = "streaming" ]; then
