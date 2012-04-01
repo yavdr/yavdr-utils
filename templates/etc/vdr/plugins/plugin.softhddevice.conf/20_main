@@ -1,1 +1,1 @@
--s -d <?cs var:display ?>
+-s -d <?cs var:display ?> <?cs var:mixer ?>
