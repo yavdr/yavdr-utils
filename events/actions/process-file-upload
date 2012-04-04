@@ -7,7 +7,14 @@ for i in "var/lib/vdr/remote.conf" "etc/vdr/diseqc.conf" "var/lib/vdr/channels.c
   if [ -f $i ]; then
     case $i in
       var/lib/vdr/remote.conf|etc/vdr/diseqc.conf)
-        stop vdr 
+        stop vdr
+        mv $i /$i
+        chown vdr:vdr /$i
+        start vdr
+        echo "OK uploaded file /$i"
+        ;;
+      var/lib/vdr/scr.conf|etc/vdr/scr.conf)
+        stop vdr
         mv $i /$i
         chown vdr:vdr /$i
         start vdr
