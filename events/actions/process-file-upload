@@ -2,8 +2,7 @@
 
 pushd /var/cache/yavdr/upload >/dev/null
 
-for i in "var/lib/vdr/remote.conf" "etc/vdr/diseqc.conf" "var/lib/vdr/channels.conf" "etc/lirc/lircd.conf" "var/lib/vdr/.xbmc/userdata/Lircmap.xml 
-"; do
+for i in "var/lib/vdr/remote.conf" "etc/vdr/diseqc.conf" "etc/vdr/diseqc.conf" "var/lib/vdr/channels.conf" "etc/lirc/lircd.conf" "var/lib/vdr/.xbmc/userdata/Lircmap.xml"; do
   if [ -f $i ]; then
     case $i in
       var/lib/vdr/remote.conf|etc/vdr/diseqc.conf)
@@ -32,7 +31,7 @@ for i in "var/lib/vdr/remote.conf" "etc/vdr/diseqc.conf" "var/lib/vdr/channels.c
         start remoted
         echo "OK uploaded file /$i"
         ;;
-      var/lib/vdr/.xbmc/userdata/Lircmap.xml)        
+      var/lib/vdr/.xbmc/userdata/Lircmap.xml)
         mv $i /$i
         chown vdr:vdr /$i
         echo "OK uploaded file /$i"
