@@ -7,20 +7,19 @@ respawn
 
 
 post-start script
-  date > /tmp/yavdr-frontend.log
   while ! vdr-dbus-send /Remote remote.Enable 2>&1 >>/tmp/yavdr-frontend.log; do sleep 0.1; done
   
-  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' 2>&1 >> /tmp/yavdr-frontend.log ||:
-  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' 2>&1 >> /tmp/yavdr-frontend.log ||:
-  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"ATTA" string:"-d :1`dbget vdr.tempdisplay`" 2>&1 >> /tmp/yavdr-frontend.log ||:
-  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' 2>&1 >> /tmp/yavdr-frontend.log ||:
+  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||:
+  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||:
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"ATTA" string:"-d :1`dbget vdr.tempdisplay`" ||:
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||:
 end script
 
 pre-stop script
-  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'SUSP' 2>&1 >> /tmp/yavdr-frontend.log ||:
-  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' 2>&1 >>/tmp/yavdr-frontend.log ||:
-  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'SUSP' 2>&1 >> /tmp/yavdr-frontend.log ||:
-  #/usr/bin/vdr-dbus-send /Remote remote.Disable 2>&1 >>/tmp/yavdr-frontend.log ||:
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'SUSP' ||:
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||:
+  #vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'SUSP' ||:
+  #/usr/bin/vdr-dbus-send /Remote remote.Disable ||:
 end script
 
 env HOME=/var/lib/vdr
