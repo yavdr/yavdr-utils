@@ -43,6 +43,9 @@ case "$1" in
                vdr-plugin-music-trigger)
                     signal-event music-plugin
                     ;;
+               vdr-plugin-muggle-trigger)
+                    signal-event muggle-plugin
+                    ;;
             esac
         done
 	;;

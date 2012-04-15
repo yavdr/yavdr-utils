@@ -150,6 +150,7 @@
       <display>AspectRatio</display>
       <select>Info</select>
       <teletext>XBMC.ActivateWindow(Teletext)</teletext>
+      <record>XBMC.PlayerControl(Record)</record>
     </remote>
   </FullscreenVideo>
   <FullscreenInfo>
