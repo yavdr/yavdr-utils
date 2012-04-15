@@ -1,21 +1,18 @@
 <?cs if:(vdr.frontend == "softhddevice") ?>
-start on ((started vdr and (stopped openbox-tools or desktop-session-start)) or vdr-frontend-restart or resume)
+start on vdr-frontend-restart or resume
 stop on stopped vdr or suspend or stopping openbox
 
-nice -10
+env HOME=/var/lib/vdr
+export HOME
 respawn
 
-
 pre-start script
-  while ! vdr-dbus-send /Remote remote.Enable 2>&1 >>/tmp/yavdr-frontend.log; do sleep 0.1; done
-  
+  while ! vdr-dbus-send /Remote remote.Enable ; do sleep 0.1; done
   vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"ATTA" string:"-d :1`dbget vdr.tempdisplay`" ||:
-  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||:
 end script
 
 post-stop script
   vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||:
 end script
 
-env HOME=/var/lib/vdr
 <?cs /if ?>
