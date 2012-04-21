@@ -5,7 +5,8 @@
 REMOTE="<?cs if:system.remote.lirc.receiver.description != "" ?><?cs var:system.remote.lirc.receiver.description ?><?cs else ?>None<?cs /if ?>"
 REMOTE_MODULES="<?cs if:system.remote.lirc.receiver.lirc_driver != "none" && if:system.remote.lirc.receiver.lirc_driver != "" ?><?cs var:system.remote.lirc.receiver.lirc_driver ?><?cs /if ?>"
 REMOTE_DRIVER="<?cs if:(system.remote.lirc.receiver.driver != "none" && system.remote.lirc.receiver.driver != "" )&& (system.remote.lirc.receiver.lirc_driver == "none" || system.remote.lirc.receiver.lirc_driver == "") ?><?cs var:system.remote.lirc.receiver.driver ?><?cs /if ?>"
-REMOTE_DEVICE="<?cs if:system.remote.lirc.receiver.lirc_driver != "" && system.remote.lirc.receiver.lirc_driver != "none" ?>/dev/lirc0<?cs /if ?>"
+#REMOTE_DEVICE="<?cs if:system.remote.lirc.receiver.lirc_driver != "" && system.remote.lirc.receiver.lirc_driver != "none" ?>/dev/lirc0<?cs /if ?>"
+REMOTE_DEVICE="<?cs if:system.remote.lirc.receiver.lirc_driver == "lirc_dev lirc_serial"?>/dev/lirc_serial0<?cs elif:system.remote.lirc.receiver.lirc_driver != "" && system.remote.lirc.receiver.lirc_driver != "none" ?>/dev/lirc0<?cs /if ?>"
 REMOTE_LIRCD_CONF="<?cs var:system.remote.lirc.receiver.lircd_conf ?>"
 REMOTE_LIRCD_ARGS=""
 
