@@ -41,10 +41,15 @@
 		<mute>KEY_MUTE</mute>
 		<start>KEY_SELECT</start>
 		<subtitle>KEY_SUBTITLE</subtitle>
+                <audio>KEY_MODE</audio>
 		<mute>KEY_MUTE</mute>
 		<myvideo>KEY_VIDEO</myvideo>
 		<mymusic>KEY_AUDIO</mymusic>
-		<mypictures>KEY_MEDIA</mypictures>
-		<mytv>KEY_TV</mytv>
+		<mypictures>KEY_IMAGES</mypictures>
+		<recordedtv>KEY_PVR</recordedtv>
+                <guide>KEY_EPG</guide>
+                <display>KEY_SCREEN</display>
+                <enter>KEY_PROG2</enter>
                 <playlist>KEY_ZOOM</playlist>
+                <liveradio>KEY_FN</liveradio>
 	</remote>
