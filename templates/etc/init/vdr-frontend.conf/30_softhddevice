@@ -1,6 +1,6 @@
 <?cs if:(vdr.frontend == "softhddevice") ?>
 start on vdr-frontend-restart or resume
-stop on stopped vdr or suspend or stopping openbox
+stop on stopping vdr or suspend or stopping openbox
 
 env HOME=/var/lib/vdr
 export HOME
