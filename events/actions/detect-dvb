@@ -69,13 +69,6 @@ if check_pci "1ADE:2032"; then
   SOURCE="SAT"
   DRIVER="linux-media-dkms"
 
-# TeVii S470
-elif check_pci "d470:9022"; then
-  SOURCE="SAT"
-  DRIVER="linux-media-dkms"
-
-#echo $DRIVER
-
 # install driver
 if [ -n "$DRIVER" ]; then
   apt-get install -y $DRIVER
