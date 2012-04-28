@@ -58,13 +58,19 @@ class Lirc2uinput:
         return self.current_gap
 
     def getKeyname(self, key):
-        if key[0].islower():
-            keycmd = eval('uinput.%s'%(key.upper()))
-            k_upper = False
-        else:
-            keycmd = eval('uinput.%s'%(key.replace('_up','')))
-            k_upper = True
-            # '_up' ist a suffix added by lircd to keynames optionally to signal key release
+        try:
+          if key[0].islower():
+              keycmd = eval('uinput.%s'%(key.upper()))
+              k_upper = False
+          else:
+              keycmd = eval('uinput.%s'%(key.replace('_up','')))
+              k_upper = True
+              # '_up' ist a suffix added by lircd to keynames optionally to signal key release
+        except: 
+          keycmd = uinput.KEY_COFFEE
+          k_upper = True
+          self.debug.log("Key %s is not supported by your input.h, get a coffee ;)"%key)
+        #print "%s mapped to %s"%(key,keycmd)
         return keycmd, k_upper
     
     def send_key(self,key):
@@ -179,7 +185,7 @@ class Debug():
         
     def log(self, message):
         if self.active:
-            syslog.syslog(message)
+              syslog.syslog(unicode(message))
 
 
 
