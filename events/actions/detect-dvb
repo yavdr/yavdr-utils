@@ -68,6 +68,13 @@ fi
 if check_pci "1ADE:2032"; then
   SOURCE="SAT"
   DRIVER="linux-media-dkms"
+fi
+
+# Digital Devices
+if check_pci "dd01:0011" ; then
+  SOURCE="C/T"
+  DRIVER="linux-media-dkms"
+fi
 
 # install driver
 if [ -n "$DRIVER" ]; then
