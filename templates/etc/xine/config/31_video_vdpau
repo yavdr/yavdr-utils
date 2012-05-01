@@ -34,3 +34,11 @@ video.output.vdpau_skip_chroma_deinterlace:1
 # default length of display queue
 # numeric, default: 2
 video.output.vdpau_display_queue_length:4
+
+# priority for vdpau_h264 decoder
+# numeric, default: 0
+#engine.decoder_priorities.vdpau_h264:0
+
+# priority for vdpau_h264_alter decoder
+# numeric, default: 0
+engine.decoder_priorities.vdpau_h264_alter:1
