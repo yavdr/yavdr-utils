@@ -111,7 +111,7 @@ case "$1" in
 		    }
 		fi
 
-		$PREFIX/bin/rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
+		$PREFIX/sbin/rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
 		    RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
 
 		[ -z "$ClearAddr" ] || echo "nfsd 127.0.0.1 1" >/proc/net/rpc/auth.unix.ip/channel

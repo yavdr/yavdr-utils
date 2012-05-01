@@ -39,7 +39,7 @@ DRIVER=""
 if check_pci "13c2:300a" || check_pci "13c2:300b"; then
   # ist kein treiber gewählt, so installiere den v4l
   SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms"
+  DRIVER="linux-media-dkms"
   dbset vdr.setup="hdff"
   dbset vdr.frontend="disabled"
   dbset vdr.backend="hdff"
@@ -63,63 +63,23 @@ fi
 ############################################################################################################
 # erkenne nun nach priorität treiber vorraussetzungen
 ############################################################################################################
-# erkenne s2-liplianin
 
 # DVBWorld DVB-S2 PCIE2006
 if check_pci "1ADE:2032"; then
   SOURCE="SAT"
-  DRIVER="s2-liplianin-dkms"
-
-# TeVii S470 - optional aber läuft wohl besser mit s2
-elif check_pci "d470:9022"; then
-  SOURCE="SAT"
-  DRIVER="s2-liplianin-dkms"
-
-# dann erkenne v4l-dvb-dkms wenn kein s2
-# Anysee
-elif check_usb "1c73:861f"; then
-  DRIVER="v4l-dvb-dkms"
-
-# TeVii S480
-# TeVii S660 USB
-elif check_usb "9022:d482" || check_usb "9022:d481" || check_usb "9022:d660"; then
-  SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms"
-
-# TT 3600 USB
-elif check_usb "0b48:3007" || check_usb "0b48:300A"; then
-  SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms" # sollte im neuen v4l auch drinne sein
-#  DRIVER="s2-liplianin-dkms"
-
-# Pinnacle Systems, Inc. [hex] PCTV Sat HDTV Pro BDA Device
-elif check_usb "2304:021f"; then
-  SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms" # sollte im neuen v4l auch drinne sein
-#  DRIVER="s2-liplianin-dkms"
-
-# Hauppauge WinTV-NOVA-HD-S2
-elif check_pci "14f1:8800"; then
-  SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms"
-
-# TechnoTrend TT S2 3200
-elif check_pci2 "1131:7146" && check_pci "13c2:1019"; then
-  SOURCE="SAT"
-  DRIVER="v4l-dvb-dkms"
-
-# Digital Devices Ocptopus / LE Bridge / NGene Bridge
-elif check_pci2 "dd01:0003" || check_pci2 "18c3:0720"; then
-  DRIVER="v4l-dvb-dkms"
+  DRIVER="linux-media-dkms"
 fi
 
-#echo $DRIVER
+# Digital Devices
+if check_pci "dd01:0011" ; then
+  SOURCE="C/T"
+  DRIVER="linux-media-dkms"
+fi
 
 # install driver
-#if [ -n "$DRIVER" ]; then
-#  apt-get install -y $DRIVER
-#fi
-apt-get install linux-media-dkms
+if [ -n "$DRIVER" ]; then
+  apt-get install -y $DRIVER
+fi
 
 # detect: Sundtek Sticks
 if check_usb "eb1a:5"; then

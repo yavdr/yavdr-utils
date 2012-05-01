@@ -22,6 +22,7 @@ import gobject
 import sys
 import uinput
 import datetime
+from threading import Timer
 from optparse import OptionParser
 
 class Lirc2uinput:
@@ -38,8 +39,9 @@ class Lirc2uinput:
         self.repeat_num = 0
         self.debug = debug
         self.timestamp = datetime.datetime.now()
+        self.timeout_value = 1
         self.events = []
-        
+        self.timeout = Timer(self.timeout_value, uinput.KEY_COFFEE)
         # add all defined KEY_.* to supported key events
         for element in dir(uinput):
           if element.startswith("KEY_"):
@@ -47,7 +49,8 @@ class Lirc2uinput:
             self.debug.log("uinput.%s"%element)
         # create uinput device
         self.device = uinput.Device(self.events, uinput_name)
-        self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
+        #self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
+        #print "init"
 
     def get_gap(self,repeat_num):
         if self.current_gap > self.min_gap:
@@ -58,56 +61,59 @@ class Lirc2uinput:
         return self.current_gap
 
     def getKeyname(self, key):
-        if key[0].islower():
-            keycmd = eval('uinput.%s'%(key.upper()))
-            k_upper = False
-        else:
-            keycmd = eval('uinput.%s'%(key.replace('_up','')))
-            k_upper = True
-            # '_up' ist a suffix added by lircd to keynames optionally to signal key release
+        try:
+          if key[0].islower():
+              keycmd = eval('uinput.%s'%(key.upper()))
+              k_upper = False
+          else:
+              keycmd = eval('uinput.%s'%(key.replace('_up','')))
+              k_upper = True
+              # '_up' ist a suffix added by lircd to keynames optionally to signal key release
+        except: 
+          keycmd = uinput.KEY_COFFEE
+          k_upper = True
+          self.debug.log("Key %s is not supported by your input.h, get a coffee ;)"%key)
+        #print "%s mapped to %s"%(key,keycmd)
         return keycmd, k_upper
-    
-    def send_key(self,key):
+   
+    def send_key_r(self,key):
         keycmd, k_upper = self.getKeyname(key)
         self.debug.log(keycmd)
+        
         now = datetime.datetime.now()
-        if key.endswith("_up") and k_upper:
-            self.debug.log("released %s"%(key[:-3]))
-            self.device.emit(keycmd, 0)
-            self.repeat_num = 0
-            self.timestamp = datetime.datetime.now()
-            self.current_gap = self.max_gap
-        elif self.lastkey == keycmd:
-            if (now - self.timestamp).microseconds < self.current_gap:
-                self.debug.log("Passing keypress... too early")#"repeated %s %s times"%(key,self.repeat)
+        # repeated keypress
+        if self.lastkey == keycmd and (now - self.timestamp).microseconds < self.current_gap:
+                self.debug.log("Passing keypress %s... too early"%(unicode(keycmd)))
                 pass     
-            else:
-                self.debug.log("Repeated keypress")
+        elif self.lastkey == keycmd:
+                self.debug.log("Repeated keypress %s" %(unicode(keycmd)))
                 if self.repeat_num >= self.wait_repeats:
                     self.current_gap = self.get_gap(self.repeat_num)
                 else:
                     pass
-                self.keypress(keycmd, 2)
+                if self.repeat_num > 0:
+                    self.keypress(keycmd, 2)
                 self.timestamp = datetime.datetime.now()
                 self.repeat_num += 1
-
         else:
-            self.debug.log("first keypress")
             self.keypress(keycmd, 1)
-            self.timestamp = datetime.datetime.now()
-            self.current_gap = self.max_gap
-            self.repeat_num = 0
-
+            self.repeat_num += 1
         self.lastkey=keycmd
-        
-    def keypress(self, key, value):
-        if key in self.specialkeys:
-            self.device.emit(key, value)
-            #self.current_gap = 
+        return keycmd
+                
+    def send_key(self,key):
+        keycmd, k_upper = self.getKeyname(key)
+        self.debug.log(keycmd)
+        if self.lastkey == keycmd and self.repeat_num > 0:
+            self.keypress(keycmd, 2)
         else:
-            self.device.emit(key, 1)
-            self.device.emit(key, 0)
-
+            self.keypress(keycmd, 1)
+        self.repeat_num += 1
+        self.lastkey=keycmd
+        return keycmd
+               
+    def keypress(self, key, value):
+        self.device.emit(key, value)
 
 class main:
     """Listens to LIRC's domain socket and calls a method each time an
@@ -116,7 +122,10 @@ class main:
         parser = Options()
         self.options = parser.get_opts()
         self.Dbg = Debug(self.options.debug)
+        self.timeout = self.options.timeout
+        self.repeatfilter = self.options.repeatfilter
         self.syslog_init()
+        self.timer = None
         if not self.options.lircd_socket:
             # use /var/run/lirc/lircd.<pidof lircd> as socket
             try:
@@ -134,16 +143,33 @@ class main:
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.sock.connect(self.socket_path)
         self.uinputdev = Lirc2uinput(options=self.options, debug=self.Dbg)
-        gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
+        if self.repeatfilter:
+            self.command = "send_key_r"
+            gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
+        else:
+            self.command = "send_key"
+            gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
             
     def handler(self, sock, *args):
-
+        try:
+             gobject.source_remove(self.timer)
+             #print "removed timer"
+        except: pass
         buf = self.sock.recv(1024)
         lines = string.split(buf, "\n")
         for line in lines[:-1]:
             code,count,cmd,device = string.split(line, " ")
-            self.uinputdev.send_key(cmd)
+            keycmd = eval("self.uinputdev.%s(cmd)"%(self.command))
+            self.timer = gobject.timeout_add(self.timeout, self.release_key,keycmd)
         return True
+        
+    def release_key(self, keycmd):
+        self.uinputdev.keypress(keycmd, 0)
+        self.uinputdev.repeat_num = 0
+        self.uinputdev.lastkey = None
+        self.uinputdev.current_gap = self.uinputdev.max_gap
+        #print 'released key', keycmd
+        return 0
             
     def syslog_init(self):
         self.Dbg.log('Started lircd2uinput with these options:')
@@ -156,19 +182,26 @@ class main:
 class Options:
     def __init__(self):
         self.parser = OptionParser()
-        self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
-                  help="set minimum gap between repeated keystrokes (default 150000)", metavar="MIN_GAP")
-        self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
-                  help="set maximum gap between repeated keystrokes (default 300000)", metavar="MAX_GAP")
-        self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
-                  help="number of repeats before using accelerated keypresses (default = 2)", metavar="WAIT_REPEATS")
-        self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
-                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed",
-                    metavar="ACCELERATION")
+        self.parser.add_option("-f", "--repeat-filter", dest="repeatfilter", action="store_true",
+                  help='enable repeat-filter')
         self.parser.add_option("-s", "--lircd-socket", dest="lircd_socket", default=None,
                   help="choose lircd socket to listen on", metavar="LIRCD_SOCKET")
         self.parser.add_option("-d", "--debug", dest="debug", action="store_true",
                   help='enable debug mode')
+        self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
+                  help="set minimum gap between repeated keystrokes (default 150000) - needs active repeat-filter", metavar="MIN_GAP")
+        self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
+                  help="set maximum gap between repeated keystrokes (default 300000) - needs active repeat-filter", metavar="MAX_GAP")
+        self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
+                  help="number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
+        self.parser.add_option("-t", "--timeout", dest="timeout", default=150, type="int",
+                  help="release key after x ms no following key is received (default = 150)", metavar="TIMEOUT")
+        self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
+                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
+                    metavar="ACCELERATION")
+
+        
+                  
     def get_opts(self):
         (options, args) = self.parser.parse_args()
         return options
@@ -179,7 +212,7 @@ class Debug():
         
     def log(self, message):
         if self.active:
-            syslog.syslog(message)
+              syslog.syslog(unicode(message))
 
 
 

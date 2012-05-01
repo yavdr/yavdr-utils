@@ -14,5 +14,5 @@ case $EXIT_STATUS in
         initctl emit vdr-frontend-restart
         ;;
 esac
-
+killall -9 xbmc.bin
 end script
