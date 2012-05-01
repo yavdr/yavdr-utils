@@ -49,7 +49,7 @@ class Lirc2uinput:
             self.debug.log("uinput.%s"%element)
         # create uinput device
         self.device = uinput.Device(self.events, uinput_name)
-        self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
+        #self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
         #print "init"
 
     def get_gap(self,repeat_num):
@@ -76,9 +76,10 @@ class Lirc2uinput:
         #print "%s mapped to %s"%(key,keycmd)
         return keycmd, k_upper
    
-    def send_key(self,key):
+    def send_key_r(self,key):
         keycmd, k_upper = self.getKeyname(key)
         self.debug.log(keycmd)
+        
         now = datetime.datetime.now()
         # repeated keypress
         if self.lastkey == keycmd and (now - self.timestamp).microseconds < self.current_gap:
@@ -97,17 +98,21 @@ class Lirc2uinput:
         else:
             self.keypress(keycmd, 1)
             self.repeat_num += 1
-        
+        return keycmd
+                
+    def send_key(self,key):
+        keycmd, k_upper = self.getKeyname(key)
+        self.debug.log(keycmd)
+        if self.lastkey == keycmd and self.repeat_num > 0:
+            self.keypress(keycmd, 2)
+        else:
+            self.keypress(keycmd, 1)
+        self.repeat_num += 1
         self.lastkey=keycmd
         return keycmd
                
     def keypress(self, key, value):
-        #if value!=0:
         self.device.emit(key, value)
-        #print 'press ',key,value
-        #else:
-        #    self.device.emit(key, value, syn=True)
-        #    print 'press ',key, value,' with sync'
 
 class main:
     """Listens to LIRC's domain socket and calls a method each time an
@@ -116,6 +121,8 @@ class main:
         parser = Options()
         self.options = parser.get_opts()
         self.Dbg = Debug(self.options.debug)
+        self.timeout = self.options.timeout
+        self.repeatfilter = self.options.repeatfilter
         self.syslog_init()
         self.timer = None
         if not self.options.lircd_socket:
@@ -135,7 +142,12 @@ class main:
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.sock.connect(self.socket_path)
         self.uinputdev = Lirc2uinput(options=self.options, debug=self.Dbg)
-        gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
+        if self.repeatfilter:
+            self.command = "send_key_r"
+            gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
+        else:
+            self.command = "send_key"
+            gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
             
     def handler(self, sock, *args):
         try:
@@ -146,10 +158,10 @@ class main:
         lines = string.split(buf, "\n")
         for line in lines[:-1]:
             code,count,cmd,device = string.split(line, " ")
-            keycmd = self.uinputdev.send_key(cmd)
-        self.timer = gobject.timeout_add(150, self.release_key,keycmd)
+            keycmd = eval("self.uinputdev.%s(cmd)"%(self.command))
+            self.timer = gobject.timeout_add(self.timeout, self.release_key,keycmd)
         return True
-
+        
     def release_key(self, keycmd):
         self.uinputdev.keypress(keycmd, 0)
         self.uinputdev.repeat_num = 0
@@ -169,19 +181,26 @@ class main:
 class Options:
     def __init__(self):
         self.parser = OptionParser()
-        self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
-                  help="set minimum gap between repeated keystrokes (default 150000)", metavar="MIN_GAP")
-        self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
-                  help="set maximum gap between repeated keystrokes (default 300000)", metavar="MAX_GAP")
-        self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
-                  help="number of repeats before using accelerated keypresses (default = 2)", metavar="WAIT_REPEATS")
-        self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
-                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed",
-                    metavar="ACCELERATION")
+        self.parser.add_option("-f", "--repeat-filter", dest="repeatfilter", action="store_true",
+                  help='enable repeat-filter')
         self.parser.add_option("-s", "--lircd-socket", dest="lircd_socket", default=None,
                   help="choose lircd socket to listen on", metavar="LIRCD_SOCKET")
         self.parser.add_option("-d", "--debug", dest="debug", action="store_true",
                   help='enable debug mode')
+        self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
+                  help="set minimum gap between repeated keystrokes (default 150000) - needs active repeat-filter", metavar="MIN_GAP")
+        self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
+                  help="set maximum gap between repeated keystrokes (default 300000) - needs active repeat-filter", metavar="MAX_GAP")
+        self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
+                  help="number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
+        self.parser.add_option("-t", "--timeout", dest="timeout", default=150, type="int",
+                  help="release key after x ms no following key is received (default = 150)", metavar="TIMEOUT")
+        self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
+                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
+                    metavar="ACCELERATION")
+
+        
+                  
     def get_opts(self):
         (options, args) = self.parser.parse_args()
         return options
