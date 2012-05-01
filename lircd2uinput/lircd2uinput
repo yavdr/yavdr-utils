@@ -98,6 +98,7 @@ class Lirc2uinput:
         else:
             self.keypress(keycmd, 1)
             self.repeat_num += 1
+        self.lastkey=keycmd
         return keycmd
                 
     def send_key(self,key):
