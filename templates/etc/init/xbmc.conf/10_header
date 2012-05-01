@@ -3,6 +3,8 @@ author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 
 env DISPLAY=:1
 export DISPLAY
+setuid vdr
+setgid vdr
 
 <?cs if:(vdr.frontend == "xbmc") ?>
 start on ((started vdr and openbox-started and sound-card-added) or vdr-frontend-restart)
