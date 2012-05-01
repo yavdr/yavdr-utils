@@ -34,6 +34,7 @@ class Lirc2uinput:
         self.min_gap = options.min_gap
         self.acceleration = options.acceleration
         self.lircd_socket = options.lircd_socket
+        self.xbmc = options.xbmc
         self.gap_delta = (self.max_gap - self.min_gap)*self.acceleration
         self.current_gap = self.max_gap
         self.repeat_num = 0
@@ -48,6 +49,7 @@ class Lirc2uinput:
             self.events.append(eval("uinput.%s"%element))
             self.debug.log("uinput.%s"%element)
         # create uinput device
+        self.specialkeys = [uinput.KEY_VOLUMEUP, uinput.KEY_VOLUMEDOWN]
         self.device = uinput.Device(self.events, uinput_name)
         #self.specialkeys = [(1, 114),(1, 115)] # KEY_VOLUMEDOWN and KEY_VOLUMEUP - a "real" repeat behaviour is used.
         #print "init"
@@ -104,10 +106,14 @@ class Lirc2uinput:
     def send_key(self,key):
         keycmd, k_upper = self.getKeyname(key)
         self.debug.log(keycmd)
-        if self.lastkey == keycmd and self.repeat_num > 0:
-            self.keypress(keycmd, 2)
+        if self.xbmc and keycmd not in self.specialkeys:
+                self.keypress(keycmd, 1)
+                self.keypress(keycmd, 0)
         else:
-            self.keypress(keycmd, 1)
+            if self.lastkey == keycmd and self.repeat_num > 0:
+                self.keypress(keycmd, 2)
+            else:
+                self.keypress(keycmd, 1)
         self.repeat_num += 1
         self.lastkey=keycmd
         return keycmd
@@ -124,6 +130,7 @@ class main:
         self.Dbg = Debug(self.options.debug)
         self.timeout = self.options.timeout
         self.repeatfilter = self.options.repeatfilter
+        self.xbmc = self.options.xbmc
         self.syslog_init()
         self.timer = None
         if not self.options.lircd_socket:
@@ -188,6 +195,8 @@ class Options:
                   help="choose lircd socket to listen on", metavar="LIRCD_SOCKET")
         self.parser.add_option("-d", "--debug", dest="debug", action="store_true",
                   help='enable debug mode')
+        self.parser.add_option("-x", "--xbmc", dest="xbmc", action="store_true",
+                  help='enable xbmc single keypress mode')
         self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
                   help="set minimum gap between repeated keystrokes (default 150000) - needs active repeat-filter", metavar="MIN_GAP")
         self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
