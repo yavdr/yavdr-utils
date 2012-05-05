@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# vim: set fileencoding=utf-8 :
 # Alexander Grothe 2011 - 2012
 #
 # This script requires python-uinput V 0.6.1. or higher. Additional required packages are libudev0 and libudev-dev.
@@ -129,6 +130,9 @@ class main:
         self.options = parser.get_opts()
         self.Dbg = Debug(self.options.debug)
         self.timeout = self.options.timeout
+        if (self.timeout * 1000) < self.options.min_gap:
+            self.timeout = self.options.min_gap + 10000
+            self.Dbg.log("Warning: timeout < --min-gap: setting timeout 10ms greater than --min-gap")
         self.repeatfilter = self.options.repeatfilter
         self.xbmc = self.options.xbmc
         self.syslog_init()
@@ -198,13 +202,13 @@ class Options:
         self.parser.add_option("-x", "--xbmc", dest="xbmc", action="store_true",
                   help='enable xbmc single keypress mode')
         self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
-                  help="set minimum gap between repeated keystrokes (default 150000) - needs active repeat-filter", metavar="MIN_GAP")
+                  help="set minimum gap between repeated keystrokes (default 150000 µs) - needs active repeat-filter", metavar="MIN_GAP")
         self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
-                  help="set maximum gap between repeated keystrokes (default 300000) - needs active repeat-filter", metavar="MAX_GAP")
+                  help="set maximum gap between repeated keystrokes (default 300000 µs) - needs active repeat-filter", metavar="MAX_GAP")
         self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
                   help="number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
         self.parser.add_option("-t", "--timeout", dest="timeout", default=150, type="int",
-                  help="release key after x ms no following key is received (default = 150)", metavar="TIMEOUT")
+                  help="release key after x ms no following key is received (default = 150 ms)", metavar="TIMEOUT")
         self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
                   help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
                     metavar="ACCELERATION")
