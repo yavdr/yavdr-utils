@@ -1,7 +1,9 @@
 <?cs if:(vdr.frontend == "xine") ?> 
-start on ((started vdr and (stopped openbox-tools or desktop-session-start)) or vdr-frontend-restart or resume)
-stop on stopping vdr or suspend or stopping openbox
+start on vdr-frontend-restart 
+stop on stopping vdr or stopping openbox
 
+setuid vdr
+setgid vdr
 nice -10
 respawn
 
@@ -35,10 +37,8 @@ if [ "$USE_AUTOCROP" = "1" ]; then
   XINEOPTS="$XINEOPTS --post autocrop:enable_autodetect=1,enable_subs_detect=1,soft_start=1,stabilize=1"
 fi
 
-while [ ! -e /tmp/vdr-xine/stream ] ; do sleep 0.1 ; done
 <?cs if:(?system.hardware.alsa.hdmi.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.hdmi.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
 <?cs if:(?system.hardware.alsa.analog.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.analog.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
-exec start-stop-daemon --start --exec /usr/bin/xine --user vdr --chuid vdr \
--- $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes &> /tmp/vdr-frontend.log
+exec /usr/bin/xine vdr  $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes 
 end script
 <?cs /if ?>
