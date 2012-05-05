@@ -1,6 +1,6 @@
 CFLAGS=-g
 
-all: lircd2uinput.py lircd2uinput.conf
+all: lircd2uinput
 
 clean:
 
