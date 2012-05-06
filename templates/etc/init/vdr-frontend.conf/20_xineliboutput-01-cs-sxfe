@@ -1,6 +1,9 @@
 <?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" ) ?>
-start on ((started vdr and (stopped openbox-tools or desktop-session-start)) or vdr-frontend-restart or resume)
-stop on stopping vdr or suspend or stopping openbox
+start on vdr-frontend-restart 
+stop on stopping vdr or stopping openbox
+
+setuid vdr
+setgid vdr
 
 nice -10
 respawn
