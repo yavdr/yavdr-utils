@@ -39,6 +39,6 @@ fi
 
 <?cs if:(?system.hardware.alsa.hdmi.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.hdmi.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
 <?cs if:(?system.hardware.alsa.analog.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.analog.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
-exec /usr/bin/xine vdr  $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes 
+exec /usr/bin/xine $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes 
 end script
 <?cs /if ?>
