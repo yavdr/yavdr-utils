@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "x$(dbget system.sound.type)" = "xhdmi" ] || \
+   [ "x$(dbget system.sound.type)" = "xanalog" ] || \
+   [ "x$(dbget system.sound.type)" = "x" ] ; then
+vdr-dbus-send /Setup setup.Set string:'xineliboutput.Audio.Speakers' string:'Stereo 2.0' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioPassthrough' string:'0' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioDownmix' string:'1' &> /dev/null
+elif [ "x$(dbget system.sound.type)" = "xpassthrough" ] || \
+     [ "x$(dbget system.sound.type)" = "xspdif" ] ; then
+vdr-dbus-send /Setup setup.Set string:'xineliboutput.Audio.Speakers' string:'Pass Through' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioPassthrough' string:'1' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioDownmix' string:'0' &> /dev/null
+
+fi
+
