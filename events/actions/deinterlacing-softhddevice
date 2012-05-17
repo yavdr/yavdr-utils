@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ "x$(dbget vdr.deinterlacer.hd.type)" = "bob" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.1080i.Deinterlace' string:'0' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.720p.Deinterlace' string:'0' &> /dev/null
+
+elif [ "x$(dbget vdr.deinterlacer.hd.type)" = "temporal" ] || \
+     [ "x$(dbget vdr.deinterlacer.hd.type)" = "half temporal" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.1080i.Deinterlace' string:'2' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.720p.Deinterlace' string:'2' &> /dev/null
+
+elif [ "x$(dbget vdr.deinterlacer.hd.type)" = "temporal_spatial" ] || \
+     [ "x$(dbget vdr.deinterlacer.hd.type)" = "half temporal_spatial" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.1080i.Deinterlace' string:'3' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.720p.Deinterlace' string:'3' &> /dev/null
+
+elif if [ "x$(dbget vdr.deinterlacer.sd.type)" = "bob" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.576i.Deinterlace' string:'0' &> /dev/null
+
+elif [ "x$(dbget vdr.deinterlacer.sd.type)" = "temporal" ] || \
+     [ "x$(dbget vdr.deinterlacer.sd.type)" = "half temporal" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.576i.Deinterlace' string:'2' &> /dev/null
+
+elif [ "x$(dbget vdr.deinterlacer.sd.type)" = "temporal_spatial" ] || \
+     [ "x$(dbget vdr.deinterlacer.sd.type)" = "half temporal_spatial" ] ; then
+
+vdr-dbus-send /Setup setup.Set string:'softhddevice.576i.Deinterlace' string:'3' &> /dev/null
+
+
+fi
