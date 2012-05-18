@@ -9,11 +9,11 @@ export LANG
 mkdir -p /var/lib/vdr/.xbmc/userdata/Database/
 mkdir -p /var/lib/vdr/.xbmc/userdata/keymaps
 
-sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV19.db<<EOF
+sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV20.db<<EOF
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE version (idVersion integer, iCompressCount integer);
-INSERT INTO "version" VALUES(19,0);
+INSERT INTO "version" VALUES(20,0);
 
 CREATE TABLE clients (idClient integer primary key, sName    varchar(64), sUid     varchar(32));
 INSERT INTO "clients" VALUES(1,'VDR XVDR Client','pvr.vdr.xvdr');
@@ -34,30 +34,39 @@ CREATE UNIQUE INDEX idx_idGroup_idChannel on map_channelgroups_channels(idGroup,
 COMMIT;
 EOF
 
-sqlite3  /var/lib/vdr/.xbmc/userdata/Database/Addons15.db<<EOF
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
-CREATE TABLE version (idVersion integer, iCompressCount integer);
-INSERT INTO "version" VALUES(15,0);
-CREATE TABLE disabled (id integer primary key, addonID text);
-INSERT INTO "disabled" VALUES(1,'pvr.vdr.vnsi');
-INSERT INTO "disabled" VALUES(2,'pvr.mythtv');
-INSERT INTO "disabled" VALUES(3,'pvr.demo');
-INSERT INTO "disabled" VALUES(5,'pvr.team-mediaportal.tvserver');
-INSERT INTO "disabled" VALUES(6,'pvr.hts');
-CREATE TABLE broken (id integer primary key, addonID text, reason text);
-INSERT INTO "broken" VALUES(1,'skin.simplicity','Dependencies not met');
-CREATE TABLE blacklist (id integer primary key, addonID text, version text);
-CREATE INDEX idxAddon ON addon(addonID);
-CREATE INDEX idxAddonExtra ON addonextra(id);
-CREATE INDEX idxDependencies ON dependencies(id);
-CREATE UNIQUE INDEX ix_addonlinkrepo_1 ON addonlinkrepo ( idAddon, idRepo );
-CREATE UNIQUE INDEX ix_addonlinkrepo_2 ON addonlinkrepo ( idRepo, idAddon );
-CREATE UNIQUE INDEX idxDisabled ON disabled(addonID);
-CREATE UNIQUE INDEX idxBroken ON broken(addonID);
-CREATE UNIQUE INDEX idxBlack ON blacklist(addonID);
-COMMIT;
-EOF
+#sqlite3  /var/lib/vdr/.xbmc/userdata/Database/Addons15.db<<EOF
+#PRAGMA foreign_keys=OFF;
+#BEGIN TRANSACTION;
+#CREATE TABLE version (idVersion integer, iCompressCount integer);
+#INSERT INTO "version" VALUES(15,0);
+#CREATE TABLE addon (id integer primary key, type text,name text, summary text, description text, stars integer,path text, addonID text, icon text, version text, changelog text, fanart text, author text, disclaimer text,minversion text);
+#CREATE TABLE dependencies (id integer, addon text, version text, optional boolean);
+#CREATE TABLE repo (id integer primary key, addonID text,checksum text, lastcheck text);
+#CREATE TABLE addonlinkrepo (idRepo integer, idAddon integer);
+#CREATE TABLE disabled (id integer primary key, addonID text);
+#INSERT INTO "disabled" VALUES(1,'pvr.vdr.vnsi');
+#INSERT INTO "disabled" VALUES(2,'pvr.mythtv');
+#INSERT INTO "disabled" VALUES(3,'pvr.demo');
+#INSERT INTO "disabled" VALUES(5,'pvr.team-mediaportal.tvserver');
+#INSERT INTO "disabled" VALUES(6,'pvr.hts');
+#CREATE TABLE broken (id integer primary key, addonID text, reason text);
+#INSERT INTO "broken" VALUES(1,'plugin.video.tapetv','Dependencies not met');
+#INSERT INTO "broken" VALUES(2,'plugin.video.dmax','Dependencies not met');
+#INSERT INTO "broken" VALUES(3,'plugin.video.cinemassacre','Dependencies not met');
+#INSERT INTO "broken" VALUES(4,'plugin.video.national.geographic','Site changes');
+#INSERT INTO "broken" VALUES(5,'skin.simplicity','Dependencies not met');
+#INSERT INTO "broken" VALUES(6,'webinterface.wtouch','Dependencies not met');
+#CREATE TABLE blacklist (id integer primary key, addonID text, version text);
+#CREATE INDEX idxAddon ON addon(addonID);
+#CREATE INDEX idxAddonExtra ON addonextra(id);
+#CREATE INDEX idxDependencies ON dependencies(id);
+#CREATE UNIQUE INDEX ix_addonlinkrepo_1 ON addonlinkrepo ( idAddon, idRepo );
+#CREATE UNIQUE INDEX ix_addonlinkrepo_2 ON addonlinkrepo ( idRepo, idAddon );
+#CREATE UNIQUE INDEX idxDisabled ON disabled(addonID);
+#CREATE UNIQUE INDEX idxBroken ON broken(addonID);
+#CREATE UNIQUE INDEX idxBlack ON blacklist(addonID);
+#COMMIT;
+#EOF
 
 
 chown -R vdr:vdr /var/lib/vdr/.xbmc
