@@ -1,0 +1,1 @@
+<?cs if:system.x11.hud == "1" ?>HUDOPTS="--opengl --hud=opengl"<?cs else ?>HUDOPTS=""<?cs /if ?>

@@ -1,4 +1,4 @@
-#################################################################################
+<?cs if:(system.hardware.nvidia.detected == "1") ?>#################################################################################
 #                                                                               #
 #   The following configuration file is generated automatically by the yaVDR    #
 #     system. Don't change this file as every update of yaVDR will overwrite    #

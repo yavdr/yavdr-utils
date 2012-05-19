@@ -4,8 +4,14 @@ author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 env DISPLAY=:1
 export DISPLAY
 
+env HOME=/var/lib/vdr
+export HOME
+
+setuid vdr
+setgid vdr
+
 <?cs if:(vdr.frontend == "xbmc") ?>
-start on ((started vdr and openbox-started and sound-card-added) or vdr-frontend-restart)
-stop on (stopping vdr or stopping openbox)
+start on vdr-frontend-restart
+stop on stopping vdr or stopping openbox
 nice -10
 <?cs /if ?>

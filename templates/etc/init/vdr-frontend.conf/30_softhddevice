@@ -1,0 +1,17 @@
+<?cs if:(vdr.frontend == "softhddevice") ?>
+start on vdr-frontend-restart 
+stop on stopping vdr or stopping openbox
+
+env HOME=/var/lib/vdr
+export HOME
+respawn
+
+pre-start script
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"ATTA" string:"-d :1`dbget vdr.tempdisplay`" ||: &> /dev/null
+end script
+
+post-stop script
+  vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||: &> /dev/null
+end script
+
+<?cs /if ?>

@@ -1,0 +1,5 @@
+# yavdr-frontend - Starts vdr frontend
+#
+
+description     "yavdr-frontend"
+author          "Gerald Dachs <gda@dachsweb.de>"

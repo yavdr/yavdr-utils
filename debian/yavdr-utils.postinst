@@ -12,8 +12,11 @@ case "$1" in
 
        /usr/bin/service tntnet restart || /bin/true
         [ -f /var/lib/yavdrdb.hdf ] && signal-event post-upgrade
+        
+        if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
+            . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
+        fi
         ;;
-
     triggered)
         SIGNAL_EVENT_NOTRIGGER="y"
 	export SIGNAL_EVENT_NOTRIGGER
@@ -42,6 +45,9 @@ case "$1" in
                     ;;
                vdr-plugin-music-trigger)
                     signal-event music-plugin
+                    ;;
+               vdr-plugin-muggle-trigger)
+                    signal-event muggle-plugin
                     ;;
             esac
         done

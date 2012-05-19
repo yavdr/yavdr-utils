@@ -56,7 +56,6 @@
       <pageminus>PageDown</pageminus>
       <back>ParentDir</back>
       <menu>PreviousMenu</menu>
-      <title>ContextMenu</title>
       <info>Info</info>
       <skipplus>SkipNext</skipplus>
       <skipminus>SkipPrevious</skipminus>
@@ -70,11 +69,18 @@
       <myvideo>XBMC.ActivateWindow(MyVideos)</myvideo>
       <mymusic>XBMC.ActivateWindow(MyMusic)</mymusic>
       <mypictures>XBMC.ActivateWindow(MyPictures)</mypictures>
-      <mytv>XBMC.ActivateWindow(Home)</mytv>
+      <!--- <mytv>XBMC.ActivateWindow(Home)</mytv> -->
+      <recordedtv>XBMC.ActivateWindowAndFocus(MyPVR, 34,0, 13,0)</recordedtv>
+      <!-- PVR: EPG -->
+      <guide>XBMC.ActivateWindowAndFocus(MyPVR, 31,0, 10,0)</guide>
+      <!-- PVR: Channellist -->
+      <title>XBMC.ActivateWindowAndFocus(MyPVR, 32,0, 11,0)</title>
+      <!-- PVR: Radio -->
+      <liveradio>XBMC.ActivateWindowAndFocus(MyPVR, 33,0, 12,0)</liveradio>
       <red>XBMC.ActivateWindow(Home)</red>
       <yellow>XBMC.ActivateWindow(MyVideos)</yellow>
       <green>XBMC.ActivateWindow(MyMusic)</green>
-      <blue>XBMC.ActivateWindow(MyPictures)</blue>
+      <!-- <blue>XBMC.ActivateWindow(MyPictures)</blue> -->
       <zero>Number0</zero>
       <one>Number1</one>
       <two>JumpSMS2</two>
@@ -86,6 +92,10 @@
       <eight>JumpSMS8</eight>
       <nine>JumpSMS9</nine>
       <audio>AudioNextLanguage</audio>
+      <subtitle>ShowSubtitles</subtitle>
+      <enter>FullScreen</enter>
+      <blue>ContextMenu</blue>
+      <playlist>XBMC.ActivateWindow(MyMusicPlaylist)</playlist>
     </remote>
   </global>
   <Home>
@@ -93,7 +103,9 @@
       <menu>XBMC.Skin.ToggleSetting(HomeViewToggle)</menu>
       <info>XBMC.ActivateWindow(SystemInfo)</info>
       <clear>XBMC.ActivateWindow(Weather)</clear>
-      <hash>XBMC.ActivateWindow(Settings)</hash>
+      <blue>XBMC.ActivateWindow(Settings)</blue>
+      <red>FullScreen</red>
+      <back>FullScreen</back>
     </remote>
   </Home>
   <MyFiles>
@@ -144,12 +156,17 @@
       <down>Pause</down>
       <yellow>StepForward</yellow>
       <green>StepBack</green>
+      <blue>CodecInfo</blue>
       <menu>OSD</menu>
       <start>OSD</start>
-      <info>CodecInfo</info>
+      <info>XBMC.ActivateWindow(PVROSDChannels)</info>
+      <title>XBMC.ActivateWindow(PVROSDChannels)</title>
       <display>AspectRatio</display>
       <select>Info</select>
       <teletext>XBMC.ActivateWindow(Teletext)</teletext>
+      <channelplus>SkipNext</channelplus>
+      <channelminus>SkipPrevious</channelminus>
+      <record>XBMC.PlayerControl(Record)</record>
     </remote>
   </FullscreenVideo>
   <FullscreenInfo>
@@ -178,17 +195,18 @@
        <obc151>XBMC.ActivateWindow(MyMusicPlaylist)</obc151>
     </universalremote>
     <remote>
-      <red>XBMC.ActivateWindow(MyMusicPlaylist)</red>
+      <red>FullScreen</red>
       <yellow>AnalogSeekForward</yellow>
       <green>AnalogSeekBack</green>
+      <blue>CodecInfo</blue>
       <left>Rewind</left>
       <right>FastForward</right>
       <pageplus>SkipNext</pageplus>
       <pageminus>SkipPrevious</pageminus>
       <up>Play</up>
       <down>Pause</down>
-      <info>CodecInfo</info>
-      <back>FullScreen</back>
+      <info>XBMC.ActivateWindow(PVROSDChannels)</info>
+      <back>XBMC.ActivateWindow(MyMusicPlaylist)</back>
       <select>Info</select>
       <menu>XBMC.ActivateWindow(MusicOSD)</menu>
       <start>XBMC.ActivateWindow(MusicOSD)</start>
@@ -307,6 +325,8 @@
     <remote>
       <zero>Queue</zero>
       <clear>Delete</clear>
+      <green>ToggleWatched</green>
+      <yellow>Queue</yellow>
     </remote>
   </MyVideoLibrary>
   <MyVideoFiles>
@@ -314,6 +334,8 @@
       <zero>Queue</zero>
       <star>Queue</star>
       <start>ContextMenu</start>
+      <green>ToggleWatched</green>
+      <yellow>Queue</yellow>
     </remote>
   </MyVideoFiles>
   <MyPictures>
