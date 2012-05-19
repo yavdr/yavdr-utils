@@ -1,22 +1,11 @@
 <?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" ) ?>
-start on vdr-frontend-restart 
-stop on stopping vdr or stopping openbox
+end script
 
+nice -10
 setuid vdr
 setgid vdr
 
-nice -10
-respawn
 
-pre-start script
-if [ -e /tmp/.standalone ]; then
-   vdr-dbus-send /Remote remote.Disable ||:
-   exit 1
-fi
-end script
-
-
-env HOME=/var/lib/vdr
 #env XINE_BUFFER_LOG=1
 env USE_AUTOCROP=0
 export USE_AUTOCROP

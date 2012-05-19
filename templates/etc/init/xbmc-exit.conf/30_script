@@ -1,6 +1,8 @@
 script
-
+# log the status with which we left xbmc
 logger -t "XBMC" "XBMC exit with exit status $EXIT_STATUS, $EXIT_SIGNAL, ENV: $(env) ."
+
+# in case we want to shutdown do it, else make sure default rate is set in all cases
 case $EXIT_STATUS in
     64|66)
 	<?cs if:(vdr.backend == "disabled") ?>
@@ -11,8 +13,11 @@ case $EXIT_STATUS in
         ;;
     *)
         signal-event reset-display-rate
-        initctl emit vdr-frontend-restart
         ;;
 esac
+
+# restart vdr frontend and make sure nothing is left over
+/sbin/initctl emit --no-wait vdr-frontend-restart
 killall -9 xbmc.bin
 end script
+

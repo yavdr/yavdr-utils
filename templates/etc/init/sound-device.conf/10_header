@@ -1,0 +1,12 @@
+
+start on sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs if:(?system.hardware.alsa.analog.card) ?><?cs var:system.hardware.alsa.analog.card ?><?cs /if ?><?cs if:(?system.hardware.alsa.hdmi.card) ?> and sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs var:system.hardware.alsa.hdmi.card ?><?cs /if ?>
+stop on sound-device-removed KERNEL=card<?cs if:(?system.hardware.alsa.analog.card) ?><?cs var:system.hardware.alsa.analog.card ?><?cs /if ?><?cs if:(?system.hardware.alsa.hdmi.card) ?> or sound-device-removed KERNEL=card<?cs var:system.hardware.alsa.hdmi.card ?><?cs /if ?>
+
+pre-start script 
+true 
+end script 
+
+post-stop script 
+true 
+end script 
+

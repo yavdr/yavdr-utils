@@ -1,21 +1,10 @@
 <?cs if:(vdr.frontend == "xine") ?> 
-start on vdr-frontend-restart 
-stop on stopping vdr or stopping openbox
+end script
 
 setuid vdr
 setgid vdr
 nice -10
-respawn
 
-pre-start script
-if [ -e /tmp/.standalone ]; then
-   vdr-dbus-send /Remote remote.Disable ||:
-   exit 1
-fi
-end script
-
-
-env HOME=/var/lib/vdr
 #env XINE_BUFFER_LOG=1
 env USE_AUTOCROP=0
 export USE_AUTOCROP
@@ -37,8 +26,6 @@ if [ "$USE_AUTOCROP" = "1" ]; then
   XINEOPTS="$XINEOPTS --post autocrop:enable_autodetect=1,enable_subs_detect=1,soft_start=1,stabilize=1"
 fi
 
-<?cs if:(?system.hardware.alsa.hdmi.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.hdmi.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
-<?cs if:(?system.hardware.alsa.analog.card) ?>while ! grep -q "^ <?cs var:system.hardware.alsa.analog.card ?>" /proc/asound/cards ; do sleep 1 ; done<?cs /if ?>
 exec /usr/bin/xine $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes 
 end script
 <?cs /if ?>

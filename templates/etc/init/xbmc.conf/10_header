@@ -11,7 +11,8 @@ setuid vdr
 setgid vdr
 
 <?cs if:(vdr.frontend == "xbmc") ?>
-start on vdr-frontend-restart
-stop on stopping vdr or stopping openbox
+start on started vdr or stopped openbox-tools or started sound-device \
+         or vdr-frontend-restart
+stop on stopping openbox
 nice -10
 <?cs /if ?>

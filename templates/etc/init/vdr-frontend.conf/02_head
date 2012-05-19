@@ -2,4 +2,9 @@
 #
 
 description     "yavdr-frontend"
-author          "Gerald Dachs <gda@dachsweb.de>"
+author          "Steffen Barszus <steffenbpunkt@gmail.com>"
+
+env HOME=/var/lib/vdr
+export HOME
+
+respawn
