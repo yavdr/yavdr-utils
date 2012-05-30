@@ -1,0 +1,9 @@
+# wait till vdr is ready
+
+# on startup the attach-hook gets very early executed but will be forked
+# so waiting is no problem and doesn't block vdr startup process
+
+while sleep 1 ; do
+  status vdr | grep -q "start/running" && break
+done
+
