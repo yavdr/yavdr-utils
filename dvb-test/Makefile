@@ -9,7 +9,7 @@ process-template: dvb-test.o
 dvb-test.o: ../common.h
 
 clean:
-	@rm -rf process-template dvb-test.o
+	@rm -rf process-template dvb-test.o dvb-test
 
 install:
 	@install dvb-test $(DESTDIR)/usr/bin/
