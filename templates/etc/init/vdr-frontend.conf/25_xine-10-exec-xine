@@ -1,0 +1,2 @@
+
+exec /usr/bin/xine $XINEOPTS vdr:/tmp/vdr-xine/stream#demux:mpeg_pes 

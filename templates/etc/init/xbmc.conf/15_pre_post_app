@@ -1,11 +1,19 @@
-<?cs if:(vdr.frontend != "xbmc") ?>
 pre-start script
+<?cs if:(vdr.frontend != "xbmc") ?>
 vdr-dbus-send /Remote remote.Disable ||:
 if [ ! -z $STANDALONE ] ; then
   touch /tmp/.standalone 
 fi
+<?cs /if ?>
+<?cs if:(vdr.frontend == "xbmc") ?>
+# wait for sound, vdr and Xorg (after wm) to be up
+start wait-for-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=xbmc WAIT_FOREVER=1 ||:
+start wait-for-state WAIT_FOR=sound-device TARGET_GOAL=start WAIT_STATE=running WAITER=xbmc WAIT_FOREVER=1 ||:
+start wait-for-state WAIT_FOR=openbox-tools TARGET_GOAL=stop WAIT_STATE=waiting WAITER=xbmc WAIT_FOREVER=1 ||:
+<?cs /if ?>
 end script
 
+<?cs if:(vdr.frontend != "xbmc") ?>
 post-stop script
 /bin/rm -f /tmp/.standalone 
 vdr-dbus-send /Remote remote.Enable ||:

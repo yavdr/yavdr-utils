@@ -1,5 +1,6 @@
 <?cs if:(vdr.backend == "xine" || vdr.backend == "xineliboutput") ?>
 export DISPLAY=:1`dbget vdr.tempdisplay`
+sudo /sbin/initctl start --no-wait toggle JOBNAME=vdr-frontend
 #/usr/bin/vdr-dbus-send /Remote remote.Disable
 
 MPLAYER="/usr/bin/mplayer"
@@ -63,4 +64,5 @@ fi
 #$AUDIOSET
 $CMDLINE "$FILE"
 #/usr/bin/vdr-dbus-send /Remote remote.Enable
+sudo /sbin/initctl start --no-wait toggle JOBNAME=vdr-frontend
 <?cs /if ?>

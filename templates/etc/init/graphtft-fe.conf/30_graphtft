@@ -1,6 +1,10 @@
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
 script
-export DISPLAY=:1.1
+# wait for vdr and Xorg (after wm started)
+start wait-for-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
+start wait-for-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
+
+# get resolution 
 TFT_SIZE=`xrandr -q -d $DISPLAY | awk '/default connected/ {print $3}' | cut -d '+' -f1`
 TFT_WIDTH=`echo $TFT_SIZE | cut -d 'x' -f1`
 TFT_HEIGHT=`echo $TFT_SIZE | cut -d 'x' -f2`
@@ -10,8 +14,6 @@ MORE_OPTIONS="-n -r"
 test -f /etc/default/graphtft-fe && . /etc/default/graphtft-fe
 
 GRAPHTFTFEOPTS="-W $TFT_WIDTH -H $TFT_HEIGHT $MORE_OPTIONS"
-
-while  ! netcat -z localhost 2039; do sleep 1; done;
 
 exec /usr/bin/graphtft-fe $GRAPHTFTFEOPTS -h localhost
 end script
