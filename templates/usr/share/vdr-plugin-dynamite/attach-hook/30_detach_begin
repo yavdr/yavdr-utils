@@ -1,0 +1,5 @@
+# detach
+
+if [ $action == 'detach' ]
+then
+
