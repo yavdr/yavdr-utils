@@ -1,0 +1,7 @@
+# attach
+
+if [ $action = "'attach'" ]
+then
+  # don't have an empty if block
+  logger -t dynamite-attach-hook attaching $device
+
