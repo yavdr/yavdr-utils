@@ -1,0 +1,7 @@
+# detach
+
+if [ $action = "'detach'" ]
+then
+  # don't have an empty if block
+  logger -t dynamite-attach-hook detaching $device
+
