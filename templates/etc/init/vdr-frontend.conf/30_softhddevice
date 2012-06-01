@@ -7,3 +7,5 @@ post-stop script
 vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||: &> /dev/null
 end script
 <?cs /if ?>
+
+<?cs /if ?>

@@ -1,6 +1,6 @@
 # yavdr-frontend - Starts vdr frontend
 #
-
+<?cs if:(vdr.frontend != "xbmc" && vdr.frontend != "hdff") ?>
 description     "yavdr-frontend"
 author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 
