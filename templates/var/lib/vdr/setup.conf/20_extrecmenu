@@ -1,2 +1,3 @@
 extrecmenu.HideMainMenuEntry = 1
 extrecmenu.ReplaceOrgRecMenu = 1
+extrecmenu.FileSystemFreeMB = 1
