@@ -1,3 +1,10 @@
 #!/bin/sh -f
-
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+# BEGIN INIT INFO
+# Provides:          forcefsck
+# Required-Start:
+# Requires-Stop:
+# Should-Stop:       umountroot
+# Default-Start:
+# Default-Stop:      0 6
+# Description:       Start fsck while shutdown or reboot
+### END INIT INFO
