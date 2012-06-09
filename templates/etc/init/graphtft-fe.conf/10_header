@@ -2,7 +2,8 @@
 description     "YaVDR Configuration webinterface"
 
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
-start on vdr-frontend-restart
+start on started vdr or started openbox-second \
+         or vdr-frontend-restart
 stop on stopping vdr or stopping openbox
 <?cs /if ?>
 
