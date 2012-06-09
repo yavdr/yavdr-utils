@@ -194,23 +194,23 @@ class Options:
     def __init__(self):
         self.parser = OptionParser()
         self.parser.add_option("-f", "--repeat-filter", dest="repeatfilter", action="store_true",
-                  help='enable repeat-filter')
+                  help=u'enable repeat-filter')
         self.parser.add_option("-s", "--lircd-socket", dest="lircd_socket", default=None,
-                  help="choose lircd socket to listen on", metavar="LIRCD_SOCKET")
+                  help=u"choose lircd socket to listen on", metavar="LIRCD_SOCKET")
         self.parser.add_option("-d", "--debug", dest="debug", action="store_true",
-                  help='enable debug mode')
+                  help=u'enable debug mode')
         self.parser.add_option("-x", "--xbmc", dest="xbmc", action="store_true",
-                  help='enable xbmc single keypress mode')
+                  help=u'enable xbmc single keypress mode')
         self.parser.add_option("-l", "--min-gap", dest="min_gap", default=150000, type="int",
-                  help="set minimum gap between repeated keystrokes (default 150000 µs) - needs active repeat-filter", metavar="MIN_GAP")
+                  help=u"set minimum gap between repeated keystrokes (default 150000 µs) - needs active repeat-filter", metavar="MIN_GAP")
         self.parser.add_option("-u", "--max-gap", dest="max_gap", default=300000, type="int",
-                  help="set maximum gap between repeated keystrokes (default 300000 µs) - needs active repeat-filter", metavar="MAX_GAP")
+                  help=u"set maximum gap between repeated keystrokes (default 300000 µs) - needs active repeat-filter", metavar="MAX_GAP")
         self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
-                  help="number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
+                  help=u"number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
         self.parser.add_option("-t", "--timeout", dest="timeout", default=150, type="int",
-                  help="release key after x ms no following key is received (default = 150 ms)", metavar="TIMEOUT")
+                  help=u"release key after x ms no following key is received (default = 150 ms)", metavar="TIMEOUT")
         self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
-                  help="acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
+                  help=u"acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
                     metavar="ACCELERATION")
 
         
