@@ -14,7 +14,6 @@ $(ALL): common.h
 
 $(INSTALL):
 	$(MAKE) -C $(@:-install=) install
-	install -m 644 yavdrdb.hdf $(DESTDIR)/var/lib/
 	install -m 644 helpers/hdf_prefill $(DESTDIR)/usr/share/yavdr/helpers/
 	install -m 644 helpers/conffiles $(DESTDIR)/usr/share/yavdr/helpers/
 	install -m 755 scripts/yavdr-db $(DESTDIR)/usr/bin/
