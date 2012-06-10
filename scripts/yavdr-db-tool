@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description='yavdr hdf command line tool')
 parser.add_argument('-a', '--action', help='default is read', default='read', choices=['read', 'write', 'delete', 'check', 'preset', 'childrens'])
 parser.add_argument('-k', '--key', help='Is a dotted path of the form "a.b.c"', required=True)
 parser.add_argument('-v', '--value', help='Content for a --key. Need only for write action')
-parser.add_argument('--file', help='default show to /var/lib/yavdr', default='/var/lib/yavdrdb.hdf')
+parser.add_argument('--file', help='default show to /var/lib/yavdrdb.hdf', default='/var/lib/yavdrdb.hdf')
 args = parser.parse_args()
 
 class HDF:
