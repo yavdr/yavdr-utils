@@ -59,8 +59,9 @@ class HDF:
 def help(error):
     print error
 
-lockf = open(args.file, 'a')
-fcntl.flock(lockf,fcntl.LOCK_EX)
+if args.action == "write" or args.action == "delete" or args.action == "preset":
+    lockf = open(args.file, 'a')
+    fcntl.flock(lockf,fcntl.LOCK_EX)
 
 hdf = HDF(args.file)
 
@@ -81,5 +82,6 @@ elif args.action == "check":
     else:
       print 0
 
-hdf.writeFile()
-lockf.close()
+if args.action == "write" or args.action == "delete" or args.action == "preset":
+    hdf.writeFile()
+    lockf.close()
