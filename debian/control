@@ -7,7 +7,7 @@ Standards-Version: 3.9.1
 
 Package: yavdr-utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-clearsilver
 Conflicts: yavdr-startup
 Description: Utilities and WEB front end for yaVDR
  Utilities and WEB front end for yaVDR (yet another VDR) a VDR distribution
