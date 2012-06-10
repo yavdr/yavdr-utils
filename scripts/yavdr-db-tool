@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import re
 import sys
 import time
 import fcntl
@@ -9,7 +10,7 @@ import neo_cgi
 import neo_util 
 
 parser = argparse.ArgumentParser(description='yavdr hdf command line tool')
-parser.add_argument('-a', '--action', help='default is read', default='read', choices=['read', 'write', 'delete', 'check', 'preset', 'childrens'])
+parser.add_argument('-a', '--action', help='default is read', default='read', choices=['read', 'write', 'delete', 'check', 'preset', 'childrens', 'dump'])
 parser.add_argument('-k', '--key', help='Is a dotted path of the form "a.b.c"', required=True)
 parser.add_argument('-v', '--value', help='Content for a --key. Need only for write action')
 parser.add_argument('--file', help='default show to /var/lib/yavdrdb.hdf', default='/var/lib/yavdrdb.hdf')
@@ -26,6 +27,13 @@ class HDF:
         return self.hdf.setValue(key, value)
     def deleteKey(self, key):
         return self.hdf.removeTree(key)
+    def dumpKey(self, key):
+        dump = []
+        for entry in self.hdf.dump().split("\n"):
+            regex = re.compile('^%s'%key)
+            if entry != "" and (key == '.' or re.search(regex, entry)):
+                dump.append(entry)
+        return "\n".join(dump)
     def childrensByKey(self, key):
         childrens = []
         dataset = self.hdf.getObj(key)
@@ -71,6 +79,8 @@ elif args.action == "write":
     hdf.writeKey(args.key, args.value)
 elif args.action == "delete":
     hdf.deleteKey(args.key)
+elif args.action == "dump":
+    print hdf.dumpKey(args.key)
 elif args.action == "preset":
     hdf.presetKey(args.key, args.value)
 elif args.action == "childrens":
