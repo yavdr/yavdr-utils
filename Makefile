@@ -17,6 +17,7 @@ $(INSTALL):
 	install -m 644 helpers/hdf_prefill $(DESTDIR)/usr/share/yavdr/helpers/
 	install -m 644 helpers/conffiles $(DESTDIR)/usr/share/yavdr/helpers/
 	install -m 755 scripts/yavdr-db-tool $(DESTDIR)/usr/bin/
+	install -m 755 scripts/yavdr-db-dump $(DESTDIR)/usr/bin/
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
