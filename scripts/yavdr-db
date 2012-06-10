@@ -2,6 +2,8 @@
 
 import os
 import sys
+import time
+import fcntl
 import argparse
 import neo_cgi
 import neo_util 
@@ -57,6 +59,9 @@ class HDF:
 def help(error):
     print error
 
+lockf = open(args.file, 'a')
+fcntl.flock(lockf,fcntl.LOCK_EX)
+
 hdf = HDF(args.file)
 
 if args.action == "read":
@@ -77,3 +82,4 @@ elif args.action == "check":
       print 0
 
 hdf.writeFile()
+lockf.close()
