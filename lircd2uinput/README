@@ -6,7 +6,6 @@ Fetch the code for python-uinput from git repository:
 
  git clone git://github.com/tuomasjjrasanen/python-uinput.git
  cd python-uinput
- git clone git://github.com/tuomasjjrasanen/libsuinput.git
  sudo python setup.py install
 
 This script must be run as superuser or with sufficent rights to create an uinput device and exspects a lircd socket under /var/run/lirc/lircd.$(pidof lircd) if none is given by --lircd-socket /PATH/TO/LIRCD_SOCKET
