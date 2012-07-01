@@ -1,8 +1,8 @@
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
 script
 # wait for vdr and Xorg (after wm started)
-start wait-for-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
-start wait-for-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
+start wait-for-job-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
+start wait-for-job-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
 
 # get resolution 
 TFT_SIZE=`xrandr -q -d $DISPLAY | awk '/default connected/ {print $3}' | cut -d '+' -f1`
