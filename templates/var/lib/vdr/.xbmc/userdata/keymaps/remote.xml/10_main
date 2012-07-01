@@ -333,7 +333,7 @@
     <remote>
       <zero>Queue</zero>
       <star>Queue</star>
-      <start>ContextMenu</start>
+      <blue>ContextMenu</blue>
       <green>ToggleWatched</green>
       <yellow>Queue</yellow>
     </remote>
@@ -373,7 +373,7 @@
   </VirtualKeyboard>
   <ContextMenu>
     <remote>
-      <title>Close</title>
+      <blue>Close</blue>
       <back>Close</back>
     </remote>
   </ContextMenu>
