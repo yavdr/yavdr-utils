@@ -14,7 +14,7 @@ if [ $(LANG=C aplay -l | grep -i $INTERFACE | wc -l) -eq 1 ]; then
   # put them into db
   dbset system.hardware.alsa.${INTERFACE}.card=$CARD
   dbset system.hardware.alsa.${INTERFACE}.device=$DEVICE
-elif [ $(LANG=C aplay -l | grep -i $INTERFACE | wc -l) -eq 4 ]; then
+elif [ $(LANG=C aplay -l | grep -i $INTERFACE | wc -l) -gt 1 ]; then
   CARD=$(LANG=C aplay -l | grep -i $INTERFACE) ; CARD=${CARD//:*} ; CARD=${CARD#card }
   ELD="`grep -e "monitor_present.*1$" /proc/asound/card${CARD}/eld* | cut -d":" -f1`"
   if [ "x$ELD" != "x" ]; then
