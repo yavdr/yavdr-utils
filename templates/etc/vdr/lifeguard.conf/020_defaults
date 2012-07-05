@@ -1,9 +1,9 @@
 # defaults entries
-cmd     aptitude        <?cs var:_("Aptitude\ is\ still\ running.") ?>
-cmd     xbmc.bin        <?cs var:_("XBMC\ is\ still\ running.") ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.aptitude || vdr.plugin.lifeguard.disable.aptitude != 1) ?>cmd     aptitude        <?cs var:_("Aptitude\ is\ still\ running.") ?><?cs /if ?> 
+<?cs if:(!?vdr.plugin.lifeguard.disable.xbmc || vdr.plugin.lifeguard.disable.xbmc != 1) ?>cmd     xbmc.bin        <?cs var:_("XBMC\ is\ still\ running.") ?><?cs /if ?>
 
-tcp     nfs             <?cs var:_("NFS\ Mount is still active") ?>
-tcp     ssh             <?cs var:_("SSH\ Connection\ still\ open.") ?>
-tcp     ftp             <?cs var:_("FTP\ Connection\ still\ open.") ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.nfs || vdr.plugin.lifeguard.disable.nfs != 1) ?>tcp     nfs             <?cs var:_("NFS\ Mount is still active") ?><?cs /if ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.ssh || vdr.plugin.lifeguard.disable.ssh != 1) ?>tcp     ssh             <?cs var:_("SSH\ Connection\ still\ open.") ?><?cs /if ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.ftp || vdr.plugin.lifeguard.disable.ftp != 1) ?>tcp     ftp             <?cs var:_("FTP\ Connection\ still\ open.") ?><?cs /if ?>
 
-smb     locks           <?cs var:_("Files\ open\ on\ SMB\ share.") ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.smb || vdr.plugin.lifeguard.disable.smb != 1) ?>smb     locks           <?cs var:_("Files\ open\ on\ SMB\ share.") ?><?cs /if ?>
