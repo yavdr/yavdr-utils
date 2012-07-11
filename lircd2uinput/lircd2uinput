@@ -208,7 +208,7 @@ class Options:
         self.parser.add_option("-r", "--min-repeats", dest="wait_repeats", default=2, type="int",
                   help=u"number of repeats before using accelerated keypresses (default = 2) - needs active repeat-filter", metavar="WAIT_REPEATS")
         self.parser.add_option("-t", "--timeout", dest="timeout", default=200, type="int",
-                  help=u"release key after x ms no following key is received (default = 150 ms)", metavar="TIMEOUT")
+                  help=u"release key after x ms no following key is received (default = 200 ms)", metavar="TIMEOUT")
         self.parser.add_option("-a", "--acceleration", dest="acceleration", default=0.25, type="float",
                   help=u"acceleration to get from MAX_GAP to MIN_GAP. default value of 0.25 equals 4 repeated keystrokes to reach maximum speed - needs active repeat-filter",
                     metavar="ACCELERATION")
