@@ -10,4 +10,5 @@ process-template /etc/init/xbmc.conf
 process-template /etc/init/openbox.conf
 process-template /etc/init/vdr-frontend.conf
 process-template /etc/init/xbmc-exit.conf
+process-template /etc/default/vdr
 
