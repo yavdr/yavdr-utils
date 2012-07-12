@@ -11,6 +11,7 @@ case $EXIT_STATUS in
 	<?cs if:(vdr.backend == "disabled") ?>
         poweroff
 	<?cs else ?>
+        echo 0 > /tmp/xbmc-active
         case "$(vdr-dbus-send /Shutdown shutdown.ConfirmShutdown boolean:true | grep -m 1 int32 | egrep -e "[[:digit:]]{3}" -o)" in 
             990|250)
                 logger -t "xbmc-exit.conf" "VDR ready to shutdown, sending POWER signal to VDR"
