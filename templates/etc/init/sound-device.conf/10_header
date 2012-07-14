@@ -1,7 +1,7 @@
 <?cs def:get_card(type) ?><?cs each:item = system.hardware.alsa ?><?cs if:name(item) == type ?><?cs var:item.card ?><?cs /if ?><?cs /each ?><?cs /def ?>
 
 <?cs if:system.sound.type == "all" ?>
-start on sound-device-changed <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> and <?cs /if ?>SOUND_INITIALIZED=1 KERNEL=card<?cs var:item.card ?><?cs /each ?>
+start on <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> and <?cs /if ?>(sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs var:item.card ?>)<?cs /each ?>
 stop on sound-device-removed <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> or <?cs /if ?>KERNEL=card<?cs var:item.card ?><?cs /each ?>
 <?cs elif:system.sound.type == "passthrough" ?>
 start on sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs call:get_card("hdmi") ?>
@@ -13,7 +13,6 @@ stop on sound-device-removed KERNEL=card<?cs call:get_card("digital") ?>
 start on sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs call:get_card(system.sound.type) ?>
 stop on sound-device-removed KERNEL=card<?cs call:get_card(system.sound.type) ?>
 <?cs /if ?>
-
 pre-start script 
 true 
 end script 
@@ -21,4 +20,3 @@ end script
 post-stop script 
 true 
 end script 
-
