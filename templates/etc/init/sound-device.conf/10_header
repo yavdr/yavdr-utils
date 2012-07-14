@@ -2,7 +2,7 @@
 
 <?cs if:system.sound.type == "all" ?>
 start on <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> and <?cs /if ?>(sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs var:item.card ?>)<?cs /each ?>
-stop on sound-device-removed <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> or <?cs /if ?>KERNEL=card<?cs var:item.card ?><?cs /each ?>
+stop on <?cs each:item = system.hardware.alsa ?><?cs if:!first(item) ?> or <?cs /if ?>(sound-device-removed KERNEL=card<?cs var:item.card ?>)<?cs /each ?>
 <?cs elif:system.sound.type == "passthrough" ?>
 start on sound-device-changed SOUND_INITIALIZED=1 KERNEL=card<?cs call:get_card("hdmi") ?>
 stop on sound-device-removed KERNEL=card<?cs call:get_card("hdmi") ?>
