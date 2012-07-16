@@ -10,6 +10,10 @@ ENABLED=1
 # computer
 ENABLE_SHUTDOWN=1
 
+<?cs if:(vdr.frontend == "xbmc") ?>
+LIRC=/dev/null
+<?cs /if ?>
+
 # Options that will be passed to vdr's commandline
 # for example: OPTIONS="-w 15"
 OPTIONS="-w 0"
