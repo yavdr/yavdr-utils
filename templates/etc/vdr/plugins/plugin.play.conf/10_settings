@@ -9,7 +9,7 @@
 <?cs else ?>
 -a alsa:device=hw=<?cs call:get_card_device(system.sound.type) ?>
 <?cs /if ?>
-
+-v vdpau:deint=4,hqscaling=1
 -f
 -s
 -d :1<?cs var:vdr.tempdisplay ?>
