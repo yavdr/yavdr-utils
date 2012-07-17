@@ -1,0 +1,15 @@
+<?cs def:get_card_device(type) ?><?cs each:item = system.hardware.alsa ?><?cs if:name(item) == type ?><?cs var:item.card ?>.<?cs var:item.device ?><?cs /if ?><?cs /each ?><?cs /def ?>
+
+<?cs if:system.sound.type == "all" ?>
+# TODO all devices
+<?cs elif:system.sound.type == "passthrough" ?>
+-a alsa:device=hw=<?cs call:get_card_device("hdmi") ?>
+<?cs elif:system.sound.type == "spdif" ?>
+-a alsa:device=hw=<?cs call:get_card_device("digital") ?>
+<?cs else ?>
+-a alsa:device=hw=<?cs call:get_card_device(system.sound.type) ?>
+<?cs /if ?>
+
+-f
+-s
+-d :1<?cs var:vdr.tempdisplay ?>
