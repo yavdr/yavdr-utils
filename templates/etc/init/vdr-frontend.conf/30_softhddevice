@@ -1,9 +1,96 @@
 <?cs if:(vdr.frontend == "softhddevice") ?>
 
-vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"ATTA" string:"-d :1`dbget vdr.tempdisplay`" ||: &> /dev/null
+end script
+
+script
+
+python - <<END
+
+import sys, os, subprocess, gobject, dbus, socket, string
+
+bus = dbus.SystemBus()
+shutdownproxy = bus.get_object("de.tvdr.vdr","/Shutdown")
+ask_vdrshutdown = dbus.Interface(shutdownproxy,"de.tvdr.vdr.shutdown")
+softhddeviceproxy = bus.get_object("de.tvdr.vdr","/Plugins/softhddevice")
+softhddevice = dbus.Interface(softhddeviceproxy,"de.tvdr.vdr.plugin")
+remoteproxy = bus.get_object("de.tvdr.vdr","/Remote")
+remote = dbus.Interface(softhddeviceproxy,"de.tvdr.vdr.remote")
+
+frontend_active = 0
+
+def get_status():
+    reply,status =  softhddevice.SVDRPCommand("STAT","")
+    status = status.split()[-1]
+    return status
+    
+def detach():
+    reply,answer = softhddevice.SVDRPCommand(dbus.String("DETA"),"")
+    remote.Disable()
+    return True
+
+def resume(status):
+    if status == "SUSPENDED":
+        softhddevice.SVDRCommand(dbus.String("RESU"),"")
+    elif status == "SUSPEND_DETACHED":
+        softhddevice.SVDRPCommand(dbus.String("ATTA"),dbus.String("-d :1"))
+    remote.Enable()
+
+def handler(sock, *args):
+    global frontend_active
+    buf = sock.recv(1024)
+    lines = string.split(buf, "\n")
+    for line in lines[:-1]:
+        code,count,cmd,device = string.split(line, " ")
+        if cmd == "KEY_PROG1":
+            if get_status() == "NOT_SUSPENDED":
+                detach()
+                frontend_active = 0
+            else:
+                resume(status)
+        elif cmd == "KEY_POWER2":
+            if get_status() == "NOT_SUSPENDED":
+                detach()
+                frontend_active = 0
+            else:
+                remote.HitKey("POWER")                
+        else:
+          if frontend_active == 0:
+            remote.Enable()
+            resume(get_status())
+            frontend_active = 1
+          else:
+              pass
+    return True
+
+if ask_vdrshutdown.ManualStart() == True:
+    status =  get_status()
+    resume(status)
+else:
+    remote.Disable()
+
+def connect_eventlircd():
+    socket_path = "/var/run/lirc/lircd"
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect(socket_path)
+    gobject.io_add_watch(sock, gobject.IO_IN, handler)
+
+def try_connection():
+  try:
+    connect_eventlircd()
+  except:
+    print "Error: could not connect to eventlircd"
+    try_connection()
+
+try_connection()
+gobject.MainLoop().run()
+END
+
 end script
 
 post-stop script
+if [ "$(vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
+    vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
+fi
 vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||: &> /dev/null
 end script
 <?cs /if ?>
