@@ -1,1 +1,1 @@
-ir-kbd-i2c	*			/lib/udev/rc_keymaps/pvr350
+ir-kbd-i2c	rc-hauppauge			/lib/udev/rc_keymaps/rc-hauppauge
