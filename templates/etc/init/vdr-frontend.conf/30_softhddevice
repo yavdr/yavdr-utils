@@ -24,6 +24,7 @@ def get_status():
     return status
     
 def detach():
+    remote.HitKey("STOP")
     reply,answer = softhddevice.SVDRPCommand(dbus.String("DETA"),"")
     remote.Disable()
     return True
@@ -32,8 +33,11 @@ def resume(status):
     if status == "SUSPENDED":
         softhddevice.SVDRCommand(dbus.String("RESU"),"")
     elif status == "SUSPEND_DETACHED":
-        softhddevice.SVDRPCommand(dbus.String("ATTA"),dbus.String("-d :1"))
+        softhddevice.SVDRPCommand(dbus.String("ATTA"),dbus.String("-d :1%s"%(getTempDisplay())))
     remote.Enable()
+
+def getTempDisplay():
+    return subprocess.check_output(["dbget","vdr.tempdisplay"])
 
 def handler(sock, *args):
     global frontend_active
