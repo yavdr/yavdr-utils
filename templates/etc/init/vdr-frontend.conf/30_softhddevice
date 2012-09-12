@@ -6,7 +6,7 @@ script
 
 python - <<END
 
-import sys, os, subprocess, gobject, dbus, socket, string
+import sys, os, subprocess, gobject, dbus, socket, string, datetime
 
 bus = dbus.SystemBus()
 shutdownproxy = bus.get_object("de.tvdr.vdr","/Shutdown")
@@ -15,8 +15,46 @@ softhddeviceproxy = bus.get_object("de.tvdr.vdr","/Plugins/softhddevice")
 softhddevice = dbus.Interface(softhddeviceproxy,"de.tvdr.vdr.plugin")
 remoteproxy = bus.get_object("de.tvdr.vdr","/Remote")
 remote = dbus.Interface(softhddeviceproxy,"de.tvdr.vdr.remote")
+vdrsetupproxy = bus.get_object("de.tvdr.vdr","/Setup")
+vdrsetup = dbus.Interface(vdrsetupproxy,"de.tvdr.vdr.setup")
 
-frontend_active = 0
+class Settings():
+    def __init__(self):
+        self.frontend_active = 0
+        self.logo_detached = "/usr/share/yavdr/images/yaVDR_background_detached.jpg"
+        self.env = os.environ
+        self.timer = None
+        self.updateDisplay()
+        try:
+            self.acpi_wakeup = self.check_acpi()
+        except:
+            self.acpi_wakeup = None
+            print "error reading /var/cache/vdr/acpiwakeup.time.old"
+        
+    def updateDisplay(self):
+        self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
+        
+    def getTempDisplay(self):
+        return subprocess.check_output(["dbget","vdr.tempdisplay"])
+        
+    def check_acpi(self):
+        timestr = open('/var/cache/vdr/acpiwakeup.time.old','r').read().splitlines()[0]
+        wakeup = datetime.datetime.strptime(timestr, "%Y-%m-%d %H:%M:%S")
+        now = datetime.datetime.utcnow()
+        print u"acip-wakeup.time.old hatte Wert: %s"%(wakeup.ctime())
+        print u"vergleiche mit jetzt: %s"%(now.ctime())
+        if wakeup < now:
+            d = now - wakeup
+        else:
+            d = wakeup - now
+        if d.seconds > 360:
+            print "assuming manual start"
+            return False
+        else:
+            print "assuming start for acpi-wakeup"
+            return True
+
+
 
 def get_status():
     reply,status =  softhddevice.SVDRPCommand("STAT","")
@@ -29,47 +67,63 @@ def detach():
     remote.Disable()
     return True
 
+def soft_detach():
+    detach()
+    return False
+
+def setUserInactive():
+    ask_vdrshutdown.SetUserInactive()
+    return False
+
 def resume(status):
+    #subprocess.Popen(["/usr/bin/feh","-d","--bg-center",settings.logo_attached], env=settings.env)
     if status == "SUSPENDED":
         softhddevice.SVDRCommand(dbus.String("RESU"),"")
     elif status == "SUSPEND_DETACHED":
-        softhddevice.SVDRPCommand(dbus.String("ATTA"),dbus.String("-d :1%s"%(getTempDisplay())))
+        softhddevice.SVDRPCommand(dbus.String("ATTA"),dbus.String("-d %s"%(settings.env["DISPLAY"])))
     remote.Enable()
 
-def getTempDisplay():
-    return subprocess.check_output(["dbget","vdr.tempdisplay"])
 
 def handler(sock, *args):
-    global frontend_active
     buf = sock.recv(1024)
     lines = string.split(buf, "\n")
     for line in lines[:-1]:
+        try:
+             gobject.source_remove(settings.timer)
+             #print "removed timer"
+        except: pass
         code,count,cmd,device = string.split(line, " ")
         if cmd == "KEY_PROG1":
             if get_status() == "NOT_SUSPENDED":
                 detach()
-                frontend_active = 0
+                settings.frontend_active = 0
             else:
                 resume(status)
         elif cmd == "KEY_POWER2":
             if get_status() == "NOT_SUSPENDED":
-                detach()
-                frontend_active = 0
+                settings.timer = gobject.timeout_add(15000,soft_detach)
+                settings.frontend_active = 0
             else:
                 remote.HitKey("POWER")                
         else:
-          if frontend_active == 0:
-            remote.Enable()
-            resume(get_status())
-            frontend_active = 1
-          else:
-              pass
+            if settings.frontend_active == 0:
+                remote.Enable()
+                resume(get_status())
+                settings.frontend_active = 1
+            else:
+                pass
     return True
 
-if ask_vdrshutdown.ManualStart() == True:
+settings = Settings()
+subprocess.Popen(["/usr/bin/feh","-d","--bg-scale",settings.logo_detached], env=settings.env)
+if ask_vdrshutdown.ManualStart() == True and settings.acpi_wakeup != True:
     status =  get_status()
     resume(status)
 else:
+    if settings.acpi_wakeup == True:
+        interval, default, answer = vdrsetup.Get(dbus.String("MinEventTimeout"))
+        interval_ms = interval  * 60000 # * 60s * 1000ms
+        settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
     remote.Disable()
 
 def connect_eventlircd():
@@ -92,6 +146,8 @@ END
 end script
 
 post-stop script
+export export DISPLAY=:1`dbget vdr.tempdisplay`
+/usr/bin/feh -d --bg-center "/usr/share/yavdr/images/yavdr_logo.png"
 if [ "$(vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
     vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
 fi
