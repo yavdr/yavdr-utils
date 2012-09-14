@@ -36,7 +36,6 @@ def manualstart():
 def setUserInactive():
     dbusshutdown = bus.get_object("de.tvdr.vdr","/Shutdown")
     return dbusshutdown.SetUserInactive(dbus_interface='de.tvdr.vdr.shutdown')
-    return False
 
 
 def vdrsetupget(option):
@@ -69,7 +68,7 @@ class Settings():
             self.acpi_wakeup = self.check_acpi()
         except:
             self.acpi_wakeup = None
-            print "error reading /var/cache/vdr/acpiwakeup.time.old"
+            #print "error reading /var/cache/vdr/acpiwakeup.time.old"
         
     def updateDisplay(self):
         self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
