@@ -10,6 +10,17 @@ import sys, os, subprocess, gobject, dbus, socket, string, datetime
 
 bus = dbus.SystemBus()
 
+def remote(signal):
+    dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
+    if signal == "enable":
+         answer, message = dbusremote.Enable(dbus_interface='de.tvdr.vdr.remote')
+    elif signal == "disable":
+         answer, message = dbusremote.Disable(dbus_interface='de.tvdr.vdr.remote')
+    elif signal == "status":
+         answer, message = dbusremote.Status(dbus_interface='de.tvdr.vdr.remote')
+    else:
+         pass
+
 def sendremote(key):
     dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
     answer, message = dbusremote.HitKey(dbus.String(key),dbus_interface='de.tvdr.vdr.remote')
@@ -43,9 +54,9 @@ def frontend(command,value=None):
     reply, answer = dbusdetach.SVDRPCommand(dbus.String(command),dbus.String(value),dbus_interface='de.tvdr.vdr.plugin')
     dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
     if command == "DETA":
-        answer, message =  dbusremote.Disable(dbus_interface='de.tvdr.vdr.remote')
+        remote("disable")
     if command == "ATTA":
-        answer, message =  dbusremote.Enable(dbus_interface='de.tvdr.vdr.remote')
+        remote("enable")
 
 class Settings():
     def __init__(self):
@@ -151,7 +162,7 @@ else:
         interval, default, answer = vdrsetupget("MinEventTimeout")
         interval_ms = interval  * 60000 # * 60s * 1000ms
         settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
-    remote.Disable()
+    remote("disable")
 
 def connect_eventlircd():
     socket_path = "/var/run/lirc/lircd"
@@ -173,7 +184,7 @@ END
 end script
 
 post-stop script
-export export DISPLAY=:1`dbget vdr.tempdisplay`
+export export DISPLAY=<?cs alt:desktop_display ?>:1<?cs /alt ?>`dbget vdr.tempdisplay`
 /usr/bin/feh -d --bg-center "/usr/share/yavdr/images/yavdr_logo.png"
 if [ "$(vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
     vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
