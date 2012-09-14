@@ -62,7 +62,6 @@ def get_status():
     return status
     
 def detach():
-    remote.HitKey("STOP")
     reply,answer = softhddevice.SVDRPCommand(dbus.String("DETA"),"")
     remote.Disable()
     return True
