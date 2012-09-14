@@ -41,8 +41,7 @@ def setUserInactive():
 
 def vdrsetupget(option):
     dbussetup = bus.get_object("de.tvdr.vdr","/Setup")
-    value, default, answer = dbussetup(dbus.String(option),dbus_interface='de.tvdr.vdr.setup')
-    return value
+    return dbussetup(dbus.String(option),dbus_interface='de.tvdr.vdr.setup')
 
 def get_status():
     dbusfstatus =  bus.get_object("de.tvdr.vdr","/Plugins/softhddevice")
