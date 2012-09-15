@@ -6,7 +6,7 @@ script
 
 python - <<END
 
-import sys, os, subprocess, gobject, dbus, socket, string, datetime
+import sys, os, subprocess, gobject, dbus, socket, string, time, datetime
 
 bus = dbus.SystemBus()
 
@@ -33,9 +33,19 @@ def manualstart():
     dbusshutdown = bus.get_object("de.tvdr.vdr","/Shutdown")
     return dbusshutdown.ManualStart(dbus_interface='de.tvdr.vdr.shutdown')
 
+def confirmShutdown(user=False):
+    dbusshutdown = bus.get_object("de.tvdr.vdr","/Shutdown")
+    code, message, shutdownhooks, message = dbusshutdown.ConfirmShutdown(dbus.Boolean(user),dbus_interface='de.tvdr.vdr.shutdown')
+    if code in [250,990]:
+        return True
+    else:
+        return False
+
 def setUserInactive():
     dbusshutdown = bus.get_object("de.tvdr.vdr","/Shutdown")
-    return dbusshutdown.SetUserInactive(dbus_interface='de.tvdr.vdr.shutdown')
+    dbusshutdown.SetUserInactive(dbus_interface='de.tvdr.vdr.shutdown')
+    send_shutdown()
+    settings.time = gobject.timeout_add(300000,send_shutdown)
 
 
 def vdrsetupget(option):
@@ -98,25 +108,20 @@ def detach():
     return True
 
 def send_shutdown():
-    dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
-    answer, message =  dbusremote.Enable(dbus_interface='de.tvdr.vdr.remote')
-    sendremote("POWER")
-    answer, message =  dbusremote.Disable(dbus_interface='de.tvdr.vdr.remote')
+    if confirmShutdown():
+        dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
+        answer, message =  dbusremote.Enable(dbus_interface='de.tvdr.vdr.remote')
+        sendremote("POWER")
+        answer, message =  dbusremote.Disable(dbus_interface='de.tvdr.vdr.remote')
     return True
 
 def soft_detach():
     frontend("DETA")
-    #setUserInactive()
-    dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
-    answer, message =  dbusremote.Enable(dbus_interface='de.tvdr.vdr.remote')
-    sendremote("POWER")
-    answer, message =  dbusremote.Disable(dbus_interface='de.tvdr.vdr.remote')
     settings.timer = gobject.timeout_add(300000,send_shutdown)
     return False
 
 
 def resume(status):
-    #subprocess.Popen(["/usr/bin/feh","-d","--bg-center",settings.logo_attached], env=settings.env)
     if status == "SUSPENDED":
         frontend("RESU")
     elif status == "SUSPEND_DETACHED":
@@ -152,7 +157,7 @@ def handler(sock, *args):
     return True
 
 settings = Settings()
-subprocess.Popen(["/usr/bin/feh","-d","--bg-scale",settings.logo_detached], env=settings.env)
+subprocess.call(["/usr/bin/hsetroot","-full",settings.logo_detached], env=settings.env)
 if settings.manualstart == True and settings.acpi_wakeup != True:
     resume(get_status())
 else:
@@ -160,6 +165,8 @@ else:
         interval, default, answer = vdrsetupget("MinEventTimeout")
         interval_ms = interval  * 60000 # * 60s * 1000ms
         settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
+    else:
+        settings.timer = gobject.timeout_add(300000, send_shutdown)    
     remote("disable")
 
 def connect_eventlircd():
