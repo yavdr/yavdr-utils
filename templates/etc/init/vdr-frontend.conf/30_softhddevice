@@ -6,7 +6,7 @@ script
 
 python - <<END
 
-import sys, os, subprocess, gobject, dbus, socket, string, time, datetime
+import sys, os, subprocess, gobject, dbus, socket, string, datetime
 
 bus = dbus.SystemBus()
 
