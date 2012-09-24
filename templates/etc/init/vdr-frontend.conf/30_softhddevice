@@ -161,12 +161,12 @@ subprocess.call(["/usr/bin/hsetroot","-full",settings.logo_detached], env=settin
 if settings.manualstart == True and settings.acpi_wakeup != True:
     resume(get_status())
 else:
-    if settings.acpi_wakeup == True:
+    if settings.manualstart == False:
+        settings.timer = gobject.timeout_add(300000, send_shutdown)
+    elif settings.acpi_wakeup == True:
         interval, default, answer = vdrsetupget("MinEventTimeout")
         interval_ms = interval  * 60000 # * 60s * 1000ms
-        settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
-    else:
-        settings.timer = gobject.timeout_add(300000, send_shutdown)    
+        settings.timer = gobject.timeout_add(interval_ms, setUserInactive)            
     remote("disable")
 
 def connect_eventlircd():
