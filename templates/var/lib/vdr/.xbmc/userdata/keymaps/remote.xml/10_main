@@ -56,6 +56,7 @@
       <pageminus>PageDown</pageminus>
       <back>ParentDir</back>
       <menu>PreviousMenu</menu>
+      <title>ContextMenu</title>
       <info>Info</info>
       <skipplus>SkipNext</skipplus>
       <skipminus>SkipPrevious</skipminus>
@@ -74,7 +75,7 @@
       <!-- PVR: EPG -->
       <guide>XBMC.ActivateWindowAndFocus(MyPVR, 31,0, 10,0)</guide>
       <!-- PVR: Channellist -->
-      <title>XBMC.ActivateWindowAndFocus(MyPVR, 32,0, 11,0)</title>
+      <livetv>XBMC.ActivateWindowAndFocus(MyPVR, 32,0, 11,0)</livetv>
       <!-- PVR: Radio -->
       <liveradio>XBMC.ActivateWindowAndFocus(MyPVR, 33,0, 12,0)</liveradio>
       <red>XBMC.ActivateWindow(Home)</red>
