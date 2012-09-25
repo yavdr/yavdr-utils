@@ -52,7 +52,7 @@ class dbusShutdown():
     def manualstart(self):
         return self.dbusshutdown.ManualStart(dbus_interface=self.interface)
 
-    def confirmShutdown(user=False):
+    def confirmShutdown(self,user=False):
         code, message, shutdownhooks, message = self.dbusshutdown.ConfirmShutdown(dbus.Boolean(user),dbus_interface=self.interface)
         if code in [250,990]:
             return True
@@ -106,7 +106,7 @@ def detach():
     return True
 
 def send_shutdown():
-    if confirmShutdown():
+    if shutdown.confirmShutdown():
         remote.enable()
         remote.sendkey("POWER")
         remote.disable()
