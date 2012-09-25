@@ -102,7 +102,7 @@ def setUserInactive():
     settings.time = gobject.timeout_add(300000,send_shutdown)
 
 def detach():
-    frontend("DETA")
+    frontend.detach()
     return True
 
 def send_shutdown():
