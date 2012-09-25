@@ -14,7 +14,7 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
-bus = dbus.SystemBus()  
+bus = dbus.SystemBus()
 class dbusRemote():
     '''wrapper for remote interface provided by the dbus2vdr plugin'''
     def __init__(self):
@@ -27,7 +27,7 @@ class dbusRemote():
             return True
         else:
             return False
-    
+
     def enable(self):
         answer, message = self.dbusremote.Enable(dbus_interface=self.interface)
         if answer == 250:
@@ -228,7 +228,7 @@ class Settings():
         
     def getTempDisplay(self):
         return subprocess.check_output(["dbget","vdr.tempdisplay"])
-        
+
     def check_acpi(self):
         timestr = open('/var/cache/vdr/acpiwakeup.time.old','r').read().splitlines()[0]
         wakeup = datetime.datetime.strptime(timestr, "%Y-%m-%d %H:%M:%S")
@@ -250,7 +250,7 @@ class dbusService(dbus.service.Object):
     def __init__(self):
         bus_name = dbus.service.BusName('de.yavdr.frontend', bus=bus)#dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/frontend')
- 
+
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def deta(self):
         detach()
