@@ -103,7 +103,7 @@ def setUserInactive():
 
 def detach():
     frontend("DETA")
-    self.frontend_active = 0
+    settings.frontend_active = 0
     return True
 
 def send_shutdown():
