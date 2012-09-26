@@ -66,8 +66,18 @@ class dbusSetup():
         self.dbussetup = bus.get_object("de.tvdr.vdr","/Setup")
         self.interface = 'de.tvdr.vdr.setup'
 
-    def vdrsetupget(option):
+    def vdrsetupget(self,option):
         return self.dbussetup.Get(dbus.String(option),dbus_interface=self.interface)
+
+def get_dbusPlugins():
+    '''wrapper for dbus plugin list'''
+    dbusplugins = bus.get_object("de.tvdr.vdr","/Plugins")
+    raw = dbusplugins.List(dbus_interface="de.tvdr.vdr.plugin")
+    plugins = {}
+    for name, version in raw:
+        plugins[name]=version
+    return plugins
+
 
 class dbusSofthddeviceFrontend():
     '''handler for softhddevice's svdrp plugin command interface provided by the dbus2vdr plugin'''
@@ -103,6 +113,7 @@ def setUserInactive():
 
 def detach():
     frontend.detach()
+    graphtft_switch()
     return True
 
 def send_shutdown():
@@ -113,15 +124,24 @@ def send_shutdown():
     return True
 
 def soft_detach():
-    frontend.detach()
+    detach()
     settings.timer = gobject.timeout_add(300000,send_shutdown)
     return False
+
+def graphtft_switch():
+    if settings.graphtft:
+        dbusgraph = bus.get_object("de.tvdr.vdr","/Plugins/graphtft")
+        if settings.frontend_active == 0:
+           dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String('NonLiveTv'),dbus_interface='de.tvdr.vdr.plugin')
+        elif settings.frontend_active == 1:
+           dbusgraph.SVDRPCommand(dbus.String('RVIEW'),dbus.String(None),dbus_interface='de.tvdr.vdr.plugin')
 
 def resume(status):
     if status == "SUSPENDED":
         frontend.resume()
     elif status == "SUSPEND_DETACHED":
         frontend.attach()
+    graphtft_switch()
     
 
 class Settings():
@@ -157,7 +177,17 @@ class Settings():
         for i in self.conf:
             if i in os.environ:
                 self.conf[i] = os.environ[i]
+        self.check_graphtft()
         self.get_event_devices()
+    
+    def check_graphtft(self):
+        plugins = get_dbusPlugins()
+        if 'graphtft' in plugins:
+            #print "found graphtft"
+            self.graphtft = True
+        else:
+            self.graphtft = False
+
 
     def get_event_devices(self):
         '''filter all connected input devices and watch those not used by eventlircd'''
@@ -314,10 +344,11 @@ if __name__ == '__main__':
     if settings.manualstart == True and settings.acpi_wakeup != True:
         resume(frontend.status())
     else:
+        graphtft_switch()
         if settings.manualstart == False:
             settings.timer = gobject.timeout_add(300000, send_shutdown)
         elif settings.acpi_wakeup == True:
-            interval, default, answer = vdrsetupget("MinEventTimeout")
+            interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)   
         remote.disable()
