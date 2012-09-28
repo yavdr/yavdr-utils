@@ -132,7 +132,7 @@ def graphtft_switch():
     if settings.graphtft:
         dbusgraph = bus.get_object("de.tvdr.vdr","/Plugins/graphtft")
         if settings.frontend_active == 0:
-           dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String('NonLiveTv'),dbus_interface='de.tvdr.vdr.plugin')
+           dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String(settings.conf['graphtft_view']),dbus_interface='de.tvdr.vdr.plugin')
         elif settings.frontend_active == 1:
            dbusgraph.SVDRPCommand(dbus.String('RVIEW'),dbus.String(None),dbus_interface='de.tvdr.vdr.plugin')
 
@@ -172,7 +172,8 @@ class Settings():
         self.conf = {
         'logo_detached':"/usr/share/yavdr/images/yaVDR_background_detached.jpg",
         'key_detach':"KEY_PROG1",
-        'key_power':"KEY_POWER2"
+        'key_power':"KEY_POWER2",
+        'graphtft_view':"NonLiveTv"
         }
         for i in self.conf:
             if i in os.environ:
@@ -341,7 +342,7 @@ if __name__ == '__main__':
     
     settings = Settings()
     # set background visible when frontend is detached
-    subprocess.call(["/usr/bin/fehl","--bg-fill",settings.conf['logo_detached']], env=settings.env)
+    subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
     
     # check if vdr was started because of a timer or an acpi_wakeup event, if not attach frontend
     if settings.manualstart == True and settings.acpi_wakeup != True:
