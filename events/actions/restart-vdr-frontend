@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$(dbget vdr.frontend)" = "sxfe" ] || [ "$(dbget vdr.frontend)" = "xine" ] || [ "$(dbget vdr.frontend)" = "softhddevice"]; then
+if [ "$(dbget vdr.frontend)" = "sxfe" ] || [ "$(dbget vdr.frontend)" = "xine" ] || [ "$(dbget vdr.frontend)" = "softhddevice" ]; then
   stop vdr-frontend
   start vdr-frontend
 fi
