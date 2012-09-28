@@ -1,0 +1,11 @@
+<?cs if:(vdr.frontend == "softhddevice") ?>
+# background shown if frontend detached
+env logo_detached=/usr/share/yavdr/images/yaVDR_background_detached.jpg    
+export logo_detached
+# Button to de/attach frontend
+env key_detach=KEY_PROG1
+export key_detach
+# VDR's Power button
+env key_power=KEY_POWER2
+export key_power
+<?cs /if ?>

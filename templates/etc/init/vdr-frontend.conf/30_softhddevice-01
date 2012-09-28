@@ -1,0 +1,7 @@
+<?cs if:(vdr.frontend == "softhddevice") ?>
+
+end script
+
+script
+
+python - <<END
