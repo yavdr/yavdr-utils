@@ -256,7 +256,10 @@ class Settings():
         self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
         
     def getTempDisplay(self):
-        return subprocess.check_output(["dbget","vdr.tempdisplay"])
+        tempdisplay = subprocess.check_output(["dbget","vdr.tempdisplay"])
+        if len(tempdisplay) == 0:
+            tempdisplay = ".0"
+        return tempdisplay
 
     def check_acpi(self):
         timestr = open('/var/cache/vdr/acpiwakeup.time.old','r').read().splitlines()[0]
@@ -293,7 +296,7 @@ class dbusService(dbus.service.Object):
     @dbus.service.method('de.yavdr.frontend',in_signature='s',out_signature='b')
     def setBackground(self,path):
         if os.path.isfile(path):
-            subprocess.call(["/usr/bin/hsetroot","-full",path], env=settings.env)
+            subprocess.call(["/usr/bin/feh","--bg-fill",path], env=settings.env)
             syslog.syslog("setting Background to %s"%(path))
             return True
         else:
@@ -338,7 +341,7 @@ if __name__ == '__main__':
     
     settings = Settings()
     # set background visible when frontend is detached
-    subprocess.call(["/usr/bin/hsetroot","-full",settings.conf['logo_detached']], env=settings.env)
+    subprocess.call(["/usr/bin/fehl","--bg-fill",settings.conf['logo_detached']], env=settings.env)
     
     # check if vdr was started because of a timer or an acpi_wakeup event, if not attach frontend
     if settings.manualstart == True and settings.acpi_wakeup != True:
