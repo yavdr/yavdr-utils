@@ -10,7 +10,7 @@ env key_power=KEY_POWER2
 export key_power
 # GraphTFT VIEW if Frontend is detached: 
 # possible values NonLiveTv, Clock, Standard, Detail, Dia, Sysinfo
-env GRAPHTFT_VIEW=NonLiveTv
-export GRAPHTFT_VIEW
+env grphtft_view=NonLiveTv
+export grapthtft_view
 <?cs /if ?>
 
