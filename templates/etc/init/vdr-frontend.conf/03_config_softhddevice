@@ -1,5 +1,8 @@
 <?cs if:(vdr.frontend == "softhddevice") ?>
-# background shown if frontend detached
+# background shown if frontend is attached
+env logo_attached=/usr/share/yavdr/images/yavdr_logo.png
+export logo_attached
+# background shown if frontend is detached
 env logo_detached=/usr/share/yavdr/images/yaVDR_background_detached.jpg    
 export logo_detached
 # Button to de/attach frontend
