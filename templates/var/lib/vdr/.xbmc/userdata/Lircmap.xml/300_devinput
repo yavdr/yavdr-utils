@@ -34,7 +34,7 @@
 		<power>KEY_POWER2</power>
 		<channelplus>KEY_CHANNELUP</channelplus>
 		<channelminus>KEY_CHANNELDOWN</channelminus>
-		<title>KEY_CHANNEL</title>
+		<title>KEY_PROG3</title>
 		<volumeplus>KEY_VOLUMEUP</volumeplus>
 		<volumeminus>KEY_VOLUMEDOWN</volumeminus>
                 <teletext>KEY_TEXT</teletext>
@@ -49,7 +49,9 @@
 		<recordedtv>KEY_PVR</recordedtv>
                 <guide>KEY_EPG</guide>
                 <display>KEY_SCREEN</display>
-                <enter>KEY_PROG2</enter>
+                <enter>KEY_PROG4</enter>
                 <playlist>KEY_ZOOM</playlist>
+                <livetv>KEY_CHANNEL</livetv>
+                <mytv>KEY_TV</mytv>
                 <liveradio>KEY_FN</liveradio>
 	</remote>

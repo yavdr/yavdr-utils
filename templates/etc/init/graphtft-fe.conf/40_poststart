@@ -1,5 +1,5 @@
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
 post-stop script 
-/usr/bin/hsetroot -center /usr/share/yavdr/images/yavdr_logo.png
+/usr/bin/feh --bg-center /usr/share/yavdr/images/yavdr_logo.png
 end script
 <?cs /if ?>
