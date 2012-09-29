@@ -1,3 +1,3 @@
 <?cs if:(system.hardware.nvidia.detected == 1 && ?system.x11.display.0.device) ?>
-    Option			"metamodes" "<?cs var:system.x11.display.0.device ?>: <?cs var:system.x11.display.0.default ?> { ViewPortIn=<?cs var:system.x11.display.0.viewport.in.x ?>x<?cs var:system.x11.display.0.viewport.in.y ?>, ViewPortOut=<?cs var:system.x11.display.0.viewport.out.x ?>x<?cs var:system.x11.display.0.viewport.out.y ?>+<?cs var:system.x11.display.0.viewport.out.plusx ?>+<?cs var:system.x11.display.0.viewport.out.plusy ?> }" 
+    Option			"MetaModes" "<?cs var:system.x11.display.0.device ?>: <?cs var:system.x11.display.0.default ?> { ViewPortIn=<?cs var:system.x11.display.0.viewport.in.x ?>x<?cs var:system.x11.display.0.viewport.in.y ?>, ViewPortOut=<?cs var:system.x11.display.0.viewport.out.x ?>x<?cs var:system.x11.display.0.viewport.out.y ?>+<?cs var:system.x11.display.0.viewport.out.plusx ?>+<?cs var:system.x11.display.0.viewport.out.plusy ?> }" 
 <?cs /if ?>
