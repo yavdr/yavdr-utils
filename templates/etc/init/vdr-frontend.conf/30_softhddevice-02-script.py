@@ -112,6 +112,9 @@ def setUserInactive():
     settings.time = gobject.timeout_add(300000,send_shutdown)
 
 def detach():
+    # set background visible when frontend is detached
+    subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
+
     frontend.detach()
     graphtft_switch()
     return True
@@ -137,6 +140,9 @@ def graphtft_switch():
            dbusgraph.SVDRPCommand(dbus.String('RVIEW'),dbus.String(None),dbus_interface='de.tvdr.vdr.plugin')
 
 def resume(status):
+    # set background visible when frontend is detached
+    subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_attached']], env=settings.env)
+
     if status == "SUSPENDED":
         frontend.resume()
     elif status == "SUSPEND_DETACHED":
@@ -170,6 +176,7 @@ class Settings():
         # inputEventSize = 16
         # (untested)
         self.conf = {
+        'logo_attached':"/usr/share/yavdr/images/yavdr_logo.png",
         'logo_detached':"/usr/share/yavdr/images/yaVDR_background_detached.jpg",
         'key_detach':"KEY_PROG1",
         'key_power':"KEY_POWER2",
@@ -341,13 +348,14 @@ if __name__ == '__main__':
     setup = dbusSetup()
     
     settings = Settings()
-    # set background visible when frontend is detached
-    subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
-    
+        
     # check if vdr was started because of a timer or an acpi_wakeup event, if not attach frontend
     if settings.manualstart == True and settings.acpi_wakeup != True:
         resume(frontend.status())
     else:
+        # set background visible when frontend is detached
+        subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
+
         graphtft_switch()
         if settings.manualstart == False:
             settings.timer = gobject.timeout_add(300000, send_shutdown)
