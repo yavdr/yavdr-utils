@@ -1,1 +1,11 @@
-../actions/image-default
+#!/bin/bash
+
+SETUPCONF=/var/lib/vdr/setup.conf
+
+if [ -e /etc/default/locale ]; then
+. /etc/default/locale
+fi
+
+export LANG
+
+process-template /etc/vdr/plugins/imagesources.conf

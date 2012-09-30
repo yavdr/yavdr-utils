@@ -1,1 +1,2 @@
-../actions/set-overscan
+export DISPLAY=:1
+/usr/bin/nvidia-settings --assign CurrentMetaMode="$3: $4 { ViewPortIn=$5x$6, ViewPortOut=$7x$8+$9+${10} }"

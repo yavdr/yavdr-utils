@@ -1,1 +1,7 @@
-../actions/restart-vdr
+#!/bin/bash
+
+stop vdr
+if [ ! "$(dbget vdr.backend)" = "disabled" ]; then
+  sleep 4
+  start vdr
+fi
