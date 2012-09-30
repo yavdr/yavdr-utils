@@ -1,1 +1,3 @@
-../actions/stop-vdr
+#!/bin/bash
+
+stop vdr &> /dev/null

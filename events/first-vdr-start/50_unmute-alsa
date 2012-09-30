@@ -1,1 +1,16 @@
-../actions/unmute-alsa
+#!/bin/bash
+
+amixer set -q 'Master' unmute &> /dev/null
+amixer set -q 'IEC958' unmute &> /dev/null
+amixer set -q 'IEC958,1' unmute &> /dev/null
+amixer set -q 'PCM' unmute &> /dev/null
+
+for CARD in $(cat /proc/asound/cards | grep "\[NVidia" | cut -b2); do
+	amixer set -q -c$CARD 'IEC958' unmute &> /dev/null
+	amixer set -q -c$CARD 'IEC958,1' unmute &> /dev/null
+	amixer set -q -c$CARD 'IEC958,2' unmute &> /dev/null 
+	amixer set -q -c$CARD 'IEC958,3' unmute &> /dev/null
+done
+
+alsactl store
+

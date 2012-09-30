@@ -1,1 +1,3 @@
-../actions/create-sound-device-conf
+#!/bin/bash
+
+process-template /etc/init/sound-device.conf 

@@ -1,1 +1,3 @@
-../actions/stop-x
+#!/bin/bash
+
+stop openbox &> /dev/null

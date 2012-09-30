@@ -1,1 +1,3 @@
-../actions/reboot
+#!/bin/bash
+
+reboot

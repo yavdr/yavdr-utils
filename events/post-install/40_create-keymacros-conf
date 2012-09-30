@@ -1,1 +1,3 @@
-../actions/create-keymacros-conf
+#!/bin/bash
+
+process-template --owner=vdr --group=vdr /var/lib/vdr/keymacros.conf

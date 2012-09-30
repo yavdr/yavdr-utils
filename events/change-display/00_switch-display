@@ -1,1 +1,10 @@
-../actions/switch-display
+#!/bin/bash
+if [ "x$(dbget vdr.plugin.graphtft.enabled)" != "x1" ]; then
+    if [ "x$(dbget vdr.tempdisplay)" = "x" ]; then
+      dbset "vdr.tempdisplay=.1"
+    else
+      dbremove "vdr.tempdisplay"
+    fi
+else
+    dbremove "vdr.tempdisplay"
+fi

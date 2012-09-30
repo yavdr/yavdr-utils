@@ -1,1 +1,3 @@
-../actions/stop-remoted
+#!/bin/bash
+
+stop lircd || :
