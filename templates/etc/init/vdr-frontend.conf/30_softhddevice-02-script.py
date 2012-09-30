@@ -249,7 +249,7 @@ class Settings():
         if typeev == 1 and code == 172 and value == 1: # code 172 = KEY_HOMEPAGE - toggle frontend (attach/detach) 
            if self.frontend_active == 1:
                syslog.syslog("detached frontend")
-               frontend.detach()
+               detach()
            elif self.frontend_active == 0:
                syslog.syslog("attached frontend")
                resume(frontend.status())
