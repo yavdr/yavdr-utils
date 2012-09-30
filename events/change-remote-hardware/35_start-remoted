@@ -1,1 +1,3 @@
-../actions/start-remoted
+#!/bin/bash
+
+start lircd || :

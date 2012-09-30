@@ -1,1 +1,4 @@
-../actions/restart-x
+#!/bin/bash
+
+stop openbox && start openbox &> /dev/null
+

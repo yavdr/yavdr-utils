@@ -1,1 +1,4 @@
-../actions/create-asound-conf
+#!/bin/bash
+
+process-template /etc/asound.conf 
+

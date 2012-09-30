@@ -1,1 +1,3 @@
-../actions/dash2bash
+#!/bin/bash
+
+ln -sf /bin/bash /bin/sh

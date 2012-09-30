@@ -1,1 +1,3 @@
-../actions/create-config_xineliboutput
+#!/bin/bash
+
+process-template --owner=vdr --group=vdr /etc/vdr-sxfe/config_xineliboutput

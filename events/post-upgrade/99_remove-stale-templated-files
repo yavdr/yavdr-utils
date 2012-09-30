@@ -1,1 +1,23 @@
-../actions/remove-stale-templated-files
+#!/bin/bash
+
+TEMPLATELIST=/var/cache/yavdr/template-list
+
+find_templates () {
+  find $1 -type f -printf "%h\n" | cut -b ${#1}-
+}
+
+(
+  find_templates /usr/share/yavdr/templates/
+  find_templates /etc/yavdr/templates_custom/
+) | sort | uniq > /tmp/template-list.$$
+
+if [ -f $TEMPLATELIST ]; then
+  for LINE in $(diff $TEMPLATELIST /tmp/template-list.$$ | grep "<" | cut -d " " -f 2); do
+    if [ -f $LINE ]; then
+      logger -i -s "$0 - remove stale templated file $LINE"
+      rm -f $LINE
+    fi
+  done
+fi
+
+mv /tmp/template-list.$$ $TEMPLATELIST

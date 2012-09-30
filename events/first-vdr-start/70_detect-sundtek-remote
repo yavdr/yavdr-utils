@@ -1,1 +1,7 @@
-../actions/detect-sundtek-remote
+#!/bin/bash
+
+# detect: Sundtek Sticks
+if /opt/bin/mediaclient --scan-network | grep -q DVB; then
+  apt-get install -y --force-yes yavdr-hardware-sundtek
+fi
+

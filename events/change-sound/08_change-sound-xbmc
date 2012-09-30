@@ -1,1 +1,3 @@
-../actions/change-sound-xbmc
+#!/bin/bash
+
+/usr/bin/xml-node-set /settings/audiooutput /var/lib/vdr/.xbmc/userdata/guisettings.xml /tmp/xbmc/guisettings-audio

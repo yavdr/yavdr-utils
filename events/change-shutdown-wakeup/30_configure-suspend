@@ -1,1 +1,19 @@
-../actions/configure-suspend
+#!/bin/bash 
+
+if [ -x /usr/sbin/s2ram ]; then
+   if /usr/sbin/s2ram --test ; then
+      dbset system.sleep.module="uswsusp"
+      dbset system.sleep.options=""
+   else 
+      dbset system.sleep.module="uswsusp"
+      dbset system.sleep.options="-f"
+   fi
+else 
+   dbset system.sleep.module="kernel"
+fi
+
+process-template /etc/pm/config.d/00module
+process-template /etc/pm/config.d/10vdr_module
+process-template --mode 755 /etc/pm/sleep.d/20vdr_sleep
+process-template --mode 755 /etc/pm/sleep.d/30force-reload
+
