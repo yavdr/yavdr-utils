@@ -1,2 +1,2 @@
 export DISPLAY=:1
-nvidia-settings --assign CurrentMetaMode="$2: $3 { ViewPortIn=$4x$5, ViewPortOut=$6x$7+$8+$9 }"
+/usr/bin/nvidia-settings --assign CurrentMetaMode="$3: $4 { ViewPortIn=$5x$6, ViewPortOut=$7x$8+$9+${10} }"
