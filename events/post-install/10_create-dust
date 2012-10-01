@@ -1,4 +1,1 @@
-#!/bin/bash
-
-process-template --owner=vdr --group=vdr /var/lib/vdr/.gtkrc-2.0
-
+../actions/create-dust

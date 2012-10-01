@@ -1,5 +1,1 @@
-#!/bin/bash
-
-apt-get -y dist-upgrade
-
-exit 0
+../actions/apt-get-dist-upgrade

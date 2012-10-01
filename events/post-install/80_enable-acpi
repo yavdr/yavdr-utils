@@ -1,2 +1,1 @@
-#!/bin/bash
-process-template --owner=vdr --group=vdr /etc/vdr/vdr-addon-acpiwakeup.conf
+../actions/enable-acpi
