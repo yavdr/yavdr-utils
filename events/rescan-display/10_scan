@@ -1,12 +1,1 @@
-#!/bin/bash
-
-process-template /etc/X11/xorg.conf.rescan
-
-export XORGCONFIG=/etc/X11/xorg.conf.rescan
-xinit /usr/bin/getNVdisplays --update -- :1 vt9
-
-rm -f /etc/X11/xorg.conf.rescan
-
-dbset "system.hardware.nvidia.0.edid=0"
-dbset "system.hardware.nvidia.1.edid=0"
-
+../actions/scan_NVDisplays
