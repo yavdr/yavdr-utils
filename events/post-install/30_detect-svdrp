@@ -1,10 +1,1 @@
-#!/bin/bash
-
-svdrp=`cat /etc/services | grep "svdrp"`
-if [ "$svdrp" = "svdrp        6419/tcp            # VDR" ]; then
-    echo "svdrp exists in /etc/services" 
-else
-    echo "inserting svdrp in /etc/services" 
-    echo "svdrp        6419/tcp            # VDR" >> /etc/services
-fi
-
+../actions/detect-svdrp

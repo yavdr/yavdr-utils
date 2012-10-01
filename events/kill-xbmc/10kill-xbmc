@@ -1,3 +1,1 @@
-#!/bin/bash
-
-killall -9 xbmc.bin
+../actions/kill-xbmc
