@@ -180,6 +180,7 @@ class Settings():
         'logo_detached':"/usr/share/yavdr/images/yaVDR_background_detached.jpg",
         'key_detach':"KEY_PROG1",
         'key_power':"KEY_POWER2",
+        'start_always_detached':'0',
         'graphtft_view':"NonLiveTv"
         }
         for i in self.conf:
@@ -350,7 +351,7 @@ if __name__ == '__main__':
     settings = Settings()
         
     # check if vdr was started because of a timer or an acpi_wakeup event, if not attach frontend
-    if settings.manualstart == True and settings.acpi_wakeup != True:
+    if settings.manualstart == True and settings.acpi_wakeup != True and settings.conf['start_always_detached'] == '0':
         resume(frontend.status())
     else:
         # set background visible when frontend is detached
@@ -362,7 +363,11 @@ if __name__ == '__main__':
         elif settings.acpi_wakeup == True:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
-            settings.timer = gobject.timeout_add(interval_ms, setUserInactive)   
+            settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
+        else:
+            interval, default, answer = setup.vdrsetupget("MinEventTimeout")
+            interval_ms = interval  * 60000 # * 60s * 1000ms
+            settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
         remote.disable()
 
     def connect_eventlircd():
