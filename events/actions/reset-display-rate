@@ -3,11 +3,20 @@
 export DISPLAY=:1`dbget vdr.tempdisplay`
 
 if [ "$DISPLAY" = ":1" ]; then
-  RATE="$(dbget system.x11.display.0.rate)"
+  DEV=0
 else
-  RATE="$(dbget system.x11.display.1.rate)"
+  DEV=1
 fi
 
-if [ ! "$RATE" = "" ]; then
-  xrandr -r $RATE
+RATE="$(dbget system.x11.display.$DEV.rate)"
+
+if [ "$(dbget system.hardware.nvidia.detected)" = "1" ]; then
+   nvidia-settings --assign CurrentMetaMode="$(dbget system.x11.display.$DEV.device): $(dbget system.x11.display.$DEV.default) \
+            {\
+            ViewPortIn=$(dbget system.x11.display.$DEV.viewport.in.x)x$(dbget system.x11.display.$DEV.viewport.in.y),\
+            ViewPortOut=$(dbget system.x11.display.$DEV.viewport.out.x)x$(dbget system.x11.display.$DEV.viewport.out.y)\
+            +$(dbget system.x11.display.$DEV.viewport.out.plusx)+$(dbget system.x11.display.$DEV.viewport.out.plusy)\
+            }"
+elif [ ! "$RATE" = "" ]; then
+   xrandr -r $RATE
 fi
