@@ -4,7 +4,7 @@ end script
 
 post-stop script
 export export DISPLAY=<?cs alt:desktop_display ?>:1<?cs /alt ?>`dbget vdr.tempdisplay`
-/usr/bin/hsetroot -center "/usr/share/yavdr/images/yavdr_logo.png"
+/usr/bin/feh --bg-center "/usr/share/yavdr/images/yavdr_logo.png"
 if [ "$(vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
     vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
 fi
