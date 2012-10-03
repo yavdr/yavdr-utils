@@ -4,6 +4,10 @@
     DefaultDepth    24
     SubSection     "Display"
         Depth       24
+<?cs if:(?system.x11.display.0.default && system.x11.display.0.default != "") ?>
         Modes      "<?cs var:system.x11.display.1.default ?>"<?cs each:mode = system.x11.display.1.mode ?><?cs if:(mode != system.x11.display.1.default) ?> "<?cs var:mode ?>"<?cs /if ?><?cs /each ?>
+<?cs else ?><?cs if:(system.hardware.nvidia.detected == 1) ?>
+        Modes      "nvidia-auto-select"
+<?cs /if ?><?cs /if ?>
     EndSubSection
 
