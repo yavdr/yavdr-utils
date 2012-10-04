@@ -50,7 +50,7 @@ if [ "$(dbget system.sound.type)" = "" ]; then
         logger -t "find-alsa-devices" "No sound device found, using system.hardware.alsa.analog.device=0 (might be wrong)"
       fi
       if ["$(dbget system.hardware.alsa.analog.card)"  = "" ]; then
-        dbget system.hardware.alsa.analog.card=0
+        dbset system.hardware.alsa.analog.card=0
         logger -t "find-alsa-devices" "No sound card found, using system.hardware.alsa.analog.card=0 (might be wrong)"
       fi
    fi
