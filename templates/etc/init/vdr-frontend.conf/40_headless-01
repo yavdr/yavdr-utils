@@ -1,4 +1,4 @@
-<?cs if:(vdr.frontend == "headless") ?>
+<?cs if:(vdr.frontend == "disabled") ?>
 
 end script
 
