@@ -1,0 +1,6 @@
+<?cs if:(vdr.frontend == "headless") ?>
+
+end script
+
+script
+
