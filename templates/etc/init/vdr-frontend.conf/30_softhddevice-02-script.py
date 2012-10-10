@@ -1,5 +1,6 @@
 import sys
 import os
+import codecs
 import subprocess
 import gobject
 import socket
