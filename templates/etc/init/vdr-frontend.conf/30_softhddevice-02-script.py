@@ -216,7 +216,7 @@ class Settings():
             syslog.syslog("added %s"%device['DEVNAME'])
             if not "eventlircd_enable" in device:
                 self.paths[device['DEVNAME']] = open(device['DEVNAME'],'rb')
-                syslog.syslog("watching %s: %s - %s"%(device.parent['NAME'], device['DEVNAME'],self.paths[device['DEVNAME']]))
+                syslog.syslog(codecs.encode(u"watching %s: %s - %s"%(device.parent['NAME'], device['DEVNAME'],self.paths[device['DEVNAME']])))
                 self.devices[device['DEVNAME']] = gobject.io_add_watch(self.paths[device['DEVNAME']], gobject.IO_IN, self.evthandler)
         elif action == "remove" and 'DEVNAME' in device:
             try:
