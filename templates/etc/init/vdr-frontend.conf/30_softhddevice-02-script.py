@@ -203,7 +203,7 @@ class Settings():
         for device in self.context.list_devices(subsystem='input',ID_INPUT_KEYBOARD=True):
             if device.sys_name.startswith('event') and not (('eventlircd_enable' in device) or ('eventlircd_enable' in device and device['eventlircd_enable'] is ('true'))):
                 self.paths[device['DEVNAME']] = open(device['DEVNAME'],'rb')
-                syslog.syslog("watching %s: %s"%(device.parent['NAME'], device['DEVNAME']))
+                syslog.syslog(codecs.encode(u"watching %s: %s"%(device.parent['NAME'], device['DEVNAME']),'utf-8'))
                 self.devices[device['DEVNAME']] = gobject.io_add_watch(self.paths[device['DEVNAME']], gobject.IO_IN, self.evthandler)
         self.observer = GUDevMonitorObserver(self.monitor)
         self.observer.connect('device-event',self.udev_event)
