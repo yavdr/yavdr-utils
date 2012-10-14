@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xhost +SI:localuser:vdr
+sudo initctl emit --no-wait yavdr-desktop-session-start DISPLAY=$DISPLAY USER=$USER

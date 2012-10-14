@@ -1,0 +1,2 @@
+<?cs var:user ?> ALL=NOPASSWD: /sbin/initctl *
+

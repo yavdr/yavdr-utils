@@ -24,6 +24,8 @@ $(INSTALL):
 	install -m 700 change-vdr-uid $(DESTDIR)/usr/sbin
 	install -m 700 create-initial-database $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
+	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
+	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
