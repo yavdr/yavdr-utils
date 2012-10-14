@@ -1,5 +1,3 @@
-
-start on started vdr or stopped openbox-tools or started sound-device \
-         or vdr-frontend-restart
-stop on stopping vdr or stopping openbox
+start on started vdr or yavdr-desktop-session-start or vdr-frontend-restart
+stop on stopping vdr or desktop-shutdown
 
