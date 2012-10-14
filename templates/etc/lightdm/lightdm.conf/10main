@@ -1,0 +1,5 @@
+[SeatDefaults]
+autologin-user=<?cs var:user ?>
+autologin-user-timeout=0
+user-session=openbox
+
