@@ -39,8 +39,8 @@ if [ ! -z $XDISPLAY ]; then
    OPTIONS="DISPLAY=:$XDISPLAY"
    export DISPLAY=:$XDISPLAY
 else
-   OPTIONS="DISPLAY=:1`dbget vdr.tempdisplay`"
-   export DISPLAY=:1`dbget vdr.tempdisplay`
+   OPTIONS="DISPLAY=:0`dbget vdr.tempdisplay`"
+   export DISPLAY=:0`dbget vdr.tempdisplay`
 fi
 
 if [ "x$STANDALONE" = "xyes" ]; then

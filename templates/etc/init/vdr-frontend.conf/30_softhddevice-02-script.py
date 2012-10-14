@@ -263,7 +263,7 @@ class Settings():
 
         
     def updateDisplay(self):
-        self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
+        self.env["DISPLAY"] = <?cs alt:desktop_display ?>":0"<?cs /alt ?>+self.getTempDisplay()
         
     def getTempDisplay(self):
         tempdisplay = subprocess.check_output(["dbget","vdr.tempdisplay"])

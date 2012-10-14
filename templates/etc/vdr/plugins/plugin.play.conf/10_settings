@@ -12,4 +12,4 @@
 -v vdpau:deint=4:hqscaling=1
 -f
 -s
--d :1<?cs var:vdr.tempdisplay ?>
+-d :0<?cs var:vdr.tempdisplay ?>
