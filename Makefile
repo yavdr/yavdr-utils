@@ -26,6 +26,8 @@ $(INSTALL):
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
 	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
 	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
+	install -d -m 755 /etc/yavdr/override
+	cp -a override /etc/yavdr/
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
