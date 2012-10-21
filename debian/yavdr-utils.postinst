@@ -35,7 +35,7 @@ case "$1" in
                 dpkg-divert --add --package ${PKG} --rename \
                         --divert $f.distrib $f
                 [ \! -e $f -o -L $f ] && \
-                        ln -sf $ETC_OVERRIDE/$f $f
+                        ln -sf $ETC_OVERRIDE$f $f
         done
         ;;
 
