@@ -8,13 +8,13 @@ case "$1" in
 	chsh -s /bin/bash vdr
 	adduser pulse audio
 	adduser vdr pulse
-	adduser vdr pulse-acces
+	adduser vdr pulse-access
 	adduser vdr cdrom
         adduser vdr plugdev
 	DESKTOP_USER=$(getent passwd 1000|cut -d ':' -f 1)
 	deluser $DESKTOP_USER audio
 	adduser $DESKTOP_USER pulse
-	adduser $DESKTOP_USER pulse-acces
+	adduser $DESKTOP_USER pulse-access
 
         chmod +x /usr/share/yavdr/events/actions/*
 
