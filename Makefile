@@ -25,9 +25,10 @@ $(INSTALL):
 	install -m 700 create-initial-database $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
 	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
+	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
 	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
-	install -d -m 755 /etc/yavdr/override
-	cp -a override /etc/yavdr/
+	install -d -m 755 $(DESTDIR)/etc/yavdr/override
+	cp -a override $(DESTDIR)/etc/yavdr/
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
