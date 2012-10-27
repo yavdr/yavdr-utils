@@ -27,8 +27,9 @@ $(INSTALL):
 	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
 	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
 	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
-	install -d -m 755 $(DESTDIR)/etc/yavdr/override
+	install -d -m 755 $(DESTDIR)/etc/yavdr
 	cp -a override $(DESTDIR)/etc/yavdr/
+	cp -a etc $(DESTDIR)
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
