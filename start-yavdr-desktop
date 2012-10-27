@@ -10,6 +10,5 @@ tools'
 
 (for X in $CATEGORIES ; do (DISPLAY=:0 wmdrawer -c /etc/wmdrawer/$X &) ; sleep $DELAY ; done) &
 
-xhost +SI:localuser:vdr
 sudo /sbin/initctl emit --no-wait yavdr-desktop-session-start DISPLAY=$DISPLAY USER=$USER
 
