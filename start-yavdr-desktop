@@ -1,6 +1,4 @@
 #!/bin/bash
 
-adeskbar &
-
 sudo /sbin/initctl emit --no-wait yavdr-desktop-session-start DISPLAY=$DISPLAY USER=$USER
 
