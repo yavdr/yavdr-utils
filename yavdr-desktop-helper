@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+
+import wnck
+import gtk
+import optparse
+#import pyatspi
+import syslog
+
+class UnfocusShader(object):
+    def __init__(self, title_matches=None):
+        if title_matches is None:
+            title_matches = ["softhddevice", "XBMC Media Center", "xbmc.bin", "VLC media player"]
+        self.title_matches = [s.lower() for s in title_matches]
+        
+        screen = wnck.screen_get_default()
+        screen.connect("active-window-changed", self.on_active_window_changed)
+        screen.connect("window-opened", self.on_window_opened)
+    
+    def match_window(self, window):
+        window_title = window.get_name().lower()
+#        return any(s in window_title for s in self.title_matches)
+        if window.get_name().lower() in self.title_matches:
+            return True
+        if window.get_application().get_name() in self.title_matches:
+            return True
+        if window.get_class_group().get_res_class() in self.title_matches:
+            return True
+        return False  
+   
+    def match_application(self, application):
+        application_title = application.get_name().lower()
+        return any(s in application_title for s in self.title_matches)
+    
+    def match_class_group(self, class_group):
+        res_class = class_group.get_res_class().lower()
+        return any(s in res_class for s in self.title_matches)
+    
+    def undecorate_and_maximize(self, window):
+        syslog.syslog("undecorate window: " + window.get_name())
+        print "undecorate window: " + window.get_name()
+	print window.get_xid()
+        xwindow = gtk.gdk.window_foreign_new(window.get_xid())
+        xwindow.set_decorations(0)
+        xwindow.maximize()
+
+    def on_active_window_changed (self, screen, previous):
+
+        active = screen.get_active_window()
+        if active and active is not None:
+	    print "AW: " + active.get_name()
+            print "AA: " + active.get_application().get_name()
+            print "AC: " + active.get_class_group().get_res_class()
+	    if active.get_name() is None:
+                syslog.syslog("window " + active.get_application().get_name() + " got active")
+                if self.match_application(active.get_application()):
+                    self.undecorate_and_maximize(active)
+            else:
+                syslog.syslog("window " + active.get_name() + " got active")
+                if self.match_window(active):
+                    self.undecorate_and_maximize(active)
+
+    def on_window_opened (self, screen, window):
+	print "OW: " + window.get_name()
+        print "OA: " + window.get_application().get_name()
+        print "Oc: " + window.get_class_group().get_res_class()
+	if window.get_name() is None:
+            syslog.syslog("window " + window.get_application().get_name() + " was opened")
+	    if window.get_application() is None:
+                if self.match_class_group(window.get_class_group()):
+                    self.undecorate_and_maximize(window)
+            else:
+                if self.match_application(window.get_application()):
+                    self.undecorate_and_maximize(window)
+        else:
+            syslog.syslog("window " + window.get_name() + " was opened")
+            if self.match_window(window):
+                 self.undecorate_and_maximize(window)
+
+    def pressKey(self, keycode):
+        """Takes an integer keycode. You can find these with xev."""
+        pyatspi.Registry.generateKeyboardEvent(keycode, None,
+                                              pyatspi.KEY_PRESSRELEASE)
+            
+parser = optparse.OptionParser()
+
+parser.add_option('-t', '--title', metavar='TITLE', action='append',
+    dest='title_matches', help='Match window title')
+    
+options, args = parser.parse_args()
+
+# This is a standard GTK mechanism, which is required to capture all existing events
+while gtk.events_pending():   
+    gtk.main_iteration()
+
+shader = UnfocusShader(title_matches=options.title_matches)
+    
+gtk.main()

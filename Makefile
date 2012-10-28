@@ -19,12 +19,16 @@ $(INSTALL):
 	  cp -pr $$f $(DESTDIR)/usr/share/yavdr; done
 	chmod +x $(DESTDIR)/usr/share/yavdr/events/actions/*
 	cp -pr defaults $(DESTDIR)/usr/share/yavdr
+	install -d -m 755 $(DESTDIR)/usr/sbin
 	install -m 700 untie-packages $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-upgrade $(DESTDIR)/usr/sbin
 	install -m 700 change-vdr-uid $(DESTDIR)/usr/sbin
 	install -m 700 create-initial-database $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
+	install -d -m 755 $(DESTDIR)/usr/bin
 	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
+	install -m 755 devilspie-wrapper $(DESTDIR)/usr/bin	
+	install -m 755 yavdr-desktop-helper $(DESTDIR)/usr/bin	
 	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
 	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
 	install -d -m 755 $(DESTDIR)/etc/yavdr
