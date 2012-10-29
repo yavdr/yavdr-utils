@@ -361,11 +361,11 @@ if __name__ == '__main__':
         graphtft_switch()
         if settings.manualstart == False:
             settings.timer = gobject.timeout_add(300000, send_shutdown)
-        elif settings.acpi_wakeup == True:
+        elif settings.acpi_wakeup == True and setup.vdrsetupget("MinUserInactivity") > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
-        else:
+        elif setup.vdrsetupget("MinUserInactivity") > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
