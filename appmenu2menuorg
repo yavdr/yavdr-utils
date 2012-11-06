@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import xml.dom.minidom
+from xml.dom.minidom import Node
+import xml.sax.handler
+from xml.sax.saxutils import escape
+import gmenu, re, sys
+import codecs
+
+class Appmenu2Menuorg:
+	def __init__(self):
+		# load the config
+		self.conf = xml.dom.minidom.parse("appmenu2menuorg.conf")
+		# parse the document
+		self.doc = xml.dom.minidom.parse("/var/lib/vdr/plugins/menuorg.xml.in")
+
+	def walk_menu(self, entry):
+		if entry.get_type() == gmenu.TYPE_DIRECTORY:
+			node = self.doc.createElement("menu")
+			node.setAttribute("name", entry.get_name())
+			self.currentNode.appendChild(node)
+			self.currentNode = node
+			map(self.walk_menu, entry.get_contents())
+			self.currentNode = self.currentNode.parentNode
+		elif entry.get_type() == gmenu.TYPE_ENTRY and not entry.is_excluded:
+			node = self.doc.createElement("command")
+			node.setAttribute("name", escape(entry.get_name()))
+			command = re.sub(' [^ ]*%[fFuUdDnNickvm]', '', entry.get_exec())
+			if entry.launch_in_terminal:
+				command = 'xterm -title "%s" -e %s' % \
+						(entry.get_name(), command)
+			node.setAttribute("execute", command)
+			self.currentNode.appendChild(node)
+
+	def main(self):
+		for node in self.doc.getElementsByTagName("menu"):
+			id = node.getAttribute("id")
+			if id == "Applications":
+				node.removeAttribute("id")
+				self.currentNode = node
+				map(self.walk_menu, gmenu.lookup_tree("/etc/xdg/menus/applications.menu").root.get_contents())
+				break
+		xmlstr = self.doc.toprettyxml(indent = "  ")
+		f = codecs.open("/var/lib/vdr/plugins/menuorg.xml", 'w', 'utf-8')
+		f.write(xmlstr)
+		f.close()
+
+if __name__ == '__main__':
+    appmenu2menuorg = Appmenu2Menuorg()
+    appmenu2menuorg.main()
