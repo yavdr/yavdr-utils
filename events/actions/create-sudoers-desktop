@@ -2,4 +2,4 @@
 
 USER=$(getent passwd 1000|cut -d ":" -f1)
 
-process-template --data "user=$USER" /etc/sudoers.d/yavdr-desktop
+process-template --mode 440 --data "user=$USER" /etc/sudoers.d/yavdr-desktop
