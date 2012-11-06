@@ -34,6 +34,7 @@ $(INSTALL):
 	install -d -m 755 $(DESTDIR)/etc/yavdr
 	cp -a override $(DESTDIR)/etc/yavdr/
 	cp -a etc $(DESTDIR)
+	install -m 755 appmenu2menuorg $(DESTDIR)/usr/bin	
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
