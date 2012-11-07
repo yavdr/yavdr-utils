@@ -27,7 +27,7 @@ done
 
 # finished parsing arguments
 
-STOP="sudo /sbin/initctl stop --no-wait"
+STOP="sudo /sbin/initctl stop"
 
 # minimum required arguments
 if [ -z $STANDALONE ] || [ -z $APP ]; then
