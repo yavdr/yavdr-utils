@@ -2,3 +2,4 @@
 
 sudo /sbin/initctl emit --no-wait yavdr-desktop-session-start DISPLAY=$DISPLAY USER=$USER
 
+/usr/bin/yavdr-applauncherd &
