@@ -35,6 +35,11 @@ $(INSTALL):
 	cp -a override $(DESTDIR)/etc/yavdr/
 	cp -a etc $(DESTDIR)
 	install -m 755 appmenu2menuorg $(DESTDIR)/usr/bin	
+	install -m 755 yavdr-applauncher $(DESTDIR)/usr/bin	
+	install -m 755 yavdr-applauncherd $(DESTDIR)/usr/bin	
+	install -d -m 755 $(DESTDIR)/etc/dbus-1/system.d/
+	install -m 644 org.yavdr.applauncher.conf $(DESTDIR)/etc/dbus-1/system.d
+
 
 $(CLEAN):
 	$(MAKE) -C $(@:-clean=) clean
