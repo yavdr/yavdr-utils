@@ -9,8 +9,6 @@ import codecs
 
 class Appmenu2Menuorg:
 	def __init__(self):
-		# load the config
-		self.conf = xml.dom.minidom.parse("appmenu2menuorg.conf")
 		# parse the document
 		self.doc = xml.dom.minidom.parse("/var/lib/vdr/plugins/menuorg.xml.in")
 
@@ -29,7 +27,7 @@ class Appmenu2Menuorg:
 			if entry.launch_in_terminal:
 				command = 'xterm -title "%s" -e %s' % \
 						(entry.get_name(), command)
-			node.setAttribute("execute", command)
+			node.setAttribute("execute", "yavdr-applauncher " + command)
 			self.currentNode.appendChild(node)
 
 	def main(self):
