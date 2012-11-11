@@ -38,10 +38,9 @@ class Appmenu2Menuorg:
 				self.currentNode = node
 				map(self.walk_menu, gmenu.lookup_tree("/etc/xdg/menus/applications.menu").root.get_contents())
 				break
-		xmlstr = self.doc.toprettyxml(indent = "  ")
-		f = codecs.open("/var/lib/vdr/plugins/menuorg.xml", 'w', 'utf-8')
-		f.write(xmlstr)
-		f.close()
+		with open('/var/lib/vdr/plugins/menuorg.xml', 'wb') as f:
+			self.doc.writexml(f, encoding= 'utf-8', indent= '    ', newl= '\n')
+
 
 if __name__ == '__main__':
     appmenu2menuorg = Appmenu2Menuorg()
