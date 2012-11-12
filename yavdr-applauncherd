@@ -1,0 +1,27 @@
+#!/usr/bin/python
+
+import gobject
+import dbus
+import dbus.service
+from dbus.mainloop.glib import DBusGMainLoop
+import subprocess
+
+DBusGMainLoop(set_as_default=True)
+bus = dbus.SystemBus()
+#bus = dbus.SessionBus()
+
+class dbusService(dbus.service.Object):
+    def __init__(self):
+        bus_name = dbus.service.BusName('org.yavdr.applauncher', bus=bus)
+        dbus.service.Object.__init__(self, bus_name, '/launcher')
+
+    @dbus.service.method(dbus_interface='org.yavdr.applauncher', in_signature='s', out_signature='i')
+    def launchApp(self, path):
+        pid = subprocess.Popen(path, shell=True).pid
+        return pid
+
+if __name__ == '__main__':
+    dbusservice = dbusService()
+    loop = gobject.MainLoop()
+    loop.run()
+

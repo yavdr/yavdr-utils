@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for disp in ":1" ":1.1"; do
+for disp in ":0" ":0.1"; do
   LINE=$(xrandr -display $disp -q 2>/dev/null| head -n 1)
   SCREEN=$(echo $LINE | cut -d ":" -f 1 | cut -d " " -f 2)
   X=$(echo $LINE | cut -d ":" -f 2 | cut -d "," -f 2 | cut -d " " -f 3)

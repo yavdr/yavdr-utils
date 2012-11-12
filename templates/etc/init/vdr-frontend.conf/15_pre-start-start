@@ -8,6 +8,7 @@ fi
 
 # wait for vdr, Xorg (after wm is running) and the sound devices to be loaded
 start wait-for-job-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=vdr-frontend WAIT_FOREVER=1 ||:
+<?cs if:(vdr.frontend != "disabled") ?>
 start wait-for-job-state WAIT_FOR=sound-device TARGET_GOAL=start WAIT_STATE=running WAITER=vdr-frontend WAIT_FOREVER=1 ||:
 start wait-for-job-state WAIT_FOR=openbox-tools TARGET_GOAL=stop WAIT_STATE=waiting WAITER=vdr-frontend WAIT_FOREVER=1 ||:
-
+<?cs /if ?>

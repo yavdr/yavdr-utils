@@ -71,8 +71,8 @@ if check_pci "1ADE:2032"; then
 fi
 
 # Digital Devices
-if check_pci "dd01:0011" ; then
-  SOURCE="C/T"
+if check_pci "dd01:0011" || check_pci "dd01:0002" ; then
+  SOURCE="S2/C/T"
   DRIVER="linux-media-dkms"
 fi
 

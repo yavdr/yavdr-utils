@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export DISPLAY=:1
+export DISPLAY=:0
 
 DEV=`dbget system.x11.display.0.device`
 

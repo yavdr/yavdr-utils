@@ -1,0 +1,2 @@
+<?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" || vdr.frontend == "xine" || vdr.frontend == "softhddevice" ) ?>
+    <menu name=<?cs call:quote(_("Applications")) ?> id="Applications" >

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+USER=$(getent passwd 1000|cut -d ":" -f1)
+
+process-template --data "user=$USER" /etc/lightdm/lightdm.conf

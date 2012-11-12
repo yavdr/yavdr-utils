@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export DISPLAY=:1`dbget vdr.tempdisplay`
+export DISPLAY=:0`dbget vdr.tempdisplay`
 
-if [ "$DISPLAY" = ":1" ]; then
+if [ "$DISPLAY" = ":0" ]; then
   DEV=0
 else
   DEV=1

@@ -1,5 +1,6 @@
 import sys
 import os
+import codecs
 import subprocess
 import gobject
 import socket
@@ -203,7 +204,7 @@ class Settings():
         for device in self.context.list_devices(subsystem='input',ID_INPUT_KEYBOARD=True):
             if device.sys_name.startswith('event') and not (('eventlircd_enable' in device) or ('eventlircd_enable' in device and device['eventlircd_enable'] is ('true'))):
                 self.paths[device['DEVNAME']] = open(device['DEVNAME'],'rb')
-                syslog.syslog("watching %s: %s"%(device.parent['NAME'], device['DEVNAME']))
+                syslog.syslog(codecs.encode(u"watching %s: %s"%(device.parent['NAME'], device['DEVNAME']),'utf-8'))
                 self.devices[device['DEVNAME']] = gobject.io_add_watch(self.paths[device['DEVNAME']], gobject.IO_IN, self.evthandler)
         self.observer = GUDevMonitorObserver(self.monitor)
         self.observer.connect('device-event',self.udev_event)
@@ -216,7 +217,7 @@ class Settings():
             syslog.syslog("added %s"%device['DEVNAME'])
             if not "eventlircd_enable" in device:
                 self.paths[device['DEVNAME']] = open(device['DEVNAME'],'rb')
-                syslog.syslog("watching %s: %s - %s"%(device.parent['NAME'], device['DEVNAME'],self.paths[device['DEVNAME']]))
+                syslog.syslog(codecs.encode(u"watching %s: %s - %s"%(device.parent['NAME'], device['DEVNAME'],self.paths[device['DEVNAME']]),'utf-8'))
                 self.devices[device['DEVNAME']] = gobject.io_add_watch(self.paths[device['DEVNAME']], gobject.IO_IN, self.evthandler)
         elif action == "remove" and 'DEVNAME' in device:
             try:
@@ -262,7 +263,7 @@ class Settings():
 
         
     def updateDisplay(self):
-        self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
+        self.env["DISPLAY"] = <?cs alt:desktop_display ?>":0"<?cs /alt ?>+self.getTempDisplay()
         
     def getTempDisplay(self):
         tempdisplay = subprocess.check_output(["dbget","vdr.tempdisplay"])
@@ -360,11 +361,11 @@ if __name__ == '__main__':
         graphtft_switch()
         if settings.manualstart == False:
             settings.timer = gobject.timeout_add(300000, send_shutdown)
-        elif settings.acpi_wakeup == True:
+        elif settings.acpi_wakeup == True and setup.vdrsetupget("MinUserInactivity")[0] > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
-        else:
+        elif setup.vdrsetupget("MinUserInactivity")[0] > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)

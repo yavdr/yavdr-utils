@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/start-yavdr-desktop
+Hidden=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=start-yavdr-desktop
+Name=start-yavdr-desktop
+Comment[en_US]=starts the yavdr-desktop
+Comment=starts the yavdr-desktop

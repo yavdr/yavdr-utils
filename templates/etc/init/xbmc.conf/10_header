@@ -1,7 +1,7 @@
 description     "XBMC Daemon"
 author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 
-env DISPLAY=:1
+env DISPLAY=:0
 export DISPLAY
 
 env HOME=/var/lib/vdr
