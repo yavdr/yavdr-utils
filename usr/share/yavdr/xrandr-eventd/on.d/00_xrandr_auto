@@ -1,0 +1,11 @@
+#!/bin/bash
+
+while getopts "d:" opt; do
+  case $opt in
+    d)
+      DEVID=$OPTARG
+      ;;
+  esac
+done
+
+xrandr --output $DEVID --auto

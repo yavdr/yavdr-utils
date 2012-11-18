@@ -21,6 +21,12 @@
 
 import sys, os, pprint
 import time
+import signal
+import syslog
+import subprocess
+import gettext
+import ConfigParser
+from syslog import *
 #import hdf
 
 # Change path so we find Xlib
@@ -30,9 +36,10 @@ from Xlib import X, display, Xutil
 from Xlib.ext import randr
 
 # Application window (only one)
-class Window:
-    def __init__(self, display):
+class XRandREventd:
+    def __init__(self, display, config):
         self.d = display
+        self.config = config
 
         # Check for extension
         if not self.d.has_extension('RANDR'):
@@ -51,6 +58,7 @@ class Window:
         # Grab the current screen
         self.screen = self.d.screen()
 
+        """
         self.window = self.screen.root.create_window(
             50, 50, 300, 200, 2,
             self.screen.root_depth,
@@ -91,10 +99,18 @@ class Window:
                                         min_height = 20)
 
         # Map the window, making it visible
-#        self.window.map()
+        self.window.map()
 
         # Enable all RandR events.
         self.window.xrandr_select_input(
+            randr.RRScreenChangeNotifyMask
+            | randr.RRCrtcChangeNotifyMask
+            | randr.RROutputChangeNotifyMask
+            | randr.RROutputPropertyNotifyMask
+            )"""
+
+        self.root_window = self.screen.root
+        self.root_window.xrandr_select_input(
             randr.RRScreenChangeNotifyMask
             | randr.RRCrtcChangeNotifyMask
             | randr.RROutputChangeNotifyMask
@@ -112,7 +128,7 @@ class Window:
         #print "Primary output:"
         #self.pp.pprint(self.window.xrandr_get_output_primary()._data)
 
-        resources = self.window.xrandr_get_screen_resources()._data
+        resources = self.root_window.xrandr_get_screen_resources()._data
 
         #print "Modes:"
         #for mode_id, mode in self.parseModes(resources['mode_names'], resources['modes']).iteritems():
@@ -129,6 +145,7 @@ class Window:
                 self.valid_crtcs.extend(output_info['crtcs'])
 
         self.crtcs = {}
+        crtcNames = [self.config.cmdInit]
         for crtc in resources['crtcs']:
             crtc_info = self.d.xrandr_get_crtc_info(crtc, resources['config_timestamp'])._data
 
@@ -136,9 +153,12 @@ class Window:
             if crtc_info['mode'] != 0 and crtc_info['width'] != 0 and crtc_info['height'] != 0:
                 for output in crtc_info['outputs']:
                     outputinfo = self.outputs[output]
+                    crtcNames.append(outputinfo['name'])
                     print "%s is on" % (outputinfo['name'], )
                 self.crtcs[crtc] = crtc_info
         
+        if os.path.isfile(self.config.cmdInit) and os.access(self.config.cmdInit, os.X_OK):
+            subprocess.call(crtcNames);
         #print "OUTPUTs:"
         #self.pp.pprint(self.outputs)
         #print "CRTCs:"
@@ -147,15 +167,15 @@ class Window:
         #print "Raw screen resources:"
         #self.pp.pprint(resources)
 
-    def parseModes(self, mode_names, modes):
-        lastIdx = 0
-        modedatas = dict()
-        for mode in modes:
-            modedata = dict(mode._data)
-            modedata['name'] = mode_names[lastIdx:lastIdx + modedata['name_length']]
-            modedatas[modedata['id']] = modedata
-            lastIdx += modedata['name_length']
-        return modedatas
+    #def parseModes(self, mode_names, modes):
+    #    lastIdx = 0
+    #    modedatas = dict()
+    #    for mode in modes:
+    #        modedata = dict(mode._data)
+    #        modedata['name'] = mode_names[lastIdx:lastIdx + modedata['name_length']]
+    #        modedatas[modedata['id']] = modedata
+    #        lastIdx += modedata['name_length']
+    #    return modedatas
 
     # Main loop, handling events
     def loop(self):
@@ -171,25 +191,31 @@ class Window:
                     sys.exit(0)
 
                 # Screen information has changed
-                elif e.type == self.d.extension_event.ScreenChangeNotify:
-                    print 'Screen change'
-                    print self.pp.pprint(e._data)
+                #elif e.type == self.d.extension_event.ScreenChangeNotify:
+                #    print 'Screen change'
+                #    print self.pp.pprint(e._data)
 
                 # CRTC information has changed
                 elif e.type == self.d.extension_event.CrtcChangeNotify:
                     crtc = e._data['crtc']
-                    print 'CRTC %d change' % (crtc, )                    
+                #    print 'CRTC %d change' % (crtc, )                    
                     if e._data['mode'] != 0 and e._data['width'] != 0 and e._data['height'] != 0:
                         if crtc in self.valid_crtcs:
                             self.crtcs[crtc] = self.d.xrandr_get_crtc_info(crtc, e._data['timestamp'])._data
                             
                             for output in self.crtcs[crtc]['outputs']:
                                 outputinfo = self.outputs[output]
+                                print "%s is going on now" % (outputinfo['name'], )
+                                if os.path.isfile(self.config.cmdOn) and os.access(self.config.cmdOn, os.X_OK):
+                                    subprocess.call([self.config.cmdOn, "-d", outputinfo['name']])
                                 print "%s is on now" % (outputinfo['name'], )
                     else:
                         if crtc in self.crtcs and crtc in self.valid_crtcs:
                             for output in self.crtcs[crtc]['outputs']:
                                 outputinfo = self.outputs[output]
+                                print "%s is going off now" % (outputinfo['name'], )
+                                if os.path.isfile(self.config.cmdOff) and os.access(self.config.cmdOff, os.X_OK):
+                                    subprocess.call([self.config.cmdOff, "-d", outputinfo['name']])
                                 print "%s is off now" % (outputinfo['name'], )
                             del self.crtcs[crtc]
                         
@@ -197,19 +223,19 @@ class Window:
 
                 # Output information has changed
                 elif e.type == self.d.extension_event.OutputChangeNotify:
-                    print 'Output change'
+                #    print 'Output change'
                     if e._data['connection'] == 0 and e._data['crtc'] != 0:
                         self.outputs[e._data['e._data']] = e._data
                     else:
                         if e._data['crtc'] in self.outputs:
                             del self.outputs[e._data['crtc']]
                         
-                    self.pp.pprint(self.outputs);
+                #    self.pp.pprint(self.outputs);
 
                 # Output property information has changed
-                elif e.type == self.d.extension_event.OutputPropertyNotify:
-                    print 'Output property change'
-                    print self.pp.pprint(e._data)
+                #elif e.type == self.d.extension_event.OutputPropertyNotify:
+                #    print 'Output property change'
+                #    print self.pp.pprint(e._data)
 
                 # Somebody wants to tell us something
                 elif e.type == X.ClientMessage:
@@ -218,7 +244,30 @@ class Window:
                         if fmt == 32 and data[0] == self.WM_DELETE_WINDOW:
                             sys.exit(0)
             time.sleep(2)
-            self.window.xrandr_get_screen_info()
+            self.root_window.xrandr_get_screen_info()
+
+
+
+class Config:
+    def __init__(self):
+        self.cmdInit = '/usr/share/yavdr/xrandr-eventd/init'
+        self.cmdOn = '/usr/share/yavdr/xrandr-eventd/on'
+        self.cmdOff = '/usr/share/yavdr/xrandr-eventd/off'
+
+def signal_handler(signal, frame):
+        sys.exit(0)
 
 if __name__ == '__main__':
-    Window(display.Display()).loop()
+    # initialize gettext
+    #gettext.install('vdr-addon-avahi-mounter', '/usr/share/locale', unicode=1)
+
+    # initialize logging
+    openlog('monitor', LOG_PID, LOG_USER)
+    
+    # load config options
+    config = Config()
+        
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    XRandREventd(display.Display(), config).loop()
