@@ -26,16 +26,3 @@ export grapthtft_view
 env start_always_detached=0
 export start_always_detached
 
-#<?cs if:(system.sound.type == "hdmi" || system.sound.type == "passthrough") ?> 
-#SOUNDDEV="-a hw:<?cs var:system.hardware.alsa.hdmi.card ?>,<?cs var:system.hardware.alsa.hdmi.device ?> -p hw:<?cs var:system.hardware.alsa.hdmi.card ?>,<?cs var:system.hardware.alsa.hdmi.device ?>"
-#<?cs elif:(system.sound.type == "analog"
-#SOUNDDEV="-a hw:<?cs var:system.hardware.alsa.analog.card ?>,<?cs var:system.hardware.alsa.analog.device ?>"
-#<?cs elif:(system.sound.type == "spdif" ?>
-#SOUNDDEV="-p hw:<?cs var:system.hardware.alsa.digital.card ?>,<?cs var:system.hardware.alsa.digital.device ?>"
-#<?cs elif:(system.sound.type == "all" ?>
-# I don't know what to set :(
-#SOUNDDEV="-a both -p both"
-#<?cs /if ?>
-#export SOUNDDEV
-#<?cs /if ?>
-
