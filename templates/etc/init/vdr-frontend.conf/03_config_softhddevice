@@ -1,4 +1,9 @@
-<?cs if:(vdr.frontend == "softhddevice") ?>
+env HOME=/var/lib/vdr
+export HOME
+env DISPLAY=":0"
+export DISPLAY
+env USER=vdr
+export USER
 # background shown if frontend is attached
 env logo_attached=/usr/share/yavdr/images/yavdr_logo.png
 export logo_attached
@@ -8,6 +13,9 @@ export logo_detached
 # Button to de/attach frontend
 env key_detach=KEY_PROG1
 export key_detach
+# XBMC start/stop
+env key_xbmc=KEY_PROG2
+export key_xbmc
 # VDR's Power button
 env key_power=KEY_POWER2
 export key_power
@@ -15,9 +23,19 @@ export key_power
 # possible values NonLiveTv, Clock, Standard, Detail, Dia, Sysinfo
 env graphtft_view=NonLiveTv
 export grapthtft_view
-# Start frontend always detached:
-# possible values: 0 (attach frontend at manual start) and 1 (alwas start detached)
 env start_always_detached=0
 export start_always_detached
-<?cs /if ?>
+
+#<?cs if:(system.sound.type == "hdmi" || system.sound.type == "passthrough") ?> 
+#SOUNDDEV="-a hw:<?cs var:system.hardware.alsa.hdmi.card ?>,<?cs var:system.hardware.alsa.hdmi.device ?> -p hw:<?cs var:system.hardware.alsa.hdmi.card ?>,<?cs var:system.hardware.alsa.hdmi.device ?>"
+#<?cs elif:(system.sound.type == "analog"
+#SOUNDDEV="-a hw:<?cs var:system.hardware.alsa.analog.card ?>,<?cs var:system.hardware.alsa.analog.device ?>"
+#<?cs elif:(system.sound.type == "spdif" ?>
+#SOUNDDEV="-p hw:<?cs var:system.hardware.alsa.digital.card ?>,<?cs var:system.hardware.alsa.digital.device ?>"
+#<?cs elif:(system.sound.type == "all" ?>
+# I don't know what to set :(
+#SOUNDDEV="-a both -p both"
+#<?cs /if ?>
+#export SOUNDDEV
+#<?cs /if ?>
 

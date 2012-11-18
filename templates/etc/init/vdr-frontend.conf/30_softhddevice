@@ -1,1 +1,17 @@
+script
+if [ -r /etc/default/locale ]; then
+        . /etc/default/locale
+        export LANG LANGUAGE LC_CTYPE=$LANG
+fi
+echo "USER is $USER, HOME is $HOME"
+sudo -u $USER python /usr/bin/vdr-frontend
+end script
 
+post-stop script
+/usr/bin/feh --bg-center "/usr/share/yavdr/images/yavdr_logo.png"
+if [ "$(vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
+    vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
+fi
+vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||: &> /dev/null
+
+end script
