@@ -1,3 +1,7 @@
+<?cs if:(vdr.frontend == "softhddevice") ?>
+
+end script
+
 script
 if [ -r /etc/default/locale ]; then
         . /etc/default/locale
@@ -15,3 +19,6 @@ fi
 vdr-dbus-send /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' ||: &> /dev/null
 
 end script
+<?cs /if ?>	
+
+<?cs /if ?>
