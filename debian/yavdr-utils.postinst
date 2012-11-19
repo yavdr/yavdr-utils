@@ -15,6 +15,7 @@ case "$1" in
 	deluser $DESKTOP_USER audio
 	adduser $DESKTOP_USER pulse
 	adduser $DESKTOP_USER pulse-access
+        adduser $DESKTOP_USER vdr
 
         chmod +x /usr/share/yavdr/events/actions/*
 
