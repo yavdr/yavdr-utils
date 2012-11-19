@@ -40,7 +40,7 @@ class Appmenu2Menuorg:
 				self.currentNode = node
 				map(self.walk_menu, gmenu.lookup_tree("/etc/xdg/menus/applications.menu").root.get_contents())
 				break
-		with codecs.open('/home/alexander/menuorg.xml', 'w','utf-8') as f:
+		with codecs.open('/var/lib/vdr/plugins/menuorg.xml', 'w','utf-8') as f:
 			self.doc.writexml(f, encoding= 'utf-8', indent= '    ', newl= '\n')
 
 
