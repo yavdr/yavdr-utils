@@ -24,7 +24,7 @@ class Appmenu2Menuorg:
 			self.currentNode = self.currentNode.parentNode
 		elif entry.get_type() == gmenu.TYPE_ENTRY and not entry.is_excluded:
 			node = self.doc.createElement("command")
-			node.setAttribute("name", escape(entry.get_name()))
+			node.setAttribute("name", escape(entry.get_name().decode('utf-8')))
 			command = re.sub(' [^ ]*%[fFuUdDnNickvm]', '', entry.get_exec())
 			if entry.launch_in_terminal:
 				command = 'xterm -title "%s" -e %s' % \
@@ -40,7 +40,7 @@ class Appmenu2Menuorg:
 				self.currentNode = node
 				map(self.walk_menu, gmenu.lookup_tree("/etc/xdg/menus/applications.menu").root.get_contents())
 				break
-		with open('/var/lib/vdr/plugins/menuorg.xml', 'wb') as f:
+		with codecs.open('/home/alexander/menuorg.xml', 'w','utf-8') as f:
 			self.doc.writexml(f, encoding= 'utf-8', indent= '    ', newl= '\n')
 
 
