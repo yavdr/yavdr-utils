@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=export $USER; export $HOME;/usr/bin/start-yavdr-desktop
+Exec=/usr/bin/start-yavdr-desktop
 Hidden=false
 X-GNOME-Autostart-enabled=true
 Name[en_US]=start-yavdr-desktop
