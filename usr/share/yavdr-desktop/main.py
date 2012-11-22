@@ -87,6 +87,11 @@ class Main():
             logging.info(u'Configured softhddevide as primary frontend')
             self.frontend = self.vdrCommands.vdrSofthddevice
         self.frontend.attach()
+    
+    def soft_detach():
+        self.frontend.detach()
+        settings.timer = gobject.timeout_add(300000,self.dbusService.send_shutdown)
+        return False
             
     def startup(self):
         # dbus2vdr fuctions

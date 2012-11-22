@@ -115,8 +115,8 @@ class dbusSofthddeviceFrontend():
         self.parent.vdrRemote.disable()
         self.main_instance.settings.frontend_active = 0
         if active == 1:
-            settings.frontend_active = 1
-            settings.external_prog = 1
+            self.main_instance.settings.frontend_active = 1
+            self.main_instance.settings.external_prog = 1
         return True
 
     def resume(self,status):

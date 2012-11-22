@@ -110,10 +110,10 @@ class dbusService(dbus.service.Object):
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def shutdown(self):
-        self.main_instance.vdrControl.vdrRemote.enable()
-        self.main_instance.vdrControl.vdrRemote.sendkey("POWER")
-        if settings.frontend_active == 0:
-            self.main_instance.vdrControl.vdrRemote.disable()
+        self.main_instance.vdrCommands.vdrRemote.enable()
+        self.main_instance.vdrCommands.vdrRemote.sendkey("POWER")
+        if self.main_instance.settings.frontend_active == 0:
+            self.main_instance.vdrCommands.vdrRemote.disable()
         self.main_instance.settings.timer = gobject.timeout_add(15000,soft_detach)
         return True
 
@@ -124,10 +124,10 @@ class dbusService(dbus.service.Object):
         
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def send_shutdown(self,user=False):
-        if self.main_instance.vdrControl.vdrShutdown.confirmShutdown(user):
-            self.main_instance.vdrControl.vdrRemote.enable()
-            self.main_instance.sendkey("POWER")
-            self.main_instance.vdrControl.vdrRemote.disable()
+        if self.main_instance.vdrCommands.vdrShutdown.confirmShutdown(user):
+            self.main_instance.vdrCommands.vdrRemote.enable()
+            self.main_instance.vdrCommands.vdrRemote.sendkey("POWER")
+            self.main_instance.vdrCommands.vdrRemote.disable()
         return True
 
     @dbus.service.method('de.yavdr.frontend',in_signature='s',out_signature='b')
@@ -138,25 +138,6 @@ class dbusService(dbus.service.Object):
             return True
         else:
             return False
-
-    @dbus.service.method('de.yavdr.frontend',out_signature='s')
-    def vdr_stop(self):
-        print "stopping vdr"
-
-        self.main_instance.frontend.detach()
-        try:
-            self.main_instance.pip.vdr.stopvdr()
-        except: pass
-        vdr_pid = 1
-        while vdr_pid:
-            vdr_pid = [p.pid for p in psutil.process_iter() if "vdr" in str(p.name)]
-            if vdr_pid:
-                print "waiting for VDR exit"
-                time.sleep(1)
-            else:
-                print("vdr terminated")
-        main()
-        return True
         
 class dbusPIP(dbus.service.Object):
     def __init__(self,main_instance):
@@ -246,10 +227,29 @@ class dbusPIP(dbus.service.Object):
     @dbus.service.method('de.yavdr.frontend',in_signature='sii',out_signature='b')
     def resize(self,s,above,decoration):
         w,h,x,y = self.main_instance.settings.tsplit(s,('x','+'))
-        logging.debug(u"%sx%s+%s+%s",x,y,w,h)
+        logging.debug("%sx%s+%s+%s",x,y,w,h)
         window = self.wnckctrl.windows['softhddevice_pip']
         if window:
             self.wnckctrl.resize(window,int(x),int(y),int(w),int(h),above,decoration)
             return True
         else:
             return False
+            
+    @dbus.service.method('de.yavdr.frontend',out_signature='s')
+    def vdr_stop(self):
+        print "stopping vdr"
+
+        self.vdr.detach()
+        try:
+            self.main_instance.pip.vdr.stopvdr()
+        except: pass
+        vdr_pid = 1
+        while vdr_pid:
+            vdr_pid = [p.pid for p in psutil.process_iter() if "vdr" in str(p.name)]
+            if vdr_pid:
+                print "waiting for VDR exit"
+                time.sleep(1)
+            else:
+                print("vdr terminated")
+        main()
+        return True
