@@ -114,7 +114,7 @@ class dbusService(dbus.service.Object):
         self.main_instance.vdrCommands.vdrRemote.sendkey("POWER")
         if self.main_instance.settings.frontend_active == 0:
             self.main_instance.vdrCommands.vdrRemote.disable()
-        self.main_instance.settings.timer = gobject.timeout_add(15000,soft_detach)
+        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.soft_detach)
         return True
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
