@@ -11,6 +11,7 @@ import logging
 import gtk
 import gobject
 import time
+import psutil
 
 from vdrPIP import vdrPIP
 
@@ -114,7 +115,7 @@ class dbusService(dbus.service.Object):
         self.main_instance.vdrCommands.vdrRemote.sendkey("POWER")
         if self.main_instance.settings.frontend_active == 0:
             self.main_instance.vdrCommands.vdrRemote.disable()
-        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.soft_detach)
+        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.mmmmmmsoft_detach)
         return True
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
@@ -154,7 +155,7 @@ class dbusPIP(dbus.service.Object):
 
     @dbus.service.method('de.yavdr.frontend',out_signature='s')
     def win(self):
-        return ", ".join(self.wnckctrl.windows)
+        return "; ".join(self.wnckctrl.windows)
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def start(self):
         if self.vdr.proc == None:
@@ -237,19 +238,19 @@ class dbusPIP(dbus.service.Object):
             
     @dbus.service.method('de.yavdr.frontend',out_signature='s')
     def vdr_stop(self):
-        print "stopping vdr"
+        logging.info("stopping pip-vdr")
 
         self.vdr.detach()
-        try:
+        if self.main_instance.pip.vdr:
+            logging.info("stopping pip-vdr")
             self.main_instance.pip.vdr.stopvdr()
-        except: pass
-        vdr_pid = 1
-        while vdr_pid:
-            vdr_pid = [p.pid for p in psutil.process_iter() if "vdr" in str(p.name)]
-            if vdr_pid:
-                print "waiting for VDR exit"
+        vdr_pid = [1]
+        while len(vdr_pid) >1:
+            vdr_pid = [p.pid for p in psutil.process_iter() if str(p.name) == 'vdr']
+            if len(vdr_pid) > 1:
+                logging.info("waiting for PIP-VDR exit")
                 time.sleep(1)
             else:
-                print("vdr terminated")
+                logging.info("pip-vdr terminated")
         main()
         return True

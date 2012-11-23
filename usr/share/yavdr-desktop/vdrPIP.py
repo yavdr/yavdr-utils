@@ -5,6 +5,7 @@
 import logging
 import os
 import gobject
+import psutil
 import subprocess
 import time
 import dbus
@@ -69,6 +70,7 @@ class vdrPIP():
         self.shddbus.SVDRPCommand(dbus.String("deta"),dbus.String(''),dbus_interface=self.interface)
 
     def stopvdr(self):
+        logging.debug("vdrPIP.stopvdr()")
         self.proc.terminate()
 
     def on_exit(self,pid, condition,data):
