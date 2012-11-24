@@ -84,18 +84,8 @@ class Main():
         self.adeskbar = adeskbarDBus(self.systembus)
         self.frontend = None
         self.lircConnection = lircConnection(self,self.vdrCommands) # connect to (event)lircd-Socket
-        if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
-            logging.info(u'Configured softhddevide as primary frontend')
-            self.frontend = self.vdrCommands.vdrSofthddevice
-        elif self.hdf.readKey('vdr.frontend') == 'sxfe' and self.vdrCommands.vdrSetup.check_plugin('xineliboutput'):
-            logging.info('using vdr-sxfe as primary frontend')
-            self.frontend = vdrSXFE(self)
         try:
-            if self.frontend:
-                logging.debug('self.frontend exists')
-                self.startup()
-            else:
-                logging.warn('no frontend')
+            self.startup()
         except:
             logging.exception('no frontend initialized')
     
@@ -107,7 +97,7 @@ class Main():
     def startup(self):
         self.vdrCommands = vdrDBusCommands(self) # dbus2vdr fuctions
         self.graphtft = GraphTFT(self)
-
+        logging.info('run startup()')
         if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             logging.info(u'Configured softhddevide as primary frontend')
             self.frontend = self.vdrCommands.vdrSofthddevice
@@ -118,8 +108,11 @@ class Main():
             logging.info('using xine as primary frontend')
             self.frontend = vdrXINE(self)
         try:
-            logging.debug('self.frontend exists')
-            self.dbusService.atta()
+            if self.frontend:
+                logging.debug('self.frontend exists')
+                self.dbusService.atta()
+            else:
+                logging.debug('self.frontend is None')
         except:
             logging.exception('no frontend initialized')
         
@@ -147,13 +140,14 @@ class Main():
             if kwargs['member'] == "StateChanged":
                 logging.debug("StateChanged:")
                 if not self.running and 'running' in args[0]:
+                    self.hdf.readFile()
                     self.startup()
                     self.running = True
                     logging.debug(u"vdr upstart job running")
                 if 'pre-stop' in args[0]:
                     self.running = False
                     self.dbusService.deta()
-                    self.hdf.readfile()
+                    
                     logging.debug(u"vdr upstart job stopped/waiting")
             elif kwargs['member'] == "InstanceRemoved":
                 logging.debug("killed job")

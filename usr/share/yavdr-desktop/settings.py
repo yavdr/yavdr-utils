@@ -42,7 +42,7 @@ class Settings():
         'display':self.hdf.updateKey("yavdr.desktop.display", os.environ['DISPLAY']),
         'default_frontend':self.hdf.updateKey('vdr.frontend','softhddevice'),
         }
-        self.hdf.writeFile()
+        #self.hdf.writeFile()
         # *** END TODO ***
         #self.updateDisplay()
         self.apps = {}

@@ -23,7 +23,6 @@ class GraphTFT():
     def loadsettings(self):
         view = self.hdf.readKey(GraphTFT.viewdetached,"NonLiveTv")
         self.hdf.updateKey(GraphTFT.viewdetached,view)
-        self.hdf.writeFile()
         
     def graphtft_switch(self):
         if self.graphtft:

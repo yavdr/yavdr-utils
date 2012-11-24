@@ -8,11 +8,15 @@ DBusGMainLoop(set_as_default=True)
 
 import logging
 import os
+import time
+import socket
 import subprocess
 
 class vdrSXFE():
     def __init__(self, main_instance, path='/usr/bin/vdr-sxfe',origin='127.0.0.1',port='37890'):
         self.main_instance = main_instance
+        self.origin = origin
+        self.port = port
         self.main_instance.hdf.updateKey('yavdr.frontend.autocrop','0')
         os.environ['__GL_SYNC_TO_VBLANK']="1"
         # TODO Display config:
@@ -33,6 +37,8 @@ class vdrSXFE():
         logging.debug('vdr-sxfe command: %s',' '.join(self.cmd))
         
     def attach(self):
+        while not self.isOpen():
+            time.sleep(1)
         logging.info('starting vdr-sxfe')
         self.proc = subprocess.Popen(self.cmd,shell=True,env=self.environ)
         logging.debug('started vdr-sxfe')
@@ -57,6 +63,15 @@ class vdrSXFE():
     def activateWindow(self,window):
         window.activate(int(time.strftime("%s",time.gmtime())))
         logging.debug(u"activate softhddevice window with xid ",window.xid())
+        
+    def isOpen(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+         s.connect((self.origin, int(self.port)))
+         s.shutdown(2)
+         return True
+        except:
+         return False
         
         
         

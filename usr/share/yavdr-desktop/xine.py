@@ -26,7 +26,7 @@ class vdrXINE():
             aspectratio = ""
         os.environ['__GL_SYNC_TI_VBLANK']="1"
         # TODO Display config:
-        os.environ['__GL_SYNC_DISPLAY_DEVICE'] = str(self.main_instance.hdf.updateKey('system.x11.display.0.device','DFP-0')) # REMOVE
+        self.main_instance.hdf.updateKey('system.x11.display.0.device','DFP-0') # REMOVE
         os.environ['__GL_SYNC_DISPLAY_DEVICE'] = str(self.main_instance.hdf.readKey('system.x11.display.0.device'))
 
         self.cmd = ['/usr/bin/xine --post tvtime:method=use_vo_driver \
@@ -35,7 +35,7 @@ class vdrXINE():
             --post vdr --post vdr_video --post vdr_audio --verbose=2 \
             --no-gui --no-logo --no-splash --deinterlace -pq \
             -A pulseaudio \
-            %s %s\
+            %s %s \
             vdr:/tmp/vdr-xine/stream#demux:mpeg_pes'%(autocrop, aspectratio)]
         self.proc = None
         self.environ = os.environ

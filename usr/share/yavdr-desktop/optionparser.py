@@ -5,7 +5,7 @@ class Options():
     def __init__(self):
         self.parser = OptionParser()
         self.parser.add_option("-c", "--hdf", dest="hdf_file",
-            default='/etc/yavdr/test.hdf', help=u"clearsilver hdf file",
+            default='/var/lib/yavdrdb.hdf', help=u"clearsilver hdf file",
             metavar="HDF_FILE")
         self.parser.add_option("-l", "--log", dest="logfile",
             default='/tmp/yavdr-frontend.log', help=u"log file",
