@@ -170,8 +170,11 @@ class Main():
             self.settings.reattach = 0
         if cmd != ' ' and cmd != None and len(cmd)!=0:
             os.chdir(os.environ['HOME'])
-            logging.info('starting %s',cmd)
-            proc = subprocess.popen(cmd,env=os.env())
+            logging.info('starting cmd: %s',cmd)
+            try:
+                proc = subprocess.Popen(cmd)
+            except:
+                logging.exception('XBMC-Start failed')
             gobject.child_watch_add(proc.pid,self.on_exit,proc) # Add callback on exit
 
     def on_exit(self,pid, condition,data):
