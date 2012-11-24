@@ -171,7 +171,7 @@ class Main():
         if cmd != ' ' and cmd != None and len(cmd)!=0:
             os.chdir(os.environ['HOME'])
             logging.info('starting %s',cmd)
-            proc = subprocess.popen(cmd,env=os.env())
+            proc = subprocess.Popen(cmd,env=os.env())
             gobject.child_watch_add(proc.pid,self.on_exit,proc) # Add callback on exit
 
     def on_exit(self,pid, condition,data):
