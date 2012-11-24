@@ -66,7 +66,7 @@ class dbusService(dbus.service.Object):
         if not self.main_instance.settings.external_prog == 1:
             self.main_instance.settings.external_prog = 1
             cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
-            self.main_instance.start_app(cmd)#
+            self.main_instance.start_app(cmd)
             return True
 
     @dbus.service.method('de.yavdr.frontend',in_signature='si',out_signature='b')

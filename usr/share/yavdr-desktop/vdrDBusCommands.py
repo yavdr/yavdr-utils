@@ -111,18 +111,11 @@ class dbusSofthddeviceFrontend():
         display = u"-d "+self.main_instance.hdf.readKey('yavdr.desktop.display')+".0"
         reply, answer = self.dbusfe.SVDRPCommand(dbus.String("ATTA"),display,dbus_interface=self.interface)
         logging.debug(u"got answer %s: %s",reply,answer)
-        self.main_instance.vdrCommands.vdrRemote.enable()
-        self.main_instance.settings.frontend_active = 1
 
     def detach(self,active=0):
         logging.debug(u"detaching softhddevice frontend")
         reply, answer = self.dbusfe.SVDRPCommand(dbus.String("DETA"),dbus.String(None),dbus_interface=self.interface)
         logging.debug(u"got answer %s: %s",reply,answer)
-        self.parent.vdrRemote.disable()
-        self.main_instance.settings.frontend_active = 0
-        if active == 1:
-            self.main_instance.settings.frontend_active = 1
-            self.main_instance.settings.external_prog = 1
         return True
 
     def resume(self):

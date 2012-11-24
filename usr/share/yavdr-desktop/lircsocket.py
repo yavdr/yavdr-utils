@@ -42,39 +42,47 @@ class lircConnection():
                 return True
         except:
             sock.close()
+            logging.exception('retry lirc connection')
             try_connection()
             return True
         lines = string.split(buf, "    n")
-        for line in lines[:-1]:
-          if self.main_instance.settings.external_prog == 1: pass
-          else:
-            try: gobject.source_remove(main_instance.settings.timer)
-            except: pass
-            try:  code,count,cmd,device = string.split(line, " ")[:4]
-            except: return True
-            if cmd == settings.conf['key_detach']:
-                if self.main_instance.frontend.status() == "NOT_SUSPENDED":
-                    self.main_instance.frontend.detach()
-                    self.main_instance.settings.frontend_active = 0
-                else:
-                    self.main_instance.dbusService.resume(frontend.status())
-            elif cmd == self.main_instance.settings.conf['key_xbmc'] and self.main_instance.settings.external_prog == 0:
-                    main_instance.settings.external_prog = 1
-                    #gobject.timeout_add(50, start_xbmc)
-                    cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
-                    gobject.timeout_add(50, self.main_instance.start_app,cmd)
+        for line in lines:
+            if self.main_instance.settings.external_prog == 0: 
+                try: 
+                    if main_instance.settings.timer: 
+                        gobject.source_remove(main_instance.settings.timer)
+                        main_instance.settings.timer = None
+                except: 
+                    logging.debug('no timer to remove')
+                try: 
+                    code,count,cmd,device = string.split(line, " ")[:4]
+                except: 
+                    logging.exception(line)
                     return True
+                if cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_detach"):
+                    if self.main_instance.frontend.status() == "NOT_SUSPENDED":
+                        self.main_instance.frontend.detach()
+                        self.main_instance.settings.frontend_active = 0
+                    else:
+                        self.main_instance.dbusService.resume(frontend.status())
+                elif cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_xbmc") and self.main_instance.settings.external_prog == 0:
+                        cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
+                        try:
+                            self.main_instance.dbusService.start_xbmc()
+                        except:
+                            logging.exception('XBMC-START')
+                        gobject.timeout_add(50, self.main_instance.dbusService.start_xbmc)
+                        return True
 
-            elif cmd == settings.conf['key_power']:
-                if self.main_instance.frontend.status() == "NOT_SUSPENDED":
-                    self.main_instance.settings.timer = gobject.timeout_add(15000,soft_detach)
-                    self.main_instance.settings.frontend_active = 0
+                elif cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_power"):
+                    if self.main_instance.frontend.status() == "NOT_SUSPENDED":
+                        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.soft_detach)
+                        self.main_instance.settings.frontend_active = 0
+                    else:
+                        self.main_instance.dbusService.send_shutdown()
                 else:
-                    send_shutdown()
-            else:
-                if self.main_instancesettings.frontend_active == 0 and settings.external_prog == 0:
-                    self.main_instance.dbusService.resume(self.main_instance.frontend.status())
-                    self.main_instance.settings.frontend_active = 1
-                else:
-                    pass
+                    if self.main_instance.settings.frontend_active == 0 and self.main_instance.settings.external_prog == 0:
+                        self.main_instance.dbusService.atta()
+                    else:
+                        pass
         return True

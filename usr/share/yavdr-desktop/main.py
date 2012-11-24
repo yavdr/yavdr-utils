@@ -89,9 +89,9 @@ class Main():
         except:
             logging.exception('no frontend initialized')
     
-    def soft_detach():
+    def soft_detach(self):
         self.frontend.detach()
-        settings.timer = gobject.timeout_add(300000,self.dbusService.send_shutdown)
+        self.settings.timer = gobject.timeout_add(300000,self.dbusService.send_shutdown)
         return False
             
     def startup(self):
@@ -109,8 +109,9 @@ class Main():
             self.frontend = vdrXINE(self)
         try:
             if self.frontend:
-                logging.debug('self.frontend exists')
-                self.dbusService.atta()
+                if self.settings.manualstart and not self.settings.acpi_wakeup:
+                    logging.debug('self.frontend exists')
+                    self.dbusService.atta()
             else:
                 logging.debug('self.frontend is None')
         except:

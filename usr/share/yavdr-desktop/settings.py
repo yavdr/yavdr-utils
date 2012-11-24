@@ -42,6 +42,7 @@ class Settings():
         'display':self.hdf.updateKey("yavdr.desktop.display", os.environ['DISPLAY']),
         'default_frontend':self.hdf.updateKey('vdr.frontend','softhddevice'),
         }
+        logging.debug(type(self.hdf.readKey("yavdr.desktop.key_xbmc","KEY_PROG2")))
         #self.hdf.writeFile()
         # *** END TODO ***
         #self.updateDisplay()
