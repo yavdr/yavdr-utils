@@ -35,6 +35,7 @@ from wnckController import wnckController
 from adeskbar import adeskbarDBus
 from sxfe import vdrSXFE
 from xine import vdrXINE
+from xbmc import XBMC
 
 class Main():
     def __init__(self,options):
@@ -97,6 +98,7 @@ class Main():
     def startup(self):
         self.vdrCommands = vdrDBusCommands(self) # dbus2vdr fuctions
         self.graphtft = GraphTFT(self)
+        self.xbmc = XBMC(self)
         logging.info('run startup()')
         if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             logging.info(u'Configured softhddevide as primary frontend')
@@ -107,11 +109,23 @@ class Main():
         elif self.hdf.readKey('vdr.frontend') == 'xine' and self.vdrCommands.vdrSetup.check_plugin('xine'):
             logging.info('using xine as primary frontend')
             self.frontend = vdrXINE(self)
+        elif self.hdf.readKey('vdr.frontend') == 'xbmc':
+            self.frontend = self.xbmc
         try:
             if self.frontend:
                 if self.settings.manualstart and not self.settings.acpi_wakeup:
                     logging.debug('self.frontend exists')
                     self.dbusService.atta()
+                else:
+                    self.graphtft.graphtft_switch()
+                    subprocess.call(["/usr/bin/feh","--bg-fill",self.hdf.readKey('logo_detached')], env=settings.env)
+                    if settings.manualstart == False:
+                        self.settings.timer = gobject.timeout_add(300000, self.dbusService.send_shutdown)
+                    elif self.settings.acpi_wakeup:
+                        if self.vdrCommands.vdrSetup.get('MinUserInactivity')[0] != 0:
+                            interval, default, answer = setup.vdrsetupget("MinEventTimeout")
+                            interval_ms = interval  * 60000 # * 60s * 1000ms
+                            settings.timer = gobject.timeout_add(interval_ms, self.dbusService.setUserInactive)
             else:
                 logging.debug('self.frontend is None')
         except:

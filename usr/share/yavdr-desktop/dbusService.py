@@ -47,6 +47,12 @@ class dbusService(dbus.service.Object):
     def start(self):
         self.main_instance.startup()
         return True
+        
+    @dbus.service.method('de.yavdr.frontend',out_signature='b')    
+    def setUserInactive(self,user=False):
+        self.send_shutdown(user)
+        self.main_instance.settings.time = gobject.timeout_add(300000,self.send_shutdown)
+        return True
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def toggle(self):
@@ -65,9 +71,23 @@ class dbusService(dbus.service.Object):
     def start_xbmc(self):
         if not self.main_instance.settings.external_prog == 1:
             self.main_instance.settings.external_prog = 1
-            cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
-            self.main_instance.start_app(cmd)
+            if self.main_instance.settings.frontend_active == 1:
+                logging.info('detaching frontend')
+                self.main_instance.dbusService.deta()
+                self.main_instance.wnckC.windows['frontend'] = None
+                self.main_instance.settings.reattach = 1
+            else:
+                self.settings.reattach = 0
+            #cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
+            #self.main_instance.start_app(cmd)
+            self.main_instance.frontend.detach()
+            self.main_instance.xbmc.attach(False)
             return True
+            
+    @dbus.service.method('de.yavdr.frontend',out_signature='b')    
+    def stop_xbmc(self):
+        self.main_instance.xbmc.detach()
+        self.main_instance.settings.external_prog = 0
 
     @dbus.service.method('de.yavdr.frontend',in_signature='si',out_signature='b')
     def start_application(self,cmd,standalone=0):
@@ -118,7 +138,7 @@ class dbusService(dbus.service.Object):
         self.main_instance.vdrCommands.vdrRemote.sendkey("POWER")
         if self.main_instance.settings.frontend_active == 0:
             self.main_instance.vdrCommands.vdrRemote.disable()
-        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.mmmmmmsoft_detach)
+        self.main_instance.settings.timer = gobject.timeout_add(15000,self.main_instance.soft_detach)
         return True
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
