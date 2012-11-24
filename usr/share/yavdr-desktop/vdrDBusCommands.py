@@ -63,8 +63,11 @@ class dbusRemote():
         else: return False
 
     def enable(self):
+        logging.info('remote enabled')
         answer, message = self.dbusremote.Enable(dbus_interface=self.interface)
-        if answer == 250: return True
+        if answer == 250: 
+            logging.info('remote enabled')
+            return True
         else: return False
 
     def disable(self):
@@ -74,7 +77,9 @@ class dbusRemote():
 
     def status(self):
         answer, message = self.dbusremote.Status(dbus_interface=self.interface)
-        if answer == 250: return True
+        if answer == 250: 
+            logging.info('remote disabled')
+            return True
         else: return False
 
 
@@ -89,6 +94,7 @@ class dbusSofthddeviceFrontend():
             self.dbusfe = main_instance.systembus.get_object("de.tvdr.vdr","/Plugins/softhddevice")
             self.interface = 'de.tvdr.vdr.plugin'
         except:
+            
             logging.exception(u"could not call softhddevice dbus object")
 
     def activateWindow(self,window):
@@ -105,7 +111,7 @@ class dbusSofthddeviceFrontend():
         display = u"-d "+self.main_instance.hdf.readKey('yavdr.desktop.display')+".0"
         reply, answer = self.dbusfe.SVDRPCommand(dbus.String("ATTA"),display,dbus_interface=self.interface)
         logging.debug(u"got answer %s: %s",reply,answer)
-        self.parent.vdrRemote.enable()
+        self.main_instance.vdrCommands.vdrRemote.enable()
         self.main_instance.settings.frontend_active = 1
 
     def detach(self,active=0):
@@ -119,10 +125,13 @@ class dbusSofthddeviceFrontend():
             self.main_instance.settings.external_prog = 1
         return True
 
-    def resume(self,status):
+    def resume(self):
         logging.debug(u"resuming softhddevice frontend")
-        reply, answer = self.dbusfe.SVDRPCommand(dbus.String("RESU"),dbus.String(None),dbus_interface=self.interface)
-        logging.debug(u"got answer %s: %s",reply,answer)
+        if self.status() == 'SUSPENDED':
+            reply, answer = self.dbusfe.SVDRPCommand(dbus.String("RESU"),dbus.String(None),dbus_interface=self.interface)
+            logging.debug(u"got answer %s: %s",reply,answer)
+        else:
+            self.attach()
         self.main_instance.settings.frontend_active = 1
 
 

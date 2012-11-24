@@ -15,11 +15,17 @@ class wnckController():
         self.main_instance = main_instance
         self.settings = main_instance.settings
         self.windows = {
-        'softhddevice_main':None,
+        'frontend':None,
         'softhddevice_pip':None,
         'xbmc':None
         }
-        self.windownames = ['softhddevice','Geany','XBMC Media Center']
+        self.windownames = [
+            'softhddevice','VDR',
+            'Connecting to VDR ...',
+            #'VDR - 127.0.0.1',
+            'xine',
+            'xine: vdr:/tmp/vdr-xine/stream#demux:mpeg_pes',
+            'Geany','XBMC Media Center']
         self.screen = wnck.screen_get_default()
         self.screen.connect("window-opened", self.on_window_opened)
         self.screen.connect('window-closed', self.on_window_closed)
@@ -30,29 +36,33 @@ class wnckController():
     def on_window_opened(self,screen,window):
         gtk.main_iteration()
         wname = window.get_name()
+        logging.debug("new Window %s"%wname)
         window.connect('name-changed', self.window_name_changed)
         self.window_name_changed(window)
 
 
     def window_name_changed(self, window):
         wname = window.get_name()
+        logging.debug('window_name_changed: %s'%wname)
         if wname in self.windownames:
-            if wname == 'softhddevice':
-                if self.windows['softhddevice_main'] == None:
+            logging.info('wname in windownames')
+            if wname == 'softhddevice' or ('VDR' in wname) or ('xine' in wname) or ('Connecting' in wname):
+                if self.windows['frontend'] == None:
                     logging.debug("assigning new main window")
-                    self.windows['softhddevice_main'] = window
+                    self.windows['frontend'] = window
                     self.maximize_and_undecorate(window)
                     #window.connect('geometry-changed', self.on_window_geochanged)
-                elif self.windows['softhddevice_pip'] == None and self.windows['softhddevice_main'].get_xid() != window.get_xid():
+                elif self.windows['softhddevice_pip'] == None and self.windows['frontend'].get_xid() != window.get_xid():
                     logging.debug("softhddevice_pip")
                     self.windows['softhddevice_pip'] = window
                     self.resize(window,1200,795,720,405,1,0)
-                elif window.get_xid() == self.windows['softhddevice_main'].get_xid():
+                elif window.get_xid() == self.windows['frontend'].get_xid():
                     logging.debug("main window already defined")
                 else:
                     logging.debug("too many softhddevice windows!")
+                
             elif wname == 'XBMC Media Center':
-                print("Detected XBMC Media Center")
+                logging.info("Detected XBMC Media Center")
                 gdkwindow = gtk.gdk.window_foreign_new(window.get_xid())
                 gdkwindow.set_icon_list([gtk.gdk.pixbuf_new_from_file('/usr/share/icons/hicolor/48x48/apps/xbmc.png')])
                 if not window.is_fullscreen():

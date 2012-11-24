@@ -33,6 +33,8 @@ from graphtft import GraphTFT
 import dbusService
 from wnckController import wnckController
 from adeskbar import adeskbarDBus
+from sxfe import vdrSXFE
+from xine import vdrXINE
 
 class Main():
     def __init__(self,options):
@@ -60,10 +62,9 @@ class Main():
             sys.exit(1)   
         
         self.hdf = HDF(options.hdf_file)
-        # wait for VDR upstart job status running
-        self.running = self.wait_for_vdrstart()
-        # Add watchdog for vdr-upstart-job to detect stopping and restarts
-        try:
+        self.running = self.wait_for_vdrstart() # wait for VDR upstart job status running
+        
+        try:# Add watchdog for vdr-upstart-job to detect stopping and restarts
             logging.debug(u'connecting to upstart')
             self.upstart_vdr = self.systembus.get_object("org.freedesktop.DBus","/com/ubuntu/Upstart/jobs/vdr")
             self.upstart_vdr.connect_to_signal("VDR", self.signal_handler, dbus_interface="com.ubuntu.Upstart0_6.Instance")
@@ -81,12 +82,22 @@ class Main():
         self.wnckC = wnckController(self)
         self.dbusPIP = dbusService.dbusPIP(self)
         self.adeskbar = adeskbarDBus(self.systembus)
-        # connect to (event)lircd-Socket
-        self.lircConnection = lircConnection(self,self.vdrCommands)
-        if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSofthddevice:
+        self.frontend = None
+        self.lircConnection = lircConnection(self,self.vdrCommands) # connect to (event)lircd-Socket
+        if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             logging.info(u'Configured softhddevide as primary frontend')
             self.frontend = self.vdrCommands.vdrSofthddevice
-        self.frontend.attach()
+        elif self.hdf.readKey('vdr.frontend') == 'sxfe' and self.vdrCommands.vdrSetup.check_plugin('xineliboutput'):
+            logging.info('using vdr-sxfe as primary frontend')
+            self.frontend = vdrSXFE(self)
+        try:
+            if self.frontend:
+                logging.debug('self.frontend exists')
+                self.startup()
+            else:
+                logging.warn('no frontend')
+        except:
+            logging.exception('no frontend initialized')
     
     def soft_detach():
         self.frontend.detach()
@@ -94,14 +105,23 @@ class Main():
         return False
             
     def startup(self):
-        # dbus2vdr fuctions
-        self.vdrCommands = vdrDBusCommands(self)
+        self.vdrCommands = vdrDBusCommands(self) # dbus2vdr fuctions
         self.graphtft = GraphTFT(self)
 
-        if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSofthddevice:
+        if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             logging.info(u'Configured softhddevide as primary frontend')
             self.frontend = self.vdrCommands.vdrSofthddevice
-        self.frontend.attach()
+        elif self.hdf.readKey('vdr.frontend') == 'sxfe' and self.vdrCommands.vdrSetup.check_plugin('xineliboutput'):
+            logging.info('using vdr-sxfe as primary frontend')
+            self.frontend = vdrSXFE(self)
+        elif self.hdf.readKey('vdr.frontend') == 'xine' and self.vdrCommands.vdrSetup.check_plugin('xine'):
+            logging.info('using xine as primary frontend')
+            self.frontend = vdrXINE(self)
+        try:
+            logging.debug('self.frontend exists')
+            self.dbusService.atta()
+        except:
+            logging.exception('no frontend initialized')
         
     def wait_for_vdrstart(self):
         upstart = self.systembus.get_object("com.ubuntu.Upstart", "/com/ubuntu/Upstart")
@@ -130,9 +150,10 @@ class Main():
                     self.startup()
                     self.running = True
                     logging.debug(u"vdr upstart job running")
-                    #self.frontend.attach()
                 if 'pre-stop' in args[0]:
                     self.running = False
+                    self.dbusService.deta()
+                    self.hdf.readfile()
                     logging.debug(u"vdr upstart job stopped/waiting")
             elif kwargs['member'] == "InstanceRemoved":
                 logging.debug("killed job")
@@ -144,18 +165,20 @@ class Main():
                 logging.info("VDR is %s", args[0])
                 #logging.info(kwargs)
         
-    def start_app(self,cmd,detachf=True):
+    def start_app(self,cmd,detachf=True, env=os.environ):
         logging.info('starting %s',cmd)
         if self.settings.frontend_active == 1 and detachf == True:
             logging.info('detaching frontend')
             self.dbusService.deta()
-            self.wnckC.windows['softhddevice_main'] = None
+            self.wnckC.windows['frontend'] = None
             self.settings.reattach = 1
         else:
             self.settings.reattach = 0
-        logging.info('starting %s',cmd)
-        proc = subprocess.Popen(cmd) # Spawn process
-        gobject.child_watch_add(proc.pid,self.on_exit,proc) # Add callback on exit
+        if cmd != ' ' and cmd != None and len(cmd)!=0:
+            os.chdir(os.environ['HOME'])
+            logging.info('starting %s',cmd)
+            proc = subprocess.popen(cmd,env=os.env())
+            gobject.child_watch_add(proc.pid,self.on_exit,proc) # Add callback on exit
 
     def on_exit(self,pid, condition,data):
         logging.debug("called function with pid=%s, condition=%s, data=%s",pid, condition,data)
