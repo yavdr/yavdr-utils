@@ -21,6 +21,7 @@ class Settings():
         self.external_prog = 0
         self.env = os.environ
         self.timer = None
+        self.vdr_remote = True
 
         self.manualstart = self.vdrCommands.vdrShutdown.manualstart()
         logging.info(u"vdr was started manually: %s",self.manualstart)

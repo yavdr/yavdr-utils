@@ -56,6 +56,15 @@ class dbusRemote():
     def __init__(self,bus):
         self.dbusremote = bus.get_object("de.tvdr.vdr","/Remote")
         self.interface = 'de.tvdr.vdr.remote'
+        
+    def channel(self,action=""):
+        answer, msg = self.dbusremote.SwitchChannel(dbus.String(action),dbus_interface=self.interface)
+        chnum,chname = msg.split(' ',1)
+        if answer == 250:
+            return chnum,chname
+        else:
+            logging.error('incorrect argument %s: %s:\n%s',action,answer,msg)
+            return None,msg
 
     def sendkey(self,key):
         answer, message = self.dbusremote.HitKey(dbus.String(key),dbus_interface=self.interface)

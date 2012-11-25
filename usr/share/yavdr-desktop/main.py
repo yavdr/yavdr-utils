@@ -111,6 +111,8 @@ class Main():
             self.frontend = vdrXINE(self)
         elif self.hdf.readKey('vdr.frontend') == 'xbmc':
             self.frontend = self.xbmc
+            self.settings.vdr_remote = False # Make shure VDR doesn't listen to remote
+            self.vdrCommands.vdrRemote.disable()
         try:
             if self.frontend:
                 if self.settings.manualstart and not self.settings.acpi_wakeup:
@@ -211,12 +213,10 @@ class Main():
         
     def reset_external_prog(self):
         self.settings.external_prog = 0
-        if self.settings.reattach == 1:
+        if self.settings.reattach == 1 and self.settings.frontend_active == 0:
             logging.info("restart vdr-frontend")
-            self.dbusService.toggle()
+            self.dbusService.atta()
             self.settings.frontend_active = 1
-        else:
-            self.settings.frontend_active = 0
         return False
         
      

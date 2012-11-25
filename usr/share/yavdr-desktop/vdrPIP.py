@@ -43,6 +43,7 @@ class vdrPIP():
         self.proc = None
         self.shddbus = None
         self.interface = 'de.tvdr.vdr.plugin'
+        self.remote_interface = 'de.tvdr.vdr.remote'
 
 
     def run_vdr(self):
@@ -52,9 +53,12 @@ class vdrPIP():
         while not self.shddbus:
             try:
                 self.shddbus = self.main_instance.systembus.get_object("de.tvdr.vdr1","/Plugins/softhddevice")
+                self.remote = self.main_instance.systembus.get_object("de.tvdr.vdr1","/Remote")
+                logging.debug('dbus2vdr of pip vdr ready')
             except:
                 logging.debug(u"dbus2vdr not jet ready")
                 time.sleep(0.5)
+        
 
 
     def attach(self,X=0,Y=0,x=0,y=0):
@@ -62,9 +66,37 @@ class vdrPIP():
             geometry="-g %sx%s+%s+%s"%(X,Y,x,y)
         else:
             geometry = ""'''
+        
         self.shddbus.SVDRPCommand(dbus.String("atta"),
                                     dbus.String('-a ""'),
                                     dbus_interface=self.interface)
+        #gobject.timeout_add(500,self.channelswitch)
+                                    
+    def channelswitch(self):
+                                    
+        try:
+            ochnum, chname = self.main_instance.vdrCommands.vdrRemote.channel()
+            logging.info('current channel of main vdr is %s', ochnum)
+        except:
+            logging.exception('error getting channel')
+        chnum = None
+        try:
+            while ochnum != chnum:
+                time.sleep(0.5)
+                answer, msg = self.remote.SwitchChannel(dbus.String(chnum),
+                                    dbus_interface=self.remote_interface)
+                answer, msg = self.remote.SwitchChannel(dbus.String(''),
+                                    dbus_interface=self.remote_interface)
+                chnum,chname = msg.split(' ',1)
+                logging.debug('could not switch to channel, channel is: %s %s',chnum,chname)
+                    
+            logging.info("Switched to %s: %s",answer,msg)
+        except: logging.exception('could not switch channel')
+        return False
+                                    
+    
+        
+        
 
     def detach(self):
         self.shddbus.SVDRPCommand(dbus.String("deta"),dbus.String(''),dbus_interface=self.interface)

@@ -62,11 +62,12 @@ class XBMC():
     def detach(self,active=0):
         logging.info('stopping xbmc')
         try:
+            logging.debug('sending terminate signal')
             self.proc.terminate()
         except:
             logging.info('xbmc already terminated')
         self.proc = None
-        self.main_instance.vdrCommands.vdrRemote.disable()
+        #self.main_instance.vdrCommands.vdrRemote.disable()
         
     def status(self):
         if self.proc: return "NOT_SUSPENDED"

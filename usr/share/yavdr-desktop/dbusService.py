@@ -24,7 +24,8 @@ class dbusService(dbus.service.Object):
     @dbus.service.method('de.yavdr.frontend',in_signature='i',out_signature='b')
     def deta(self,active=0):
         self.main_instance.frontend.detach()
-        self.main_instance.vdrCommands.vdrRemote.disable()
+        if self.main_instance.settings.vdr_remote:
+            self.main_instance.vdrCommands.vdrRemote.disable()
         self.main_instance.settings.frontend_active = 0
         if active == 1:
             self.main_instance.settings.frontend_active = 1
@@ -32,11 +33,14 @@ class dbusService(dbus.service.Object):
         self.main_instance.graphtft.graphtft_switch()
         return True
 
-    @dbus.service.method('de.yavdr.frontend',out_signature='b')
+    @dbus.service.method('de.yavdr.frontend',out_signature='b',vdr_remote=True)
     def atta(self):
         self.main_instance.frontend.attach()
         self.main_instance.settings.frontend_active = 1
-        self.main_instance.vdrCommands.vdrRemote.enable()
+        if self.main_instance.settings.vdr_remote:
+            self.main_instance.vdrCommands.vdrRemote.enable()
+        else:
+            self.main_instance.vdrCommands.vdrRemote.disable()
         self.main_instance.settings.external_prog = 0
         return True
         
@@ -78,8 +82,6 @@ class dbusService(dbus.service.Object):
                 self.main_instance.settings.reattach = 1
             else:
                 self.settings.reattach = 0
-            #cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
-            #self.main_instance.start_app(cmd)
             self.main_instance.frontend.detach()
             self.main_instance.xbmc.attach(False)
             return True
