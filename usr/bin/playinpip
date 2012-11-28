@@ -1,0 +1,4 @@
+#!/bin/bash
+echo $1 > /tmp/play
+#/usr/bin/frontend-dbus-send /pip play variant:string:"$1" > /dev/null
+/usr/bin/frontend-dbus-send /pip play string:"$1" > /dev/null
