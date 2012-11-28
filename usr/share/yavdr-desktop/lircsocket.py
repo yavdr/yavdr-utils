@@ -70,9 +70,13 @@ class lircConnection():
                 pass
             try: 
                 code,count,cmd,device = string.split(line, " ")[:4]
+                if count != "0": 
+                    loggging.debug('repeated keypress')
+                    return True
             except: 
                 logging.exception(line)
                 return True
+            logging.debug('Key press: %s',cmd)
             if self.main_instance.settings.external_prog == 0: 
                 if cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_detach"):
                     if self.main_instance.frontend.status() == "NOT_SUSPENDED":

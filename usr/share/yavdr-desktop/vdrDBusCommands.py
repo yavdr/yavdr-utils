@@ -14,11 +14,30 @@ class vdrDBusCommands():
         self.vdrSetup = dbusVDRSetup(main_instance.systembus)
         self.vdrShutdown = dbusShutdown(main_instance.systembus,main_instance)
         self.vdrRemote = dbusRemote(main_instance.systembus)
+        self.vdrRecordings = dbusRecordings(main_instance)
         if self.vdrSetup.check_plugin('softhddevice'):
             self.vdrSofthddevice = dbusSofthddeviceFrontend(main_instance,self)
             logging.debug(u'softhddevice has been loaded by VDR')
         else:
             logging.info(u'softhddevice has not been loaded by VDR')
+            
+class dbusRecordings():
+    def __init__(self,main_instance):
+        self.main_instance = main_instance
+        self.bus = self.main_instance.systembus
+        self.dbusrecordings = self.bus.get_object("de.tvdr.vdr","/Recordings")
+        self.interface = 'de.tvdr.vdr.recording'
+        
+    def get_recordings(self):
+        reclist = self.dbusrecordings.List(dbus_interface=self.interface)
+        recordings = {}
+        for recording in reclist:
+            recordings[recording[0]] = dict(recording[1])
+        return recordings
+        
+    def play_recording(self,recording):
+        answer, msg = self.dbusrecordings.Play(recording,dbus_interface = self.interface, signature='v')
+        return answer, msg
 
         
 class dbusVDRSetup():

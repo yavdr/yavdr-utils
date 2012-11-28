@@ -44,6 +44,13 @@ class vdrPIP():
         self.shddbus = None
         self.interface = 'de.tvdr.vdr.plugin'
         self.remote_interface = 'de.tvdr.vdr.remote'
+        
+    def play_recording(self,path):
+        self.bus = self.main_instance.systembus
+        self.dbusrecordings = self.bus.get_object("de.tvdr.vdr1","/Recordings")
+        interface = 'de.tvdr.vdr.recording'
+        answer, msg = self.dbusrecordings.Play(path,dbus_interface = interface, signature='v')
+        return answer, msg
 
 
     def run_vdr(self):
@@ -100,6 +107,10 @@ class vdrPIP():
 
     def detach(self):
         self.shddbus.SVDRPCommand(dbus.String("deta"),dbus.String(''),dbus_interface=self.interface)
+        self.main_instance = main_instance
+        self.bus = self.main_instance.systembus
+        self.dbusrecordings = self.bus.get_object("de.tvdr.vdr","/Recordings")
+        self.interface = 'de.tvdr.vdr.recording'
 
     def stopvdr(self):
         logging.debug("vdrPIP.stopvdr()")

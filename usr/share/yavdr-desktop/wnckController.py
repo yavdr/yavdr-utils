@@ -69,6 +69,7 @@ class wnckController():
                     logging.debug("no fullscreen - maximizing and undecorating")
                     window.set_fullscreen(0)
                     window.maximize()
+                    gdkwindow.set_decorations(0)
                     #window.make_below()
                     window.unmake_above()
 

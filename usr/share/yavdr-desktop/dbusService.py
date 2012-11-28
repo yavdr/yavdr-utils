@@ -109,6 +109,11 @@ class dbusService(dbus.service.Object):
             window.maximize()
             window.activate(int(time.strftime("%s",time.gmtime())))
         return True
+        
+    @dbus.service.method('de.yavdr.frontend',in_signature='s',out_signature='is')
+    def play(self,path):
+        answer, msg = self.main_instance.vdrCommands.vdrRecordings.play_recording(dbus.String(path))
+        return answer, msg
 
     @dbus.service.method('de.yavdr.frontend',in_signature='sii',out_signature='b')
     def resize(self,s,above,decoration):
@@ -260,6 +265,11 @@ class dbusPIP(dbus.service.Object):
             return True
         else:
             return False
+            
+    @dbus.service.method('de.yavdr.frontend',in_signature='s',out_signature='is')
+    def play(self,path):
+        answer, msg = self.vdr.play_recording(dbus.String(path))
+        return answer, msg
             
     @dbus.service.method('de.yavdr.frontend',out_signature='s')
     def vdr_stop(self):
