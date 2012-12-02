@@ -67,7 +67,6 @@ class wnckController():
                 gdkwindow.set_icon_list([gtk.gdk.pixbuf_new_from_file('/usr/share/icons/hicolor/48x48/apps/xbmc.png')])
                 if not window.is_fullscreen():
                     logging.debug("no fullscreen - maximizing and undecorating")
-                    gdkwindow.set_decorations(0)
                     window.set_fullscreen(0)
                     window.maximize()
                     gdkwindow.set_decorations(0)

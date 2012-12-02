@@ -87,8 +87,12 @@ class Main():
         self.lircConnection = lircConnection(self,self.vdrCommands) # connect to (event)lircd-Socket
         try:
             self.startup()
+        except dbus.DBusException as error:
+            logging.exception('dbus Error, could not init frontend')
+            if "ServiceUnknown" in error.get_name():
+                logging.error('dbus2vdr not rechable, assuming vdr crashed since entering main instance')
         except:
-            logging.exception('no frontend initialized')
+            logging.exception('something went wrong, could not init frontend')
     
     def soft_detach(self):
         self.frontend.detach()
@@ -128,10 +132,13 @@ class Main():
                             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
                             interval_ms = interval  * 60000 # * 60s * 1000ms
                             settings.timer = gobject.timeout_add(interval_ms, self.dbusService.setUserInactive)
+                    
             else:
                 logging.debug('self.frontend is None')
+            return False
         except:
             logging.exception('no frontend initialized')
+            return True
         
     def wait_for_vdrstart(self):
         upstart = self.systembus.get_object("com.ubuntu.Upstart", "/com/ubuntu/Upstart")
@@ -161,13 +168,20 @@ class Main():
                     self.startup()
                     self.running = True
                     logging.debug(u"vdr upstart job running")
-                if 'pre-stop' in args[0]:
+                elif 'pre-stop' in args[0]:
                     self.running = False
                     self.dbusService.deta()
                     
                     logging.debug(u"vdr upstart job stopped/waiting")
+                elif 'killed' in args[0]:
+                    if self.settings.external_prog == 0:
+                        self.settings.frontend_active = 0
+                    self.running = False
             elif kwargs['member'] == "InstanceRemoved":
                 logging.debug("killed job")
+                self.running = False
+                if self.settings.external_prog == 0:
+                    self.settings.frontend_active = 0
             elif kwargs['member'] == "InstanceAdded":
                 logging.debug("added upstart-job")
             else:
