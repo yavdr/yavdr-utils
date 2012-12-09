@@ -106,13 +106,16 @@ class Main():
         logging.info('run startup()')
         if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             logging.info(u'Configured softhddevide as primary frontend')
+            self.vdrCommands.vdrRemote.enable()
             self.frontend = self.vdrCommands.vdrSofthddevice
         elif self.hdf.readKey('vdr.frontend') == 'sxfe' and self.vdrCommands.vdrSetup.check_plugin('xineliboutput'):
             logging.info('using vdr-sxfe as primary frontend')
             self.frontend = vdrSXFE(self)
+            self.vdrCommands.vdrRemote.enable()
         elif self.hdf.readKey('vdr.frontend') == 'xine' and self.vdrCommands.vdrSetup.check_plugin('xine'):
             logging.info('using xine as primary frontend')
             self.frontend = vdrXINE(self)
+            self.vdrCommands.vdrRemote.enable()
         elif self.hdf.readKey('vdr.frontend') == 'xbmc':
             self.frontend = self.xbmc
             self.settings.vdr_remote = False # Make shure VDR doesn't listen to remote
@@ -190,7 +193,7 @@ class Main():
                 logging.info("VDR is %s", args[0])
                 #logging.info(kwargs)
         
-    def start_app(self,cmd,detachf=True, env=os.environ):
+    def start_app(self,cmd,detachf=True, exitOnPID=True, environment=os.environ):
         logging.info('starting %s',cmd)
         if self.settings.frontend_active == 1 and detachf == True:
             logging.info('detaching frontend')
@@ -203,20 +206,23 @@ class Main():
             os.chdir(os.environ['HOME'])
             logging.info('starting cmd: %s',cmd)
             try:
-                proc = subprocess.Popen(cmd)
+                self.settings.external_proc[cmd] = subprocess.Popen(cmd, env=environment, shell=True)
             except:
-                logging.exception('XBMC-Start failed')
-            gobject.child_watch_add(proc.pid,self.on_exit,proc) # Add callback on exit
+                logging.exception('APP-Start failed: %s',cmd)
+            if exitOnPID:
+                gobject.child_watch_add(self.settings.external_proc[cmd].pid,self.on_exit,cmd) # Add callback on exit
 
     def on_exit(self,pid, condition,data):
+        cmd = data
         logging.debug("called function with pid=%s, condition=%s, data=%s",pid, condition,data)
         self.settings.external_prog = 0
+        self.settings.external_proc[cmd] = None
         if condition == 0:
             logging.info(u"normal exit")
             gobject.timeout_add(500,self.reset_external_prog)
         elif condition < 16384:
             logging.warn(u"abnormal exit: %s",condition)
-            gobject.timeout_add(500,reset_external_prog)
+            gobject.timeout_add(500,self.reset_external_prog)
         elif condition == 16384:
             logging.info(u"XBMC shutdown")
             self.dbusService.send_shutdown(user=True)

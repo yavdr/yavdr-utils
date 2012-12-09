@@ -19,6 +19,8 @@ class Settings():
         self.vdrCommands = main_instance.vdrCommands
         self.frontend_active = 0
         self.external_prog = 0
+        self.external_proc = {}
+        self.dialog = 0
         self.env = os.environ
         self.timer = None
         self.vdr_remote = True
@@ -39,6 +41,7 @@ class Settings():
         'key_detach':self.hdf.updateKey("yavdr.desktop.key_detach","KEY_PROG1"),
         'key_xbmc':self.hdf.updateKey("yavdr.desktop.key_xbmc","KEY_PROG2"),
         'key_power':self.hdf.updateKey("yavdr.desktop.key_power","KEY_POWER2"),
+        'key_dialog':self.hdf.updateKey("yavdr.desktop.key_dialog","KEY_PROG3"),
         'start_always_detached':self.hdf.updateKey("yavdr.desktop.start_detached",'0'),
         'display':self.hdf.updateKey("yavdr.desktop.display", os.environ['DISPLAY']),
         'default_frontend':self.hdf.updateKey('vdr.frontend','softhddevice'),

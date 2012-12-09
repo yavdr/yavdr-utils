@@ -46,6 +46,9 @@ class dbusService(dbus.service.Object):
         
     def stat(self):
         return self.main_instance.frontend.status()
+        
+    def resume(self):
+        self.main_instance.resume()
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def start(self):
@@ -91,11 +94,16 @@ class dbusService(dbus.service.Object):
         self.main_instance.xbmc.detach()
         self.main_instance.settings.external_prog = 0
 
-    @dbus.service.method('de.yavdr.frontend',in_signature='si',out_signature='b')
-    def start_application(self,cmd,standalone=0):
-        self.main_instance.settings.external_prog = 1
-        self.main_instance.start_app(cmd)#
-        return True
+    @dbus.service.method('de.yavdr.frontend',in_signature='sii',out_signature='b')
+    def start_application(self,cmd,standalone=0,exitOnPID=1):
+        if "xbmc" == cmd:
+            self.start_xbmc()
+            return True
+        else:
+            if standalone: self.main_instance.settings.external_prog = 1
+            else: self.main_instance.settings.external_prog = 0
+            self.main_instance.start_app(cmd,standalone,exitOnPID)#
+            return True
         
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')

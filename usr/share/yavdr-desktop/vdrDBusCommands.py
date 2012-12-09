@@ -99,7 +99,11 @@ class dbusRemote():
         else: return False
 
     def disable(self):
-        answer, message = self.dbusremote.Disable(dbus_interface=self.interface)
+        try:
+            answer, message = self.dbusremote.Disable(dbus_interface=self.interface)
+        except:
+            logging.exception('could not disable remote via dbus')
+            answer, message = self.dbusremote.Disable(dbus_interface=self.interface)
         if answer == 250: return True
         else: return False
 

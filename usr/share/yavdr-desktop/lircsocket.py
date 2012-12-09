@@ -8,6 +8,7 @@ import socket
 import string
 from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
+import appmenu
 
 class lircConnection():
     def __init__(self,main_instance,vdrCommands,socket_path="/var/run/lirc/lircd"):
@@ -71,13 +72,22 @@ class lircConnection():
             try: 
                 code,count,cmd,device = string.split(line, " ")[:4]
                 if count != "0": 
-                    loggging.debug('repeated keypress')
+                    #logging.debug('repeated keypress')
                     return True
             except: 
                 logging.exception(line)
                 return True
             logging.debug('Key press: %s',cmd)
-            if self.main_instance.settings.external_prog == 0: 
+            if cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_dialog") and self.main_instance.settings.dialog == 0:
+                logging.info('start dialog')
+                self.main_instance.settings.dialog = 1
+                self.main_instance.vdrCommands.vdrRemote.disable()
+                self.dock = appmenu.YavdrDock(self.main_instance)
+                return True
+            elif self.main_instance.settings.dialog == 1:
+                self.dock.lirc_handler(cmd)
+                return True
+            elif self.main_instance.settings.external_prog == 0: 
                 if cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_detach"):
                     if self.main_instance.frontend.status() == "NOT_SUSPENDED":
                         self.main_instance.frontend.detach()

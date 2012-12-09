@@ -25,7 +25,8 @@ class wnckController():
             #'VDR - 127.0.0.1',
             'xine',
             'xine: vdr:/tmp/vdr-xine/stream#demux:mpeg_pes',
-            'Geany','XBMC Media Center']
+            'Geany','XBMC Media Center',
+            'YouTube TV']
         self.screen = wnck.screen_get_default()
         self.screen.connect("window-opened", self.on_window_opened)
         self.screen.connect('window-closed', self.on_window_closed)
@@ -63,15 +64,20 @@ class wnckController():
                 
             elif wname == 'XBMC Media Center':
                 logging.info("Detected XBMC Media Center")
-                gdkwindow = gtk.gdk.window_foreign_new(window.get_xid())
-                gdkwindow.set_icon_list([gtk.gdk.pixbuf_new_from_file('/usr/share/icons/hicolor/48x48/apps/xbmc.png')])
-                if not window.is_fullscreen():
-                    logging.debug("no fullscreen - maximizing and undecorating")
-                    window.set_fullscreen(0)
-                    window.maximize()
-                    gdkwindow.set_decorations(0)
-                    #window.make_below()
-                    window.unmake_above()
+                try:
+                    gdkwindow = gtk.gdk.window_foreign_new(window.get_xid())
+                    gdkwindow.set_icon_list([gtk.gdk.pixbuf_new_from_file('/usr/share/icons/hicolor/48x48/apps/xbmc.png')])
+                    if not window.is_fullscreen():
+                        logging.debug("no fullscreen - maximizing and undecorating")
+                        window.set_fullscreen(0)
+                        window.maximize()
+                        #gdkwindow.set_decorations(0)
+                        #window.make_below()
+                        window.unmake_above()
+                except: logging.exception('XBMC window not changable')
+                
+            elif wname in self.windownames:
+                self.maximize_and_undecorate(window)
 
     def maximize_and_undecorate(self,window):
         logging.debug("Window recognized: %s"%window.get_name())
