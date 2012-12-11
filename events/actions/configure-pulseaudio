@@ -8,7 +8,7 @@ if [ ! -e /home/$DESKTOP_USER/.pulse/default.pa ]; then
   chown -R $DESKTOP_USER:$DESKTOP_USER /home/$DESKTOP_USER/.pulse
 fi
 
-if [ ! -e /home/$DESKTOP_USER/.pulse/default.pa ]; then
+if [ ! -e /var/lib/vdr/.pulse/default.pa ]; then
   mkdir -p /var/lib/vdr/.pulse
   cp /etc/yavdr/pulse/client.conf /var/lib/vdr/.pulse
   chown -R vdr:vdr /var/lib/vdr/.pulse
