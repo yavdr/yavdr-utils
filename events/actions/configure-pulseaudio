@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DESKTOP_USER=$(getent passwd 1000|cut -d ':' -f 1)
+
+if [ ! -e /home/$DESKTOP_USER/.pulse/default.pa ]; then
+  mkdir -p /home/$DESKTOP_USER/.pulse
+  cp /etc/yavdr/pulse/default.pa /home/$DESKTOP_USER/.pulse
+  chown -R $DESKTOP_USER:$DESKTOP_USER /home/$DESKTOP_USER/.pulse
+fi
+
+if [ ! -e /home/$DESKTOP_USER/.pulse/default.pa ]; then
+  mkdir -p /var/lib/vdr/.pulse
+  cp /etc/yavdr/pulse/client.conf /var/lib/vdr/.pulse
+  chown -R vdr:vdr /var/lib/vdr/.pulse
+fi

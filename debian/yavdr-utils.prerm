@@ -7,8 +7,7 @@ PKG=yavdr-utils
 if [ "$1" = remove ] ; then
 # handle "override" files
         ETC_OVERRIDE=/etc/yavdr/override
-        FILES="/etc/default/pulseaudio \
-               /etc/asound.conf"
+        FILES="/etc/asound.conf"
         for f in $FILES
         do
                 [ -L $f ] && rm $f

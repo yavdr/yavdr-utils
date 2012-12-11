@@ -6,15 +6,9 @@ case "$1" in
     configure)
 	chown vdr:vdr /var/log/vdr
 	chsh -s /bin/bash vdr
-	adduser pulse audio
-	adduser vdr pulse
-	adduser vdr pulse-access
 	adduser vdr cdrom
         adduser vdr plugdev
 	DESKTOP_USER=$(getent passwd 1000|cut -d ':' -f 1)
-	deluser $DESKTOP_USER audio
-	adduser $DESKTOP_USER pulse
-	adduser $DESKTOP_USER pulse-access
         adduser $DESKTOP_USER vdr
 
         chmod +x /usr/share/yavdr/events/actions/*
@@ -28,8 +22,7 @@ case "$1" in
 
 # handle "override" files
 	ETC_OVERRIDE=/etc/yavdr/override
-        FILES="/etc/default/pulseaudio \
-               /etc/asound.conf"
+        FILES="/etc/asound.conf"
 
         for f in $FILES
         do
