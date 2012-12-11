@@ -164,5 +164,5 @@ load-module module-switch-on-port-available
 #set-default-sink output
 #set-default-source input
 
-load-module module-combine-sink name=combined
+load-module module-combine-sink
 set-default-sink combined
