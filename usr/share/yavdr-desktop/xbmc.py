@@ -57,6 +57,7 @@ class XBMC():
             self.main_instance.dbusService.send_shutdown(user=True)
         elif condition == 16896:
             logging.info(u"XBMC wants a reboot")
+            logging.info(self.main_instance.powermanager.restart())
         
         
     def detach(self,active=0):
