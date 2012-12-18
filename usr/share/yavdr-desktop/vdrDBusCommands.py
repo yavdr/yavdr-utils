@@ -31,6 +31,8 @@ class dbusRecordings():
     def get_recordings(self):
         reclist = self.dbusrecordings.List(dbus_interface=self.interface)
         recordings = {}
+        #*** TODO****
+        # recordings = {name: value for (name, value) in reclist}
         for recording in reclist:
             recordings[recording[0]] = dict(recording[1])
         return recordings
