@@ -1,1 +1,4 @@
-    Identifier     "Device0"
+<?cs if:(system.hardware.nvidia.detected == "1") ?>
+	# put your nvidia options here
+	Option         "NoLogo" "True"
+<?cs /if ?>

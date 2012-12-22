@@ -1,1 +1,3 @@
-    Identifier     "Device0"
+<?cs if:(system.hardware.intel.detected == "1") ?>
+	# put your intel options here
+<?cs /if ?>
