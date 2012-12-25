@@ -2,13 +2,13 @@ Source: yavdr-utils
 Section: misc
 Priority: extra
 Maintainer: Gerald Dachs <gda@dachsweb.de>
-Build-Depends: debhelper (>= 7), clearsilver-dev
+Build-Depends: debhelper (>= 7), clearsilver-dev, libx11-dev, libxext-dev, libxrandr-dev, libstdc++6-4.6-dev
 Standards-Version: 3.9.1
 Homepage: http://yavdr.origo.ethz.ch/
 
 Package: yavdr-utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, sqlite3, ir-keytable, python-uinput, python-pyudev, avahi-utils, feh, adeskbar, lightdm, python-clearsilver, python-wnck, python-psutil, librsvg2-common, python-rsvg
+Depends: ${shlibs:Depends}, ${misc:Depends}, sqlite3, ir-keytable, python-uinput, python-pyudev, avahi-utils, feh, adeskbar, lightdm, python-clearsilver, python-wnck, python-psutil, librsvg2-common, python-rsvg, libx11, libxext, libxrandr, libstdc++6-4.6
 Suggests: lirc
 Conflicts: yavdr-startup
 Description: Utilities and WEB front end for yaVDR
