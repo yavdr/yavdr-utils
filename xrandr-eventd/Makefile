@@ -1,18 +1,18 @@
 #See LICENSE for copyright and license details
 
-TARGET			:= yavdr-xrandr-eventd
-SOURCE			:= yavdr-xrandr-eventd.cpp
-VERSION			:= 0.2
-COPYRIGHT		:= "(C) 2013 Volker Richert"
-LICENSE			:= "yaVDR Team"
+TARGET		:= yavdr-xrandr-eventd
+SOURCE		:= yavdr-xrandr-eventd.cpp
+VERSION		:= 0.1
+COPYRIGHT	:= "(C) 2013 Volker Richert"
+LICENSE		:= "yaVDR Team"
 
-DISTDIR 		:= $(TARGET)-$(VERSION)
+DISTDIR 	:= $(TARGET)-$(VERSION)
 
-PREFIX			?= /usr
+PREFIX		?= /usr
 INSTALLDIR	:= $(DESTDIR)$(PREFIX)
 
-MANPREFIX		?= $(PREFIX)/share/man
-MANPREFIX		:= $(DESTDIR)$(MANPREFIX)
+MANPREFIX	?= $(PREFIX)/share/man
+MANPREFIX	:= $(DESTDIR)$(MANPREFIX)
 
 #CFLAGS		:= -Wall -Os -pedantic -std=c99 #-Werror -Wextra
 CC			:= c++
@@ -33,15 +33,15 @@ install:
 	@echo Installing executable to $(INSTALLDIR)/bin
 	@install -d $(INSTALLDIR)/bin
 	@install -m 755 $(TARGET) $(INSTALLDIR)/bin/
-	@echo Installing manpage to $(MANPREFIX)/man1
-	@install -d $(MANPREFIX)/man1
-	@install -m 644 $(TARGET).1 $(MANPREFIX)/man1
+	#@echo Installing manpage to $(MANPREFIX)/man1
+	#@install -d $(MANPREFIX)/man1
+	#@install -m 644 $(TARGET).1 $(MANPREFIX)/man1
 
 uninstall: 
 	@echo Removing executable from $(INSTALLDIR)/bin
 	@rm -f $(INSTALLDIR)/bin/$(TARGET)
-	@echo Removing manpage from $(INSTALLDIR)/bin
-	@rm -f $(MANPREFIX)/man1/$(TARGET).1
+	#@echo Removing manpage from $(INSTALLDIR)/bin
+	#@rm -f $(MANPREFIX)/man1/$(TARGET).1
 
 clean: 
 	$(RM) $(TARGET)
