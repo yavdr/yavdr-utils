@@ -201,9 +201,9 @@ void handleChanges(unsigned long currentEvent, bool init) {
 				syslog(LOG_INFO, "%s is connected\n", oi->name);
 				if (onScript != NULL && !init) {
 					char *cmd;
-					if (asprintf(&cmd, "%s %s", onScript, oi->name)) {
+					if (asprintf(&cmd, "%s -d %s", onScript, oi->name)) {
 						if (system(cmd) < 0) {
-							syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
+							syslog(LOG_ERR, "error: %s system\n", strerror(errno));
 						}
 						free(cmd);
 					}
@@ -233,9 +233,9 @@ void handleChanges(unsigned long currentEvent, bool init) {
 				syslog(LOG_INFO, "%s is disconnected\n", oi->name);
 				if (offScript != NULL && !init) {
 					char *cmd;
-					if (asprintf(&cmd, "%s %s", offScript, oi->name)) {
+					if (asprintf(&cmd, "%s -d %s", offScript, oi->name)) {
 						if (system(cmd) < 0) {
-							syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
+							syslog(LOG_ERR, "error: %s system\n", strerror(errno));
 						}
 						free(cmd);
 					}
@@ -286,7 +286,7 @@ void handleChanges(unsigned long currentEvent, bool init) {
 			}
 
 			if (system(join_strings(argv, " ", i)) < 0) {
-				syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
+				syslog(LOG_ERR, "error: %s system\n", strerror(errno));
 			}
 		}
 	}
