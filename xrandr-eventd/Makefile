@@ -3,8 +3,8 @@
 TARGET			:= yavdr-xrandr-eventd
 SOURCE			:= yavdr-xrandr-eventd.cpp
 VERSION			:= 0.2
-COPYRIGHT		:= "(C) 2012 Stefan Bolte"
-LICENSE			:= "MIT/X Consortium"
+COPYRIGHT		:= "(C) 2013 Volker Richert"
+LICENSE			:= "yaVDR Team"
 
 DISTDIR 		:= $(TARGET)-$(VERSION)
 
@@ -46,9 +46,9 @@ uninstall:
 clean: 
 	$(RM) $(TARGET)
 
-doc: srandrd.1
+doc: yavdr-xrandr-eventd.1
 
-srandrd.1: srandrd.1.txt 
+yavdr-xrandr-eventd.1: yavdr-xrandr-eventd.1.txt 
 	a2x --doctype manpage --format manpage $<
 
 dist: 
