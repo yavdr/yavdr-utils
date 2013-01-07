@@ -12,16 +12,23 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 #include <map>
+#include <errno.h>
+#include <getopt.h>
+#include <syslog.h>
+
+#define no_argument 0
+#define required_argument 1
+#define optional_argument 2
+#define MAX_DEV 100
 
 static std::map<RROutput, XRROutputInfo *> outputs;
 static std::map<RROutput, XRROutputInfo *> connected_outputs;
 static std::map<RROutput, XRROutputInfo *> disconnected_outputs;
 static std::map<RROutput, bool> lastConnectionState; // false if crtc is disconnected
 
-//static std::map<RRCrtc, XRRCrtcInfo *> connected_crtcs;
-//static std::map<RRCrtc, XRRCrtcInfo *> disconnected_crtcs;
-//static std::map<RRCrtc, XRRCrtcInfo *> available_crtcs;
-//static std::map<RRCrtc, bool> lastConnectionState; // false if crtc is disconnected
+static char *onScript = NULL;
+static char *offScript = NULL;
+static char *changeScript = NULL;
 
 static unsigned long lastHandledEvent = -1l;
 
@@ -60,19 +67,22 @@ void get_outputs(Display *dpy, XRRScreenResources *res) {
 	}
 	outputs.clear();
 	connected_outputs.clear();
-	//disconnected_outputs.clear();
 
 	for (int i = 0; i < res->noutput; i++) {
 		if ((oi = XRRGetOutputInfo(dpy, res, res->outputs[i])) != NULL) {
 			RROutput outputId = res->outputs[i];
 			if (outputs.count(outputId) == 0) {
 				outputs[outputId] = oi;
+
+#ifdef DEBUG
 				printf("\tid: %lu: name: %s, connection: %i, crtc: %lu crtcs:", outputId, oi->name, oi->connection,
 						oi->crtc);
 				for (int j = 0; j < oi->ncrtc; j++) {
 					printf(" %lu", oi->crtcs[j]);
 				}
 				printf("\n");
+#endif
+
 			}
 		}
 	}
@@ -97,18 +107,20 @@ void scan(Display *dpy, XRRScreenResources *res) {
 						//available_crtcs[crtcId] = ci;
 						lastConnectionState[outputId] = false;
 
+#ifdef DEBUG
 						printf("\tavailable crtcs %lu: x: %i, y: %i, width: %i, height: %i outputs:", crtcId, ci->x,
 								ci->y, ci->width, ci->height);
 						for (int j = 0; j < ci->noutput; j++) {
 							printf(" %lu", ci->outputs[j]);
 						}
 						printf("\n");
+#endif
 
 						if (ci->mode != 0 && ci->width != 0
 								&& ci->height != 0 /*&& connected_crtcs.count(crtcId) == 0*/) { // we have valid data -> crtc is connected
 								//connected_crtcs[crtcId] = ci;
 
-							printf("\tcrtc %lu is connected\n", crtcId);
+							syslog(LOG_INFO, "crtc %lu is connected", crtcId);
 						}
 
 						XRRFreeCrtcInfo(ci);
@@ -124,26 +136,25 @@ void scan(Display *dpy, XRRScreenResources *res) {
 
 							//if (available_crtcs.count(crtcId) == 0) {
 							//	available_crtcs[crtcId] = ci;
-								lastConnectionState[outputId] = false;
+							lastConnectionState[outputId] = false;
 
-								printf("\tavailable crtcs %lu: x: %i, y: %i, width: %i, height: %i outputs:", crtcId,
-										ci->x, ci->y, ci->width, ci->height);
-								for (int j = 0; j < ci->noutput; j++) {
-									printf(" %lu", ci->outputs[j]);
-								}
-								printf("\n");
+#ifdef DEBUG
+							printf("\tavailable crtcs %lu: x: %i, y: %i, width: %i, height: %i outputs:", crtcId, ci->x,
+									ci->y, ci->width, ci->height);
+							for (int j = 0; j < ci->noutput; j++) {
+								printf(" %lu", ci->outputs[j]);
+							}
+							printf("\n");
+#endif
 
-								if (ci->mode != 0 && ci->width != 0 && ci->height != 0/*
-								 && connected_crtcs.count(crtcId) == 0*/) { // wie have valid data -> crtc is connected
+							if (ci->mode != 0 && ci->width != 0 && ci->height != 0/*
+							 && connected_crtcs.count(crtcId) == 0*/) { // wie have valid data -> crtc is connected
 
-								//connected_crtcs[crtcId] = ci;
+							//connected_crtcs[crtcId] = ci;
 
-									printf("\tcrtc %lu is connected\n", crtcId);
-								}
-								//XRRFreeCrtcInfo(ci);
-							//}
-							//	}
-							//}
+								printf("\tcrtc %lu is connected\n", crtcId);
+							}
+
 							XRRFreeCrtcInfo(ci);
 						}
 					}
@@ -154,34 +165,68 @@ void scan(Display *dpy, XRRScreenResources *res) {
 					crtc_disable(dpy, res, oi->crtc);
 				}
 			}
-
-			//XRRFreeOutputInfo(oi);
 		}
 	}
 }
-void handleChanges(unsigned long currentEvent) {
+
+char* join_strings(const char* strings[], const char* seperator, int count) {
+	char* str = NULL; /* Pointer to the joined strings  */
+	size_t total_length = 0; /* Total length of joined strings */
+	int i = 0; /* Loop counter                   */
+
+	/* Find total length of joined strings */
+	for (i = 0; i < count; i++)
+		total_length += strlen(strings[i]);
+	total_length++; /* For joined string terminator */
+	total_length += strlen(seperator) * (count - 1); // for seperators
+
+	str = (char*) malloc(total_length); /* Allocate memory for joined strings */
+	str[0] = '\0'; /* Empty string we can append to      */
+
+	/* Append all the strings */
+	for (i = 0; i < count; i++) {
+		strcat(str, strings[i]);
+		if (i < (count - 1))
+			strcat(str, seperator);
+	}
+
+	return str;
+}
+void handleChanges(unsigned long currentEvent, bool init) {
 	if (currentEvent != lastHandledEvent) {
 		bool callScript = false;
-		printf("handleChanges:\n");
-		printf("--------------\n");
+
+#ifdef DEBUG
 		printf("\tstart - connected crtc: %lu, disconnected crtc: %lu\n", connected_outputs.size(),
 				disconnected_outputs.size());
+#endif
 
 		for (std::map<RROutput, XRROutputInfo *>::iterator it = connected_outputs.begin();
 				it != connected_outputs.end(); it++) {
 			XRROutputInfo *oi = (*it).second;
 
 			if (oi->connection == 0) {
-				printf("%lu: %s is connected\n", (*it).first, oi->name);
+				syslog(LOG_INFO, "%lu: %s is connected\n", (*it).first, oi->name);
+				if (onScript != NULL && !init) {
+					char *cmd;
+					if (asprintf(&cmd, "%s %s", onScript, oi->name)) {
+						if (system(cmd) < 0) {
+							syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+						}
+						free(cmd);
+					}
+				}
 			}
-			/*
-			 for (int i = 0; i < ci->noutput; i++) {
-			 RROutput oId = ci->outputs[i];
-			 if (outputs[oId]->connection == 0) {
-			 printf("%lu: %s is connected\n", (*it).first, outputs[oId]->name);
-			 }
-			 }
-			 */
+
+#ifdef DEBUG
+			for (int i = 0; i < ci->noutput; i++) {
+				RROutput oId = ci->outputs[i];
+				if (outputs[oId]->connection == 0) {
+					printf("%lu: %s is connected\n", (*it).first, outputs[oId]->name);
+				}
+			}
+#endif
+
 			if (!lastConnectionState[(*it).first]) {
 				callScript = true;
 			}
@@ -193,16 +238,27 @@ void handleChanges(unsigned long currentEvent) {
 			XRROutputInfo *oi = (*it).second;
 
 			if (oi->connection == 1) {
-				printf("%lu: %s is disconnected\n", (*it).first, oi->name);
+				syslog(LOG_INFO, "%lu: %s is disconnected\n", (*it).first, oi->name);
+				if (offScript != NULL && !init) {
+					char *cmd;
+					if (asprintf(&cmd, "%s %s", offScript, oi->name)) {
+						if (system(cmd) < 0) {
+							syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+						}
+						free(cmd);
+					}
+				}
 			}
-			/*
-			 for (int i = 0; i < ci->noutput; i++) {
-			 RROutput oId = ci->outputs[i];
-			 if (outputs[oId]->connection == 1) {
-			 printf("%lu: %s is disconnected\n", (*it).first, outputs[oId]->name);
-			 }
-			 }
-			 */
+
+#ifdef DEBUG
+			for (int i = 0; i < ci->noutput; i++) {
+				RROutput oId = ci->outputs[i];
+				if (outputs[oId]->connection == 1) {
+					printf("%lu: %s is disconnected\n", (*it).first, outputs[oId]->name);
+				}
+			}
+#endif
+
 			disconnected_outputs.erase((*it).first);
 
 			if (lastConnectionState[(*it).first]) {
@@ -210,24 +266,55 @@ void handleChanges(unsigned long currentEvent) {
 			}
 			lastConnectionState[(*it).first] = false;
 
-			//XRRFreeCrtcInfo(ci);
 			XRRFreeOutputInfo(oi);
 		}
 
 		lastHandledEvent = currentEvent;
 
+#ifdef DEBUG
 		printf("\tend   - connected crtc: %lu, disconnected crtc: %lu\n", connected_outputs.size(),
 				disconnected_outputs.size());
+#endif
 
-		if (callScript) {
+		if (callScript && changeScript != NULL) {
+#ifdef DEBUG
 			printf("!!! We have to update X11 !!!\n");
+#endif
+			const char *argv[MAX_DEV];
+			int i = 0;
+
+			argv[i++] = changeScript;
+			if (init) {
+				argv[i++] = "-i";
+			}
+
+			for (std::map<RROutput, XRROutputInfo *>::iterator it = connected_outputs.begin();
+					it != connected_outputs.end() && i < MAX_DEV - 1; it++, i++) {
+				XRROutputInfo *oi = (*it).second;
+				argv[i] = oi->name;
+			}
+
+			if (system(join_strings(argv, " ", i)) < 0) {
+				syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+			}
 		}
-		printf("==============\n\n");
 
 	}
 }
 
+void usage() {
+	printf("Usage: %s: ", NAME);
+	printf(" [-h|--help|-?]");
+	printf(" [--version]");
+	printf(" [-d displayname | --display=DISPLAY]");
+	printf(" [-s EXECUTABLE | --script=EXECUTABLE]");
+	printf(" [-o EXECUTABLE | --on=EXECUTABLE]");
+	printf(" [-f EXECUTABLE | --off=EXECUTABLE]");
+	printf("\n");
+}
+
 int main(int argc, char **argv) {
+
 	XEvent event;
 	Display *dpy;
 	uid_t uid;
@@ -235,10 +322,82 @@ int main(int argc, char **argv) {
 	int randrEventBase;
 	int error_base;
 
+	char *display = NULL;
+
+	const struct option longopts[] = { { "version", no_argument, 0, 0 }, { "help", no_argument, 0, 'h' }, { "script",
+			required_argument, 0, 's' }, { "on", required_argument, 0, 'o' }, { "off", required_argument, 0, 'f' }, { "display", required_argument, 0, 'd' }, { 0,
+			0, 0, 0 }, };
+
+	int index;
+	int c = 0;
+
+
+	//turn off getopt error message
+	opterr = 1;
+
+	if (argc > 1) {
+		while (1) {
+			c = getopt_long(argc, argv, "s:o:f:d:vh?", longopts, &index);
+			if (c == -1)
+				break;
+
+			switch (c) {
+			case 'h':
+			case '?':
+				usage();
+				exit(0);
+
+			case 'v':
+				printf("%s %s\n", NAME, VERSION);
+				exit(0);
+
+			case 's':
+				if (access(optarg, F_OK | X_OK) == 0) {
+					changeScript = optarg;
+				} else {
+					syslog(LOG_ERR, "%s is not executable!", optarg);
+					printf("%s is not executable!\n", optarg);
+					exit(-1);
+				}
+
+				break;
+
+			case 'o':
+				if (access(optarg, F_OK | X_OK) == 0) {
+					onScript = optarg;
+				} else {
+					syslog(LOG_ERR, "%s is not executable!", optarg);
+					printf("%s is not executable!\n", optarg);
+					exit(-1);
+				}
+				break;
+
+			case 'f':
+				if (access(optarg, F_OK | X_OK) == 0) {
+					offScript = optarg;
+				} else {
+					syslog(LOG_ERR, "%s is not executable!", optarg);
+					printf("%s is not executable!\n", optarg);
+					exit(-1);
+				}
+
+				break;
+
+			case 'd':
+				display = optarg;
+				break;
+
+			default:
+				usage();
+				exit(0);
+			}
+		}
+	}
+
 	if (((uid = getuid()) == 0) || uid != geteuid())
 		xerror("%s may not run as root\n", NAME);
 
-	if ((dpy = XOpenDisplay(NULL)) == NULL)
+	if ((dpy = XOpenDisplay(display)) == NULL)
 		xerror("Cannot open display\n");
 	XRRSelectInput(dpy, DefaultRootWindow(dpy),
 			RRScreenChangeNotifyMask | RRCrtcChangeNotifyMask | RROutputChangeNotifyMask | RROutputPropertyNotifyMask);
@@ -246,21 +405,22 @@ int main(int argc, char **argv) {
 	XSetIOErrorHandler((XIOErrorHandler) error_handler);
 	XRRQueryExtension(dpy, &randrEventBase, &error_base);
 	XRRScreenResources *res = XRRGetScreenResources(dpy, DefaultRootWindow(dpy));
-	/*
-	 printf("crtcs:\n");
-	 for (int i = 0; i < res->ncrtc; i++) {
-	 printf("\t%lu\n", res->crtcs[i]);
-	 }
-	 printf("\noutputs:\n");
-	 for (int i = 0; i < res->noutput; i++) {
-	 printf("\t%lu\n", res->outputs[i]);
-	 }
-	 printf("\nmodes:\n");
-	 for (int i = 0; i < res->nmode; i++) {
-	 printf("\tid: %lu, width: %i, height: %i, name: %s\n", res->modes[i].id, res->modes[i].width,
-	 res->modes[i].height, res->modes[i].name);
-	 }
-	 */
+
+#ifdef DEBUG
+	printf("crtcs:\n");
+	for (int i = 0; i < res->ncrtc; i++) {
+		printf("\t%lu\n", res->crtcs[i]);
+	}
+	printf("\noutputs:\n");
+	for (int i = 0; i < res->noutput; i++) {
+		printf("\t%lu\n", res->outputs[i]);
+	}
+	printf("\nmodes:\n");
+	for (int i = 0; i < res->nmode; i++) {
+		printf("\tid: %lu, width: %i, height: %i, name: %s\n", res->modes[i].id, res->modes[i].width,
+				res->modes[i].height, res->modes[i].name);
+	}
+#endif
 
 	// query ScreenInfo to be sure because of NVidia
 	sc = XRRGetScreenInfo(dpy, DefaultRootWindow(dpy));
@@ -272,21 +432,24 @@ int main(int argc, char **argv) {
 
 	scan(dpy, res);
 
-	handleChanges(0);
+	handleChanges(0, true);
 
-	/*
-	 for (int i = 0; i < res->ncrtc; i++) {
-	 if ((ci = XRRGetCrtcInfo(dpy, res, res->crtcs[i])) != NULL) {
-	 RRCrtc crtcId = res->crtcs[i];
-	 crtcs[crtcId] = ci;
-	 XRRFreeCrtcInfo(ci);
-	 printf("crtcs %lu: x: %i, y: %i, width: %i, height: %i\n",
-	 crtcId, crtcs[crtcId].x,
-	 crtcs[crtcId].y, crtcs[crtcId].width,
-	 crtcs[crtcId].height);
-	 }
-	 }
-	 */
+#ifdef DEBUG
+
+	for (int i = 0; i < res->ncrtc; i++) {
+		if ((ci = XRRGetCrtcInfo(dpy, res, res->crtcs[i])) != NULL) {
+			RRCrtc crtcId = res->crtcs[i];
+			printf("crtcs %lu: x: %i, y: %i, width: %i, height: %i\n",
+					crtcId, ci->x,
+					ci->y, ci->.width,
+					ci->.height);
+
+			XRRFreeCrtcInfo(ci);
+
+		}
+	}
+#endif
+
 	unsigned long currentEvent = 0;
 	bool handledEvent;
 
@@ -308,21 +471,24 @@ int main(int argc, char **argv) {
 				currentEvent = aevent->serial;
 
 				XRRScreenResources *res = XRRGetScreenResources(dpy, DefaultRootWindow(dpy));
-				//printf("crtcs:\n");
-				//for (int i = 0; i < res->ncrtc; i++) {
-				//	printf("\t%lu\n", res->crtcs[i]);
-				//}
-				//printf("\noutputs:\n");
-				//for (int i = 0; i < res->noutput; i++) {
-				//	printf("\t%lu\n", res->outputs[i]);
-				//}
-				/*
-				 printf("\nmodes:\n");
-				 for (int i = 0; i < res->nmode; i++) {
-				 printf("\tid: %lu, width: %i, height: %i, name: %s\n",
-				 res->modes[i].id, res->modes[i].width,
-				 res->modes[i].height, res->modes[i].name);
-				 }*/
+
+#ifdef DEBUG
+				printf("crtcs:\n");
+				for (int i = 0; i < res->ncrtc; i++) {
+					printf("\t%lu\n", res->crtcs[i]);
+				}
+				printf("\noutputs:\n");
+				for (int i = 0; i < res->noutput; i++) {
+					printf("\t%lu\n", res->outputs[i]);
+				}
+
+				printf("\nmodes:\n");
+				for (int i = 0; i < res->nmode; i++) {
+					printf("\tid: %lu, width: %i, height: %i, name: %s\n",
+							res->modes[i].id, res->modes[i].width,
+							res->modes[i].height, res->modes[i].name);
+				}
+#endif
 				XRRFreeScreenResources(res);
 				break;
 			}
@@ -397,14 +563,14 @@ int main(int argc, char **argv) {
 
 					RRCrtc crtcId = aevent->crtc;
 					ci = XRRGetCrtcInfo(dpy, res, crtcId);
-/*
-					// free OutputInfo if not in connected crtc
-					if (available_crtcs.count(crtcId) > 0 && connected_crtcs.count(crtcId) == 0) {
-						XRRFreeCrtcInfo(available_crtcs[crtcId]);
-					}
-					// store new OutputInfo
-					available_crtcs[crtcId] = ci;
-*/
+					/*
+					 // free OutputInfo if not in connected crtc
+					 if (available_crtcs.count(crtcId) > 0 && connected_crtcs.count(crtcId) == 0) {
+					 XRRFreeCrtcInfo(available_crtcs[crtcId]);
+					 }
+					 // store new OutputInfo
+					 available_crtcs[crtcId] = ci;
+					 */
 					printf("\tCrtcInfo:\n");
 					printf("\tcrtcs %lu: x: %i, y: %i, width: %i, height: %i\n", crtcId, ci->x, ci->y, ci->width,
 							ci->height);
@@ -457,7 +623,7 @@ int main(int argc, char **argv) {
 		}
 
 		if (handledEvent)
-			handleChanges(currentEvent);
+			handleChanges(currentEvent, false);
 		sleep(2);
 	}
 	return EXIT_SUCCESS;
