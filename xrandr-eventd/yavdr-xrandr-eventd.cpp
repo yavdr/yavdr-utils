@@ -103,10 +103,8 @@ void scan(Display *dpy, XRRScreenResources *res) {
 				if (oi->crtc != 0) { // crtc is enabled
 					RRCrtc crtcId = oi->crtc;
 
-					if (/*available_crtcs.count(crtcId) == 0 && */(ci = XRRGetCrtcInfo(dpy, res, crtcId)) != NULL) {
-						//available_crtcs[crtcId] = ci;
+					if ((ci = XRRGetCrtcInfo(dpy, res, crtcId)) != NULL) {
 						lastConnectionState[outputId] = false;
-
 #ifdef DEBUG
 						printf("\tavailable crtcs %lu: x: %i, y: %i, width: %i, height: %i outputs:", crtcId, ci->x,
 								ci->y, ci->width, ci->height);
@@ -114,15 +112,13 @@ void scan(Display *dpy, XRRScreenResources *res) {
 							printf(" %lu", ci->outputs[j]);
 						}
 						printf("\n");
-#endif
+
 
 						if (ci->mode != 0 && ci->width != 0
-								&& ci->height != 0 /*&& connected_crtcs.count(crtcId) == 0*/) { // we have valid data -> crtc is connected
-								//connected_crtcs[crtcId] = ci;
-
-							syslog(LOG_INFO, "crtc %lu is connected", crtcId);
+								&& ci->height != 0) { // we have valid data -> crtc is connected
+							printf("crtc %lu is connected", crtcId);
 						}
-
+#endif
 						XRRFreeCrtcInfo(ci);
 					}
 				} else { // output ist connected but crtc ist disabled
@@ -145,15 +141,11 @@ void scan(Display *dpy, XRRScreenResources *res) {
 								printf(" %lu", ci->outputs[j]);
 							}
 							printf("\n");
-#endif
 
-							if (ci->mode != 0 && ci->width != 0 && ci->height != 0/*
-							 && connected_crtcs.count(crtcId) == 0*/) { // wie have valid data -> crtc is connected
-
-							//connected_crtcs[crtcId] = ci;
-
+							if (ci->mode != 0 && ci->width != 0 && ci->height != 0) { // wie have valid data -> crtc is connected
 								printf("\tcrtc %lu is connected\n", crtcId);
 							}
+#endif
 
 							XRRFreeCrtcInfo(ci);
 						}
@@ -206,12 +198,12 @@ void handleChanges(unsigned long currentEvent, bool init) {
 			XRROutputInfo *oi = (*it).second;
 
 			if (oi->connection == 0) {
-				syslog(LOG_INFO, "%lu: %s is connected\n", (*it).first, oi->name);
+				syslog(LOG_INFO, "%s is connected\n", oi->name);
 				if (onScript != NULL && !init) {
 					char *cmd;
 					if (asprintf(&cmd, "%s %s", onScript, oi->name)) {
 						if (system(cmd) < 0) {
-							syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+							syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
 						}
 						free(cmd);
 					}
@@ -238,12 +230,12 @@ void handleChanges(unsigned long currentEvent, bool init) {
 			XRROutputInfo *oi = (*it).second;
 
 			if (oi->connection == 1) {
-				syslog(LOG_INFO, "%lu: %s is disconnected\n", (*it).first, oi->name);
+				syslog(LOG_INFO, "%s is disconnected\n", oi->name);
 				if (offScript != NULL && !init) {
 					char *cmd;
 					if (asprintf(&cmd, "%s %s", offScript, oi->name)) {
 						if (system(cmd) < 0) {
-							syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+							syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
 						}
 						free(cmd);
 					}
@@ -275,7 +267,6 @@ void handleChanges(unsigned long currentEvent, bool init) {
 		printf("\tend   - connected crtc: %lu, disconnected crtc: %lu\n", connected_outputs.size(),
 				disconnected_outputs.size());
 #endif
-
 		if (callScript && changeScript != NULL) {
 #ifdef DEBUG
 			printf("!!! We have to update X11 !!!\n");
@@ -295,10 +286,9 @@ void handleChanges(unsigned long currentEvent, bool init) {
 			}
 
 			if (system(join_strings(argv, " ", i)) < 0) {
-				syslog(LOG_WARNING, "error: %s system\n", strerror(errno));
+				syslog(LOG_ERROR, "error: %s system\n", strerror(errno));
 			}
 		}
-
 	}
 }
 
@@ -324,9 +314,15 @@ int main(int argc, char **argv) {
 
 	char *display = NULL;
 
-	const struct option longopts[] = { { "version", no_argument, 0, 0 }, { "help", no_argument, 0, 'h' }, { "script",
-			required_argument, 0, 's' }, { "on", required_argument, 0, 'o' }, { "off", required_argument, 0, 'f' }, { "display", required_argument, 0, 'd' }, { 0,
-			0, 0, 0 }, };
+	const struct option longopts[] = {
+			{ "version",	no_argument, 		0, 0 },
+			{ "help", 		no_argument, 		0, 'h' },
+			{ "script",		required_argument, 	0, 's' },
+			{ "on", 		required_argument, 	0, 'o' },
+			{ "off", 		required_argument, 	0, 'f' },
+			{ "display", 	required_argument, 	0, 'd' },
+			{ 0, 0, 0, 0 },
+	};
 
 	int index;
 	int c = 0;
