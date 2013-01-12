@@ -1,0 +1,16 @@
+#!/bin/bash
+
+BACKUPDIR=/var/cache/yavdr/process-template-backup
+FILES="/etc/init/plymouth.conf /etc/init/plymouth-stop.conf"
+
+for f in $FILES; do
+  if [ ! -e $f ]; then
+    if [ -d $BACKUPDIR$f ]; then
+      for b in $BACKUPDIR$f/*; do
+        cp $b $f
+        rm -rf $BACKUPDIR$f
+        break
+      done
+    fi
+  fi
+done
