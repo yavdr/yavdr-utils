@@ -1,17 +1,9 @@
 #!/bin/bash
 
 TEMPLATELIST=/var/cache/yavdr/template-list
-BACKUPDIR=/var/cache/yavdr/process-template-backup
 
 find_templates () {
   find $1 -type f -printf "%h\n" | cut -b ${#1}-
-}
-
-find_backup () {
-  for f in $BACKUPDIR$1/*; do
-    echo $f
-    break
-  done
 }
 
 (
@@ -23,18 +15,7 @@ if [ -f $TEMPLATELIST ]; then
   for LINE in $(diff $TEMPLATELIST /tmp/template-list.$$ | grep "<" | cut -d " " -f 2); do
     if [ -f $LINE ]; then
       logger -i -s "$0 - remove stale templated file $LINE"
-      ORIG=$(find_backup $LINE)
-      if [ -n "$ORIG" ]; then
-        logger -i -s "$0 - backup of $LINE found, restoring" 
-        USER=$(stat --printf "%U" $LINE)
-        GROUP=$(stat --printf "%G" $LINE)
-        cp $ORIG $LINE
-        chown $USER:$GROUP $LINE
-        logger -i -s "$0 - removing template dir $BACKUPDIR$LINE" 
-        rm -rf $BACKUPDIR$LINE        
-      else
-        rm -f $LINE
-      fi
+      rm -f $LINE
     fi
   done
 fi
