@@ -18,12 +18,10 @@ fi
 # detect display
 if [ `dbget system.x11.display.0.device` = "$DEVID" ]; then
   OPTION="-p"          # primary
+elif [ `dbget system.x11.display.1.device` = "$DEVID" ]; then
+  OPTION="-s"        # seconday
 else
-  if [ `dbget system.x11.display.1.device` = "$DEVID" ]; then
-    OPTION="-s"        # seconday
-  else
-    OPTION="-o"        # other
-  fi
+  OPTION="-o"        # other
 fi
 
 run-parts --verbose -a "-d" -a "$DEVID" -a "$OPTION" /usr/share/yavdr/xrandr-eventd/off.d
