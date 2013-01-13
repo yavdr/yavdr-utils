@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#set -x
+
 while getopts "d:" opt; do
   case $opt in
     d)
@@ -8,4 +10,20 @@ while getopts "d:" opt; do
   esac
 done
 
-run-parts --verbose -a "-d" -a "$DEVID" /usr/share/yavdr/xrandr-eventd/off.d
+if [ -z $DEVID ]; then
+  logger "Device is missing"
+  exit 1;
+fi
+
+# detect display
+if [ `dbget system.x11.display.0.device` = "$DEVID" ]; then
+  OPTION="-p"          # primary
+else
+  if [ `dbget system.x11.display.1.device` = "$DEVID" ]; then
+    OPTION="-s"        # seconday
+  else
+    OPTION="-o"        # other
+  fi
+fi
+
+run-parts --verbose -a "-d" -a "$DEVID" -a "$OPTION" /usr/share/yavdr/xrandr-eventd/off.d

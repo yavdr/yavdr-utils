@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# does not do anything at the moment
+# Just show the handling
+
+#set -x
+
+while getopts "p:s:o:" opt; do
+echo $OPTARG
+  case $opt in
+    p)
+      PRIMARY=1
+      DISPLAY=0
+      ;;
+    s)
+      SECONDARY=1
+      DISPLAY=1
+      ;;
+    o)
+      OTHER=1
+      ;;
+  esac
+done
