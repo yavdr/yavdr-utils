@@ -4,13 +4,14 @@ PKG=yavdr-utils
 
 case "$1" in
     configure)
-	chown vdr:vdr /var/log/vdr
+	mkdir -p /home/vdr
+        cp -r /etc/skel/. /home/vdr
+	chown vdr:vdr /home/vdr
+        usermod --home /home/vdr
 	chsh -s /bin/bash vdr
+	chown vdr:vdr /var/log/vdr
 	adduser vdr cdrom
         adduser vdr plugdev
-	DESKTOP_USER=$(getent passwd 1000|cut -d ':' -f 1)
-        adduser $DESKTOP_USER vdr
-
         chmod +x /usr/share/yavdr/events/actions/*
 
        /usr/bin/service tntnet restart || /bin/true

@@ -1,4 +1,4 @@
 [SeatDefaults]
-autologin-user=<?cs var:user ?>
+autologin-user=vdr
 autologin-user-timeout=0
 user-session=<?cs alt:system.desktop_session ?>openbox<?cs /alt ?>
