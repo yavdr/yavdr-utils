@@ -1,4 +1,0 @@
-<?cs if:(vdr.frontend == "disabled") ?>
-
-end script
-

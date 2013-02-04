@@ -1,1 +1,0 @@
-exec /usr/lib/xbmc/xbmc.bin --standalone --lircdev /var/run/lirc/lircd

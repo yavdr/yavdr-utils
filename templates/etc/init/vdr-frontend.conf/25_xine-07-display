@@ -1,1 +1,0 @@
-export DISPLAY=<?cs alt:desktop_display ?>:0<?cs /alt ?>`dbget vdr.tempdisplay`
