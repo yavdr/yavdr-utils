@@ -7,7 +7,7 @@ case "$1" in
 	mkdir -p /home/vdr
         cp -r /etc/skel/. /home/vdr
 	chown vdr:vdr /home/vdr
-        usermod --home /home/vdr
+	sed -e 's/\(^vdr:.*:\)\/var\/lib\/vdr\(:.*\)/\1\/home\/vdr\2/' /etc/passwd
 	chsh -s /bin/bash vdr
 	chown vdr:vdr /var/log/vdr
 	adduser vdr cdrom
