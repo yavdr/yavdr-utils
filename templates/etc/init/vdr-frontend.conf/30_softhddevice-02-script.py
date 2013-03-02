@@ -358,7 +358,7 @@ if __name__ == '__main__':
     remote = dbusRemote()
     shutdown = dbusShutdown()
     setup = dbusSetup()
-
+    timer = dbusTimer()
     settings = Settings()
 
     # attach frontend if vdr has not been started for a timer or an acpi
