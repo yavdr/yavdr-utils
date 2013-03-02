@@ -28,8 +28,6 @@ $(INSTALL):
 	install -d -m 755 $(DESTDIR)/usr/bin
 	install -m 755 devilspie-wrapper $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-desktop-helper $(DESTDIR)/usr/bin	
-	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
-	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
 	install -d -m 755 $(DESTDIR)/etc/yavdr
 	cp -a override $(DESTDIR)/etc/yavdr/
 	cp -a etc $(DESTDIR)
