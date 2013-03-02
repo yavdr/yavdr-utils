@@ -70,6 +70,16 @@ class dbusSetup():
     def vdrsetupget(self,option):
         return self.dbussetup.Get(dbus.String(option),dbus_interface=self.interface)
 
+class dbusTimer():
+    def __init__(self):
+        self.dbustimer = bus.get_object("de.tvdr.vdr","/Timers")
+        self.interface = 'de.tvdr.vdr.timer'
+    def wakeup_for_Timer(self):
+        status,tid,rel,startt,stopt,event = self.dbustimer.Next(dbus_interface=self.interface)
+        if status == 250 and (rel <= (6 * 60)):
+            return True
+        else:                                                                                                        return False
+
 def get_dbusPlugins():
     '''wrapper for dbus plugin list'''
     dbusplugins = bus.get_object("de.tvdr.vdr","/Plugins")
@@ -189,7 +199,7 @@ class Settings():
                 self.conf[i] = os.environ[i]
         self.check_graphtft()
         self.get_event_devices()
-    
+
     def check_graphtft(self):
         plugins = get_dbusPlugins()
         if 'graphtft' in plugins:
@@ -241,7 +251,7 @@ class Settings():
             syslog.syslog('can not read from %s'%(path))
             return False
         (time1, time2, typeev, code, value) = struct.unpack(self.inputEventFormat, event)
-        
+
         if typeev == 1 and code == 115: # code 115 = KEY_VOLUMEUP
            remote.sendkey("Volume+") 
 	if typeev == 1 and code == 114: # code 115 = KEY_VOLUMEDOWN
@@ -261,10 +271,10 @@ class Settings():
                resume(frontend.status())
         return True
 
-        
+
     def updateDisplay(self):
         self.env["DISPLAY"] = <?cs alt:desktop_display ?>":1"<?cs /alt ?>+self.getTempDisplay()
-        
+
     def getTempDisplay(self):
         tempdisplay = subprocess.check_output(["dbget","vdr.tempdisplay"])
         if len(tempdisplay) == 0:
@@ -348,23 +358,27 @@ if __name__ == '__main__':
     remote = dbusRemote()
     shutdown = dbusShutdown()
     setup = dbusSetup()
-    
+
     settings = Settings()
-        
-    # check if vdr was started because of a timer or an acpi_wakeup event, if not attach frontend
+
+    # attach frontend if vdr has not been started for a timer or an acpi
+    # wakeup event
     if settings.manualstart == True and settings.acpi_wakeup != True and settings.conf['start_always_detached'] == '0':
         resume(frontend.status())
     else:
         # set background visible when frontend is detached
         subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
-
+        # change graphtft view if the plugin has been loaded
         graphtft_switch()
-        if settings.manualstart == False:
+        # check for timer within the next 6 minutes
+        if settings.manualstart == False and timer.wakeup_for_Timer():
             settings.timer = gobject.timeout_add(300000, send_shutdown)
+        # no timer, just an acpi-wakeup event
         elif settings.acpi_wakeup == True and setup.vdrsetupget("MinUserInactivity")[0] > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
             settings.timer = gobject.timeout_add(interval_ms, setUserInactive)
+        # neither woken for a timer nor for a acpi event
         elif setup.vdrsetupget("MinUserInactivity")[0] > 0:
             interval, default, answer = setup.vdrsetupget("MinEventTimeout")
             interval_ms = interval  * 60000 # * 60s * 1000ms
