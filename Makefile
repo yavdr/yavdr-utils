@@ -26,7 +26,6 @@ $(INSTALL):
 	install -m 700 create-initial-database $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
 	install -d -m 755 $(DESTDIR)/usr/bin
-	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
 	install -m 755 devilspie-wrapper $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-desktop-helper $(DESTDIR)/usr/bin	
 	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
