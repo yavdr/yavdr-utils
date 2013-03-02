@@ -35,7 +35,6 @@ $(INSTALL):
 	cp -a override $(DESTDIR)/etc/yavdr/
 	cp -a etc $(DESTDIR)
 	cp -a usr $(DESTDIR)
-	install -m 755 appmenu2menuorg $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-applauncher $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-applauncherd $(DESTDIR)/usr/bin	
 	install -d -m 755 $(DESTDIR)/etc/dbus-1/system.d/
