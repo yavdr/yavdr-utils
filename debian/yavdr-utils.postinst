@@ -21,17 +21,6 @@ case "$1" in
             . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
         fi
 
-# handle "override" files
-#	ETC_OVERRIDE=/etc/yavdr/override
-#        FILES=""
-
-#        for f in $FILES
-#        do
-#                dpkg-divert --add --package ${PKG} --rename \
-#                        --divert $f.distrib $f
-#                [ \! -e $f -o -L $f ] && \
-#                        ln -sf $ETC_OVERRIDE$f $f
-#        done
         ;;
 
     triggered)

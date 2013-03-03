@@ -4,20 +4,10 @@ set -e
 
 PKG=yavdr-utils
 
-if [ "$1" = remove ] ; then
-# handle "override" files
-        ETC_OVERRIDE=/etc/yavdr/override
-        FILES="/etc/asound.conf"
-        for f in $FILES
-        do
-                [ -L $f ] && rm $f
-                dpkg-divert --remove --package ${PKG} --rename \
-                        --divert $f.distrib $f
-        done
-
+#if [ "$1" = remove ] ; then
 #        # created by postinst, remove it outside of loop
 #        rm -f /etc/init/yavdr-wm
-fi
+#fi
 
 #DEBHELPER#
 
