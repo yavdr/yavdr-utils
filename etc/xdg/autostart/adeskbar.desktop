@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=ADesk Bar
-Comment=A Quick Application Launcher
-Exec=adeskbar
-Icon=adeskbar
-Categories=GNOME;Utility;
-NoDisplay=true
-OnlyShowIn=OPENBOX;
