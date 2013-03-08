@@ -76,6 +76,7 @@ class dbusService(dbus.service.Object):
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def start_xbmc(self):
+        logging.info("main_instance.settings.external_prog ==%s",self.main_instance.settings.external_prog)
         if not self.main_instance.settings.external_prog == 1:
             self.main_instance.settings.external_prog = 1
             if self.main_instance.settings.frontend_active == 1:
@@ -88,6 +89,26 @@ class dbusService(dbus.service.Object):
             self.main_instance.frontend.detach()
             self.main_instance.xbmc.attach(False)
             return True
+        else:
+            logging.info("external prog active")
+    
+    @dbus.service.method('de.yavdr.frontend',out_signature='b')
+    def start_youtube(self):
+        logging.info("main_instance.settings.external_prog ==%s",self.main_instance.settings.external_prog)
+        if not self.main_instance.settings.external_prog == 1:
+            self.main_instance.settings.external_prog = 1
+            if self.main_instance.settings.frontend_active == 1:
+                logging.info('detaching frontend')
+                self.main_instance.dbusService.deta()
+                self.main_instance.wnckC.windows['frontend'] = None
+                self.main_instance.settings.reattach = 1
+            else:
+                self.settings.reattach = 0
+            self.main_instance.frontend.detach()
+            self.main_instance.youtube.attach()
+            return True
+        else:
+            logging.info("external prog active")
             
     @dbus.service.method('de.yavdr.frontend',out_signature='b')    
     def stop_xbmc(self):
@@ -96,9 +117,11 @@ class dbusService(dbus.service.Object):
 
     @dbus.service.method('de.yavdr.frontend',in_signature='sii',out_signature='b')
     def start_application(self,cmd,standalone=0,exitOnPID=1):
-        if "xbmc" == cmd:
+        if cmd == "xbmc" :
             self.start_xbmc()
             return True
+        if cmd == "youtube":
+            self.start_youtube()
         else:
             if standalone: self.main_instance.settings.external_prog = 1
             else: self.main_instance.settings.external_prog = 0
@@ -138,11 +161,11 @@ class dbusService(dbus.service.Object):
 
     @dbus.service.method('de.yavdr.frontend',in_signature='isii',out_signature='b')
     def resizexid(self,xid,s,above,decoration):
-        w,h,x,y = settings.tsplit(s,('x','+'))
+        w,h,x,y = self.main_instance.settings.tsplit(s,('x','+'))
         print(x,y,w,h)
-        if window:
+        if xid:
             gdkwindow = gtk.gdk.window_foreign_new(xid)
-            self.main_instance.wnckC.resize(window,int(x),int(y),int(w),int(h),above,decoration)
+            self.main_instance.wnckC.resize(gdkwindow,int(x),int(y),int(w),int(h),above,decoration)
             return True
         else:
             return False

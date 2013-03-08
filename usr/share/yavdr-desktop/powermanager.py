@@ -21,7 +21,7 @@ class PowerManager():
     def restart(self):
         logging.info('Reboot')
         try:
-            answer = self.ck.Restart(dbus_interface=sel.interface_ck)
+            answer = self.ck.Restart(dbus_interface=self.interface_ck)
             logging.debug(answer)
             return answer
         except:

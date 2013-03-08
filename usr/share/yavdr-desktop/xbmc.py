@@ -80,7 +80,7 @@ class XBMC():
         
     def activateWindow(self,window):
         window.activate(int(time.strftime("%s",time.gmtime())))
-        logging.debug(u"activate softhddevice window with xid ",window.xid())
+        logging.debug(u"activate xbmc window with xid ",window.xid())
         
         
         

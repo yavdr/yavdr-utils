@@ -95,7 +95,6 @@ class lircConnection():
                     else:
                         self.main_instance.dbusService.resume(frontend.status())
                 elif cmd == self.main_instance.hdf.readKey("yavdr.desktop.key_xbmc") and self.main_instance.settings.external_prog == 0:
-                        cmd = ['/usr/lib/xbmc/xbmc.bin','--standalone','--lircdev','/var/run/lirc/lircd']
                         if self.main_instance.xbmc.status() != "NOT_SUSPENDED":
                             try:
                                 self.main_instance.dbusService.start_xbmc()

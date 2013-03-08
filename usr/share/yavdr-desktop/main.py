@@ -36,6 +36,7 @@ from adeskbar import adeskbarDBus
 from sxfe import vdrSXFE
 from xine import vdrXINE
 from xbmc import XBMC
+from youtube import YouTube
 from powermanager import PowerManager
 
 class Main():
@@ -106,6 +107,7 @@ class Main():
         self.vdrCommands = vdrDBusCommands(self) # dbus2vdr fuctions
         self.graphtft = GraphTFT(self)
         self.xbmc = XBMC(self)
+        self.youtube = YouTube(self)
         logging.info('run startup()')
         if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
             self.settings.check_pulseaudio() # Wait until pulseaudio has loaded it's tcp module

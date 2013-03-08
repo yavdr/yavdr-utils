@@ -30,12 +30,16 @@ class dbusRecordings():
         
     def get_recordings(self):
         reclist = self.dbusrecordings.List(dbus_interface=self.interface)
-        recordings = {}
-        #*** TODO****
-        # recordings = {name: value for (name, value) in reclist}
-        for recording in reclist:
-            recordings[recording[0]] = dict(recording[1])
-        return recordings
+        try:
+            recordings = {name: value for (name, value) in reclist}
+            logging.info("new method to enlist recordings successfull")
+        except:
+            recordings = {}
+            for recording in reclist:
+                recordings[recording[0]] = dict(recording[1])
+            logging.exception("Fallback to old method to enlist recordings")
+        finally:
+            return recordings
         
     def play_recording(self,recording):
         answer, msg = self.dbusrecordings.Play(recording,dbus_interface = self.interface, signature='v')

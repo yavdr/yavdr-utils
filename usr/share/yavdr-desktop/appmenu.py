@@ -19,7 +19,6 @@ class YavdrDock:
     def __init__(self, main_instance):
         self.main_instance = main_instance
         config = ConfigParser.SafeConfigParser()
-        #config.read('/home/alexander/yavdr-desktop/example.cfg')
         config.read('/usr/share/yavdr-desktop/dialog.cfg')
         
 
@@ -77,16 +76,19 @@ class YavdrDock:
         child = self.hbox.get_children()[0]
         child.grab_focus()
         child.set_state(gtk.STATE_PRELIGHT)
-            
 
     # is invoked when the button is clicked.  It calls the program.
     def button_clicked(self, widget, data=None, modal=None, exitOnPID=1):
         try:
             self.main_instance.settings.dialog = 0
-            self.main_instance.dbusService.start_application(data,modal,exitOnPID)
+            if data.startswith('frontend-dbus-send /frontend'):
+                eval("self.main_instance.dbusService.%s()" % data.split()[-1])
+            else:
+                self.main_instance.dbusService.start_application(data,modal,exitOnPID)
         except:
-            logging.exception("error calling " + data) 
-        self.window.destroy()
+            logging.exception("error calling " + data)
+        finally:
+            self.window.destroy()
         return True
 
     def lirc_handler(self, code):
