@@ -1,8 +1,0 @@
-#!/bin/bash
-
-#sudo /sbin/initctl emit --no-wait yavdr-desktop-session-start DISPLAY=$DISPLAY USER=$USER HOME=$HOME
-while true; do
-python /usr/share/yavdr-desktop/main.py -l ~/.yavdr-desktop.log
-sleep 1
-done
-#/usr/bin/yavdr-applauncherd &

@@ -110,7 +110,7 @@ class Main():
         self.youtube = YouTube(self)
         logging.info('run startup()')
         if self.hdf.readKey('vdr.frontend') == 'softhddevice' and self.vdrCommands.vdrSetup.check_plugin('softhddevice'):
-            self.settings.check_pulseaudio() # Wait until pulseaudio has loaded it's tcp module
+            #self.settings.check_pulseaudio() # Wait until pulseaudio has loaded it's tcp module
             logging.info(u'Configured softhddevide as primary frontend')
             self.vdrCommands.vdrRemote.enable()
             self.frontend = self.vdrCommands.vdrSofthddevice

@@ -26,16 +26,11 @@ $(INSTALL):
 	install -m 700 create-initial-database $(DESTDIR)/usr/sbin
 	install -m 700 yavdr-post-install $(DESTDIR)/usr/sbin	
 	install -d -m 755 $(DESTDIR)/usr/bin
-	install -m 755 start-yavdr-desktop $(DESTDIR)/usr/bin	
 	install -m 755 devilspie-wrapper $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-desktop-helper $(DESTDIR)/usr/bin	
-	install -d -m 755 $(DESTDIR)/etc/xdg/autostart
-	install -m 644 yavdr.desktop $(DESTDIR)/etc/xdg/autostart
 	install -d -m 755 $(DESTDIR)/etc/yavdr
-	cp -a override $(DESTDIR)/etc/yavdr/
 	cp -a etc $(DESTDIR)
 	cp -a usr $(DESTDIR)
-	install -m 755 appmenu2menuorg $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-applauncher $(DESTDIR)/usr/bin	
 	install -m 755 yavdr-applauncherd $(DESTDIR)/usr/bin	
 	install -d -m 755 $(DESTDIR)/etc/dbus-1/system.d/

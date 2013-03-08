@@ -32,9 +32,6 @@ build-stamp: configure-stamp
 
 	touch $@
 
-override_dh_installdeb:
-	dh_installdeb
-	sed -i -e "/override/d" debian/yavdr-utils/DEBIAN/conffiles
 clean: 
 	dh_testdir
 	dh_testroot
