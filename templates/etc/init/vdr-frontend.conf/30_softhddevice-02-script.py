@@ -85,8 +85,9 @@ def get_dbusPlugins():
     dbusplugins = bus.get_object("de.tvdr.vdr","/Plugins")
     raw = dbusplugins.List(dbus_interface="de.tvdr.vdr.plugin")
     plugins = {}
-    for name, version in raw:
-        plugins[name]=version
+    if len(raw) > 0:
+        for name, version in raw:
+            plugins[name]=version
     return plugins
 
 
