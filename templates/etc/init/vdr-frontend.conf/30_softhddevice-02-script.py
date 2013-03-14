@@ -323,34 +323,86 @@ class dbusService(dbus.service.Object):
         else:
             return False
 
-def handler(sock, *args):
-    '''callback function for activity on eventlircd socket'''
-    buf = sock.recv(1024)
-    lines = string.split(buf, "\n")
-    for line in lines[:-1]:
+class lircConnection():
+    def __init__(self,socket_path="/var/run/lirc/lircd"):
+        self.socket_path = socket_path
+        self.try_connection()
+        self.callback = None
+        
+    def connect_eventlircd(self):
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.sock.connect(self.socket_path)
+        self.callback = gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
+
+    def try_connection(self):
         try:
-             gobject.source_remove(settings.timer)
-        except: pass
-        code,count,cmd,device = string.split(line, " ")
-        if cmd == settings.conf['key_detach']:#"KEY_PROG1":
-            if frontend.status() == "NOT_SUSPENDED":
-                detach()
-                settings.frontend_active = 0
-            else:
-                resume(frontend.status())
-        elif cmd == settings.conf['key_power']:#"KEY_POWER2":
-            if frontend.status() == "NOT_SUSPENDED":
-                settings.timer = gobject.timeout_add(15000,soft_detach)
-                settings.frontend_active = 0
-            else:
-                send_shutdown()
-        else:
-            if settings.frontend_active == 0:
-                resume(frontend.status())
-                settings.frontend_active = 1
-            else:
+            self.connect_eventlircd()
+            syslog.syslog(u"conntected to Lirc-Socket on %s"%(self.socket_path))
+            return False
+        except:
+            gobject.timeout_add(1000, self.try_connection)
+            try:
+                if self.callback:
+                    gobject.source_remove(self.callback)
+            except:
                 pass
-    return True
+            syslog.syslog("Error: vdr-frontend could not connect to eventlircd socket")
+            return False
+            
+    def handler(self, sock, *args):
+        '''callback function for activity on eventlircd socket'''
+        try:
+            buf = sock.recv(1024)
+            if not buf:
+                self.sock.close()
+                try:
+                    if self.callback:
+                        gobject.source_remove(self.callback)
+                except:
+                    pass
+                syslog.syslog("Error reading from lircd socket")
+                self.try_connection()
+                return False
+        except:
+            sock.close()
+            try:
+                gobject.source_remove(self.callback)
+            except: pass
+            syslog.syslog('retry lirc connection')
+            self.try_connection()
+            return True
+        lines = string.split(buf, "\n")
+        for line in lines[:-1]:
+            try:
+                 gobject.source_remove(settings.timer)
+            except: pass
+            try: 
+                code,count,cmd,device = string.split(line, " ")[:4]
+                if count != "0": 
+                    #syslog.syslog('repeated keypress')
+                    return True
+            except: 
+                syslog.syslog(line)
+                return True
+            if cmd == settings.conf['key_detach']:#"KEY_PROG1":
+                if frontend.status() == "NOT_SUSPENDED":
+                    detach()
+                    settings.frontend_active = 0
+                else:
+                    resume(frontend.status())
+            elif cmd == settings.conf['key_power']:#"KEY_POWER2":
+                if frontend.status() == "NOT_SUSPENDED":
+                    settings.timer = gobject.timeout_add(15000,soft_detach)
+                    settings.frontend_active = 0
+                else:
+                    send_shutdown()
+            else:
+                if settings.frontend_active == 0:
+                    resume(frontend.status())
+                    settings.frontend_active = 1
+                else:
+                    pass
+        return True
 
 if __name__ == '__main__':
     syslog.openlog(ident="vdr-frontend",logoption=syslog.LOG_PID)
@@ -398,9 +450,8 @@ if __name__ == '__main__':
       except:
         syslog.syslog("Error: vdr-frontend could not connect to eventlircd socket")
 
-    try_connection()
+    lircconnection = lircConnection()
     dbusservice = dbusService()
-    #gobject.MainLoop().run()
     loop = gobject.MainLoop()
     loop.run()
 
