@@ -103,7 +103,7 @@ class Main():
         return False
             
     def startup(self):
-        
+        self.wait_for_vdrstart()
         self.vdrCommands = vdrDBusCommands(self) # dbus2vdr fuctions
         self.graphtft = GraphTFT(self)
         self.xbmc = XBMC(self)
@@ -166,7 +166,15 @@ class Main():
                 time.sleep(1)
             else:
                 logging.info('vdr upstart job running')
-                return True
+                #return True
+        #test dbus connection
+        while not status == True:
+            try:
+                vdrDBusCommands(self)
+                status = True
+            except:
+                pass
+        return True
     
     def signal_handler(self,*args, **kwargs):
         if '/com/ubuntu/Upstart/jobs/vdr/_' == kwargs['path']:
