@@ -168,12 +168,19 @@ class Main():
                 logging.info('vdr upstart job running')
                 #return True
         #test dbus connection
-        while not status == True:
+        status = None
+        while not status is True:
             try:
                 vdrDBusCommands(self)
                 status = True
             except:
                 pass
+            if not status: 
+                logging.info('dbus2vdr not reachable, wait 1 s')
+                time.sleep(1)
+            else:
+                logging.info('dbus2vdr available')
+                return True
         return True
     
     def signal_handler(self,*args, **kwargs):
