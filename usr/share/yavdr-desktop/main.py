@@ -133,7 +133,7 @@ class Main():
                     self.dbusService.atta()
                 else:
                     self.graphtft.graphtft_switch()
-                    subprocess.call(["/usr/bin/feh","--bg-fill",self.hdf.readKey('logo_detached')], env=settings.env)
+                    subprocess.call(["/usr/bin/feh","--bg-fill",self.hdf.readKey('logo_detached')], env=self.settings.env)
                     if settings.manualstart == False:
                         self.settings.timer = gobject.timeout_add(300000, self.dbusService.send_shutdown)
                     elif self.settings.acpi_wakeup:
