@@ -1,1 +1,1 @@
-<?cs if:vdr.plugin.graphtft.enabled == "1" ?>       <command name=<?cs call:quote(_("Xterm on graphtft Display")) ?> execute="/usr/share/vdr/menuorg-appswitcher app=xterm display=1.1 &amp;> /dev/null " /> <?cs /if ?>
+<?cs if:vdr.plugin.graphtft.enabled == "1" ?>       <command name=<?cs call:quote(_("Xterm on graphtft Display")) ?> execute="/usr/share/vdr/menuorg-appswitcher standalone=no app=xterm display=1.1 &amp;> /dev/null " /> <?cs /if ?>

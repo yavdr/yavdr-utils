@@ -1,1 +1,1 @@
-        <command name=<?cs call:quote(_("Xterm")) ?> execute="/usr/share/vdr/menuorg-appswitcher app=xterm &amp;> /dev/null " />
+        <command name=<?cs call:quote(_("Xterm")) ?> execute="/usr/share/vdr/menuorg-appswitcher standalone=no app=xterm &amp;> /dev/null " />
