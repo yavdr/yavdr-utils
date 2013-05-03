@@ -323,6 +323,14 @@ class dbusService(dbus.service.Object):
         else:
             return False
 
+    @dbus.service.method('de.yavdr.frontend', in_signature="s", out_signature='b')
+    def  updateDisplay(self, display=None):
+        if display:
+            settings.env["DISPLAY"] = string(display)
+            return True
+        else:
+            return False
+
 class lircConnection():
     def __init__(self,socket_path="/var/run/lirc/lircd"):
         self.socket_path = socket_path
