@@ -300,9 +300,10 @@ class Settings():
             return True
 
 class dbusService(dbus.service.Object):
-    def __init__(self):
+    def __init__(self, settings):
         bus_name = dbus.service.BusName('de.yavdr.frontend', bus=bus)#dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/frontend')
+        self.settings = settings
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def deta(self):
@@ -324,9 +325,9 @@ class dbusService(dbus.service.Object):
             return False
 
     @dbus.service.method('de.yavdr.frontend', in_signature="s", out_signature='b')
-    def  updateDisplay(self, display=None):
-        if display:
-            settings.env["DISPLAY"] = string(display)
+    def updateDisplay(self, display=None):
+        if display is not None:
+            self.settings.env["DISPLAY"] = display
             return True
         else:
             return False
@@ -459,7 +460,7 @@ if __name__ == '__main__':
         syslog.syslog("Error: vdr-frontend could not connect to eventlircd socket")
 
     lircconnection = lircConnection()
-    dbusservice = dbusService()
+    dbusservice = dbusService(settings)
     loop = gobject.MainLoop()
     loop.run()
 
