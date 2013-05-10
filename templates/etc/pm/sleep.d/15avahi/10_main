@@ -1,0 +1,11 @@
+case $1 in
+  hibernate|suspend)
+        stop avahi-daemon
+    ;;
+  resume|thaw)
+        start avahi-daemon
+    ;;
+  *)
+    # NOP
+    ;;
+esac
