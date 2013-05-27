@@ -3,7 +3,7 @@ END
 end script
 
 post-stop script
-export export DISPLAY=<?cs alt:desktop_display ?>:1<?cs /alt ?>`dbget vdr.tempdisplay`
+export DISPLAY=<?cs alt:desktop_display ?>:1<?cs /alt ?>`dbget vdr.tempdisplay`
 /usr/bin/feh --bg-center "/usr/share/yavdr/images/yavdr_logo.png"
 if [ "$(vdr-dbus-fast /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" | grep -q "SUSPEND_NORMAL")" ]; then 
     vdr-dbus-fast /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' ||: &> /dev/null
