@@ -5,8 +5,8 @@
 
 description	"mDNS/DNS-SD daemon"
 
-start on nfs-server-startup
-stop on nfs-server-shutdown or stopping network-services
+start on nfs-server-startup and started dbus
+stop on nfs-server-shutdown or stopping network-services or stopping dbus
 
 expect daemon
 respawn
