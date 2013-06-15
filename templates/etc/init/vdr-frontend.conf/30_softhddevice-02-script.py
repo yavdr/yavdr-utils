@@ -386,14 +386,15 @@ class lircConnection():
             return True
         lines = string.split(buf, "\n")
         for line in lines[:-1]:
-            try:
-                 gobject.source_remove(settings.timer)
-            except: pass
             try: 
                 code,count,cmd,device = string.split(line, " ")[:4]
                 if count != "0": 
                     #syslog.syslog('repeated keypress')
                     return True
+                else:
+                    try:
+                        gobject.source_remove(settings.timer)
+                    except: pass
             except: 
                 syslog.syslog(line)
                 return True
