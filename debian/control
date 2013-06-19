@@ -8,7 +8,7 @@ Homepage: http://yavdr.origo.ethz.ch/
 
 Package: yavdr-utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, sqlite3, ir-keytable, python-uinput, python-pyudev, avahi-utils, feh, lightdm, python-clearsilver, python-wnck, python-psutil, librsvg2-common, python-rsvg
+Depends: ${shlibs:Depends}, ${misc:Depends}, sqlite3, ir-keytable, python-uinput, python-pyudev, avahi-utils, feh, python-clearsilver, python-wnck, python-psutil, librsvg2-common, python-rsvg
 Suggests: lirc
 Conflicts: yavdr-startup
 Description: Utilities and WEB front end for yaVDR

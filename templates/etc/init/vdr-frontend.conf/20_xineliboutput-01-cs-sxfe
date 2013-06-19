@@ -1,0 +1,14 @@
+<?cs if:(!?vdr.frontend || vdr.frontend == "sxfe" ) ?>
+end script
+
+nice -10
+setuid vdr
+setgid vdr
+
+
+#env XINE_BUFFER_LOG=1
+env USE_AUTOCROP=0
+export USE_AUTOCROP
+
+script
+export DISPLAY=<?cs alt:desktop_display ?>:1<?cs /alt ?>`dbget vdr.tempdisplay`

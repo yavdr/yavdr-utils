@@ -1,0 +1,23 @@
+<?cs if:(vdr.frontend == "softhddevice") ?>
+# background shown if frontend is attached
+env logo_attached=/usr/share/yavdr/images/yavdr_logo.png
+export logo_attached
+# background shown if frontend is detached
+env logo_detached=/usr/share/yavdr/images/yaVDR_background_detached.jpg    
+export logo_detached
+# Button to de/attach frontend
+env key_detach=KEY_PROG1
+export key_detach
+# VDR's Power button
+env key_power=KEY_POWER2
+export key_power
+# GraphTFT VIEW if Frontend is detached: 
+# possible values NonLiveTv, Clock, Standard, Detail, Dia, Sysinfo
+env graphtft_view=NonLiveTv
+export graphtft_view
+# Start frontend always detached:
+# possible values: 0 (attach frontend at manual start) and 1 (alwas start detached)
+env start_always_detached=0
+export start_always_detached
+<?cs /if ?>
+

@@ -1,4 +1,6 @@
 #!/bin/bash
 
+process-template /etc/init/openbox.conf
+process-template /etc/init/vdr-frontend.conf
 process-template /etc/default/vdr
 

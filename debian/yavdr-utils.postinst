@@ -10,6 +10,7 @@ case "$1" in
 	sed -i -e 's/\(^vdr:.*:\)\/var\/lib\/vdr\(:.*\)/\1\/home\/vdr\2/' /etc/passwd
 	chsh -s /bin/bash vdr
 	chown vdr:vdr /var/log/vdr
+	adduser vdr audio
 	adduser vdr cdrom
         adduser vdr plugdev
         chmod +x /usr/share/yavdr/events/actions/*
