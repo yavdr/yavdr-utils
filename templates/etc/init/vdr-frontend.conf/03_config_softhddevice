@@ -13,8 +13,8 @@ env key_power=KEY_POWER2
 export key_power
 # GraphTFT VIEW if Frontend is detached: 
 # possible values NonLiveTv, Clock, Standard, Detail, Dia, Sysinfo
-env graphtft_view=NonLiveTv
-export graphtft_view
+env graphtftng_view=NonLiveTv
+export graphtftng_view
 # Start frontend always detached:
 # possible values: 0 (attach frontend at manual start) and 1 (alwas start detached)
 env start_always_detached=0
