@@ -16,7 +16,7 @@ class GraphTFT():
         self.settings = main_instance.settings
         self.bus = main_instance.systembus
         self.hdf = main_instance.hdf
-        self.graphtft = main_instance.vdrCommands.vdrSetup.check_plugin('graphtft')
+        self.graphtft = main_instance.vdrCommands.vdrSetup.check_plugin('graphtftng')
         self.loadsettings()
         
         
@@ -26,7 +26,7 @@ class GraphTFT():
         
     def graphtft_switch(self):
         if self.graphtft:
-            dbusgraph = self.bus.get_object("de.tvdr.vdr","/Plugins/graphtft")
+            dbusgraph = self.bus.get_object("de.tvdr.vdr","/Plugins/graphtftng")
             if self.settings.frontend_active == 0:
                dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String(self.hdf.readKey(GraphTFT.viewdetached,"NonLiveTv")),dbus_interface='de.tvdr.vdr.plugin')
             elif self.settings.frontend_active == 1:
