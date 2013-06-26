@@ -9,7 +9,7 @@ if [ "$(vdr-dbus-fast /Plugins/softhddevice plugin.SVDRPCommand string:"STAT" st
     vdr-dbus-fast /Plugins/softhddevice plugin.SVDRPCommand string:'RESU' string:"" ||: &> /dev/null
 fi
 vdr-dbus-fast /Plugins/softhddevice plugin.SVDRPCommand string:'DETA' string:"" ||: &> /dev/null
-<?cs if:(vdr.plugin.graphtft.enabled == "1") ?>vdr-dbus-fast /Plugins/graphtft plugin.SVDRPCommand string:TVIEW string:$graphtft_view <?cs /if ?>
+<?cs if:(vdr.plugin.graphtft.enabled == "1") ?>vdr-dbus-fast /Plugins/graphtftng plugin.SVDRPCommand string:TVIEW string:$graphtft_view <?cs /if ?>
 end script
 <?cs /if ?>
 
