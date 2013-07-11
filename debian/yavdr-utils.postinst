@@ -1,19 +1,13 @@
 #!/bin/sh
 
-PKG=yavdr-utils
-
 case "$1" in
     configure)
-	mkdir -p /home/vdr
-        cp -r /etc/skel/. /home/vdr
-	chown vdr:vdr /home/vdr
-	#sed -i -e 's/\(^vdr:.*:\)\/var\/lib\/vdr\(:.*\)/\1\/home\/vdr\2/' /etc/passwd
-	sed -i -e 's/\(^vdr:.*:\)\/home\/vdr\(:.*\)/\1\/var\/lib\/vdr\2/' /etc/passwd
-	chsh -s /bin/bash vdr
 	chown vdr:vdr /var/log/vdr
+	chsh -s /bin/bash vdr
 	adduser vdr audio
 	adduser vdr cdrom
         adduser vdr plugdev
+
         chmod +x /usr/share/yavdr/events/actions/*
 
        /usr/bin/service tntnet restart || /bin/true
@@ -22,9 +16,7 @@ case "$1" in
         if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
             . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
         fi
-
         ;;
-
     triggered)
         SIGNAL_EVENT_NOTRIGGER="y"
 	export SIGNAL_EVENT_NOTRIGGER
