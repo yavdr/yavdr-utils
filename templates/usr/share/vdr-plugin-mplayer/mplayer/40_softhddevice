@@ -1,5 +1,5 @@
 <?cs if:(vdr.backend == "softhddevice") ?>
-export DISPLAY=:0
+export DISPLAY=:1
 
 <?cs def:get_card_device(type) ?><?cs each:item = system.hardware.alsa ?><?cs if:name(item) == type || ((type == "all" || type == "passthrough") && name(item) == "hdmi") ?><?cs var:item.card ?>.<?cs var:item.device ?><?cs /if ?><?cs /each ?><?cs /def ?>
 

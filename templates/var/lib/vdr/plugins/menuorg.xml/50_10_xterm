@@ -1,0 +1,1 @@
+        <command name=<?cs call:quote(_("Xterm")) ?> execute="/usr/share/vdr/menuorg-appswitcher standalone=no app=xterm &amp;> /dev/null " />
