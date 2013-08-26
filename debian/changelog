@@ -1,3 +1,17 @@
+yavdr-utils (0.3.1.1-0yavdr0) precise; urgency=medium
+
+  * add xorg-launch-helper
+
+ -- Lars Hanisch <dvb@flensrocker.de>  Mon, 26 Aug 2013 14:33:32 +0200
+
+yavdr-utils (0.3.1.0-0yavdr0) precise; urgency=medium
+
+  * don't remove old vdr-init.d-script
+  * moved vdr-upstart-jobs to vdr package
+  * set VIDEO_DIR to yavdr's default
+
+ -- Lars Hanisch <dvb@flensrocker.de>  Thu, 28 Mar 2013 01:07:43 +0100
+
 yavdr-utils (0.3.0.2557-1yavdr1) lucid; urgency=low
 
   * build
