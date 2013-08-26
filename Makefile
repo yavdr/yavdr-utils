@@ -1,5 +1,5 @@
 SUBDIRS = common db-utils process-template signal-event dvb-test \
-          irserver2uinput lircd2uinput xrandr-eventd
+          irserver2uinput lircd2uinput xrandr-eventd xorg-launch-helper
 .PHONY: $(SUBDIRS)
 
 ALL = $(addsuffix -all,$(SUBDIRS))
