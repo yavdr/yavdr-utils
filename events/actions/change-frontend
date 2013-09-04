@@ -146,9 +146,9 @@ fi
 
 # graphtft support
 if [ "x$(dbget vdr.plugin.graphtft.enabled)" = "x1" ]; then
-  enable_plugin "graphtft"
+  enable_plugin "graphtftng"
 else
-  disable_plugin "graphtft"
+  disable_plugin "graphtftng"
 fi
 
 # disable vdr if needed

@@ -1,5 +1,5 @@
 # timer conflict check
 
 # for now, just list the conflicts till epgsearch will have some better command
-  vdr-dbus-send /Plugins/epgsearch plugin.SVDRPCommand string:'LSCC' > /dev/null
+  vdr-dbus-send /Plugins/epgsearch plugin.SVDRPCommand string:'LSCC' string:'' > /dev/null
 

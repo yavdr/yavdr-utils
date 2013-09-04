@@ -128,7 +128,7 @@ def detach():
     subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
 
     frontend.detach()
-    graphtft_switch()
+    graphtftng_switch()
     return True
 
 def send_shutdown():
@@ -143,11 +143,11 @@ def soft_detach():
     settings.timer = gobject.timeout_add(300000,send_shutdown)
     return False
 
-def graphtft_switch():
-    if settings.graphtft:
-        dbusgraph = bus.get_object("de.tvdr.vdr","/Plugins/graphtft")
+def graphtftng_switch():
+    if settings.graphtftng:
+        dbusgraph = bus.get_object("de.tvdr.vdr","/Plugins/graphtftng")
         if settings.frontend_active == 0:
-           dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String(settings.conf['graphtft_view']),dbus_interface='de.tvdr.vdr.plugin')
+           dbusgraph.SVDRPCommand(dbus.String('TVIEW'),dbus.String(settings.conf['graphtftng_view']),dbus_interface='de.tvdr.vdr.plugin')
         elif settings.frontend_active == 1:
            dbusgraph.SVDRPCommand(dbus.String('RVIEW'),dbus.String(None),dbus_interface='de.tvdr.vdr.plugin')
 
@@ -159,7 +159,7 @@ def resume(status):
         frontend.resume()
     elif status == "SUSPEND_DETACHED":
         frontend.attach()
-    graphtft_switch()
+    graphtftng_switch()
     
 
 class Settings():
@@ -193,21 +193,21 @@ class Settings():
         'key_detach':"KEY_PROG1",
         'key_power':"KEY_POWER2",
         'start_always_detached':'0',
-        'graphtft_view':"NonLiveTv"
+        'graphtftng_view':"NonLiveTv"
         }
         for i in self.conf:
             if i in os.environ:
                 self.conf[i] = os.environ[i]
-        self.check_graphtft()
+        self.check_graphtftng()
         self.get_event_devices()
 
-    def check_graphtft(self):
+    def check_graphtftng(self):
         plugins = get_dbusPlugins()
-        if 'graphtft' in plugins:
-            #print "found graphtft"
-            self.graphtft = True
+        if 'graphtftng' in plugins:
+            #print "found graphtftng"
+            self.graphtftng = True
         else:
-            self.graphtft = False
+            self.graphtftng = False
 
 
     def get_event_devices(self):
@@ -300,9 +300,10 @@ class Settings():
             return True
 
 class dbusService(dbus.service.Object):
-    def __init__(self):
+    def __init__(self, settings):
         bus_name = dbus.service.BusName('de.yavdr.frontend', bus=bus)#dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name, '/frontend')
+        self.settings = settings
 
     @dbus.service.method('de.yavdr.frontend',out_signature='b')
     def deta(self):
@@ -322,6 +323,18 @@ class dbusService(dbus.service.Object):
             return True
         else:
             return False
+
+    @dbus.service.method('de.yavdr.frontend', in_signature="s", out_signature='b')
+    def updateDisplay(self, display=None):
+        if display is not None:
+            self.settings.env["DISPLAY"] = display
+            return True
+        else:
+            return False
+
+    @dbus.service.method('de.yavdr.frontend', out_signature='s')
+    def checkDisplay(self):
+        return self.settings.env["DISPLAY"]
 
 class lircConnection():
     def __init__(self,socket_path="/var/run/lirc/lircd"):
@@ -422,8 +435,8 @@ if __name__ == '__main__':
     else:
         # set background visible when frontend is detached
         subprocess.call(["/usr/bin/feh","--bg-fill",settings.conf['logo_detached']], env=settings.env)
-        # change graphtft view if the plugin has been loaded
-        graphtft_switch()
+        # change graphtftng view if the plugin has been loaded
+        graphtftng_switch()
         # check for timer within the next 6 minutes
         if settings.manualstart == False and timer.wakeup_for_Timer():
             settings.timer = gobject.timeout_add(300000, send_shutdown)
@@ -452,7 +465,7 @@ if __name__ == '__main__':
         syslog.syslog("Error: vdr-frontend could not connect to eventlircd socket")
 
     lircconnection = lircConnection()
-    dbusservice = dbusService()
+    dbusservice = dbusService(settings)
     loop = gobject.MainLoop()
     loop.run()
 
