@@ -82,6 +82,8 @@ vdr-plugin-scheduler
 vdr-plugin-serial
 vdr-plugin-skinelchi
 vdr-plugin-skinenigmang
+vdr-plugin-skinflat
+vdr-plugin-skinnopacity
 vdr-plugin-skinsoppalusikka
 vdr-plugin-sleeptimer
 vdr-plugin-sndctl
@@ -101,7 +103,9 @@ vdr-plugin-timeline
 vdr-plugin-timersync
 vdr-plugin-trayopenng
 vdr-plugin-ttxtsubs
+vdr-plugin-tvguide
 vdr-plugin-tvonscreen
+vdr-plugin-tvscraper
 vdr-plugin-undelete
 vdr-plugin-vcd
 vdr-plugin-vdrc
