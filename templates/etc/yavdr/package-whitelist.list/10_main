@@ -111,6 +111,7 @@ vdr-plugin-vcd
 vdr-plugin-vdrc
 vdr-plugin-vdrcd
 vdr-plugin-vdrrip
+vdr-plugin-vnsiserver
 vdr-plugin-vompserver
 vdr-plugin-webvideo
 vdr-plugin-zappilot
@@ -121,5 +122,6 @@ vdr-plugin-zaphistory
 vdr-plugin-zappilot
 vdr-skin.*
 vdr-tft-.*
+xbmc-pvr-vdr-vnsi
 ^yavdr-addon-.*
 yavdr-hardware-sundtek
