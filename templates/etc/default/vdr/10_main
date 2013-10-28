@@ -11,7 +11,7 @@ ENABLED=1
 ENABLE_SHUTDOWN=1
 
 <?cs if:(vdr.frontend == "xbmc") ?>
-LIRC=/dev/null
+LIRC=""
 <?cs /if ?>
 
 # Options that will be passed to vdr's commandline
