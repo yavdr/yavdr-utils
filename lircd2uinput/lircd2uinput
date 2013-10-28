@@ -48,7 +48,7 @@ class Lirc2uinput:
         for element in dir(uinput):
           if element.startswith("KEY_"):
             self.events.append(eval("uinput.%s"%element))
-            self.debug.log("uinput.%s"%element)
+            #self.debug.log("uinput.%s"%element)
         # create uinput device
         self.specialkeys = [uinput.KEY_VOLUMEUP, uinput.KEY_VOLUMEDOWN]
         self.device = uinput.Device(self.events, uinput_name)
