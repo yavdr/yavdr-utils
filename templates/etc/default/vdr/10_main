@@ -14,7 +14,7 @@ ENABLE_SHUTDOWN=1
 VIDEO_DIR="/srv/vdr/video.00"
 
 <?cs if:(vdr.frontend == "xbmc") ?>
-LIRC=/dev/null
+LIRC=""
 <?cs /if ?>
 
 # Options that will be passed to vdr's commandline
