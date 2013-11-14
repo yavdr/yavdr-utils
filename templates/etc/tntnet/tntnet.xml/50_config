@@ -4,21 +4,3 @@
   <pidfile>/var/run/tntnet.pid</pidfile>
   <mimeDb>/etc/tntnet/mime.conf</mimeDb>
   <!--<documentRoot>/var/www</documentRoot>-->
-  <compPath>
-    <entry>/usr/lib/tntnet</entry>
-    <entry>/usr/lib/yavdrweb</entry>
-  </compPath>
-  <logging>
-    <rootlogger>INFO</rootlogger>
-    <loggers>
-      <logger>
-        <category>tntnet</category>
-        <level>INFO</level>
-      </logger>
-    </loggers>
-    <file>/var/log/tntnet/tntnet.log</file>
-    <maxfilesize>1MB</maxfilesize>
-    <maxbackupindex>2</maxbackupindex>
-    <maxRequestSize>1048576</maxRequestSize>
-    <!-- <host>localhost:1234</host> --> <!--  # send log-messages with udp -->
-  </logging>
