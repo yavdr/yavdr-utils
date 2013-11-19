@@ -54,7 +54,7 @@ class dbusShutdown():
         return self.dbusshutdown.ManualStart(dbus_interface=self.interface)
 
     def confirmShutdown(self,user=False):
-        code, message, shutdownhooks, message = self.dbusshutdown.ConfirmShutdown(dbus.Boolean(user),dbus_interface=self.interface)
+        code, message, shutdownhooks, message = self.dbusshutdown.ConfirmShutdown(dbus.Boolean(user),dbus_interface=self.interface, timeout=120) # wait up to 120 second for a reply, because the lifeguard-addon is as fast as a snail
         if code in [250,990]:
             return True
         else:
@@ -83,7 +83,7 @@ class dbusTimer():
 def get_dbusPlugins():
     '''wrapper for dbus plugin list'''
     dbusplugins = bus.get_object("de.tvdr.vdr","/Plugins")
-    raw = dbusplugins.List(dbus_interface="de.tvdr.vdr.plugin")
+    raw = dbusplugins.List(dbus_interface="de.tvdr.vdr.pluginmanager")
     plugins = {}
     if len(raw) > 0:
         for name, version in raw:
@@ -132,11 +132,18 @@ def detach():
     return True
 
 def send_shutdown():
-    if shutdown.confirmShutdown():
+    try:
+        if shutdown.confirmShutdown():
+            remote.enable()
+            remote.sendkey("POWER")
+            remote.disable()
+    except Exception as error:
+        syslog.syslog(error)
         remote.enable()
         remote.sendkey("POWER")
         remote.disable()
-    return True
+    finally:
+        return True
 
 def soft_detach():
     detach()

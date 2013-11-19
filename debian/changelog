@@ -1,3 +1,9 @@
+yavdr-utils (0.3.1.2-0yavdr0) precise; urgency=medium
+
+  * add /etc/tntnet/tntnet.xml for tntnet 2.2
+
+ -- Lars Hanisch <dvb@flensrocker.de>  Thu, 14 Nov 2013 17:56:35 +0100
+
 yavdr-utils (0.3.1.1-0yavdr0) precise; urgency=medium
 
   * add xorg-launch-helper (from master)

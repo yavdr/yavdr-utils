@@ -2,14 +2,14 @@
 
 SETUPCONF=/var/lib/vdr/setup.conf
 
-if [ "$(dbget vdr.backend)" = "xineliboutput" ] || [ "$(dbget vdr.backend)" = "xine" ]; then
+if [ "$(dbget vdr.backend)" = "xineliboutput" ] || [ "$(dbget vdr.backend)" = "xine" ] || [ "$(dbget vdr.backend)" = "softhddevice" ] ; then
 
-# default yaepghd.Theme = Vid_Win_1920
+# default yaepghd.Theme = nOpacit_1920
 
    if ! grep -q '^yaepghd.Theme =.*' $SETUPCONF;then
-     echo "yaepghd.Theme = Vid_Win_1920" >> $SETUPCONF
+     echo "yaepghd.Theme = nOpacity_1920" >> $SETUPCONF
    else
-     sed -i 's/yaepghd.Theme =.*/yaepghd.Theme = Vid_Win_1920/g' $SETUPCONF;
+     sed -i 's/yaepghd.Theme =.*/yaepghd.Theme = nOpacity_1920/g' $SETUPCONF;
    fi
 
 # default yaepghd.EpgImages = 1
@@ -19,5 +19,22 @@ if [ "$(dbget vdr.backend)" = "xineliboutput" ] || [ "$(dbget vdr.backend)" = "x
    else
      sed -i 's/yaepghd.EpgImages =.*/yaepghd.EpgImages = 1/g' $SETUPCONF;
    fi
+
+# default yaepghd.MenuBACK = 1
+
+   if ! grep -q '^yaepghd.MenuBACK =.*' $SETUPCONF;then
+     echo "yaepghd.MenuBACK = 1" >> $SETUPCONF
+   else
+     sed -i 's/yaepghd.MenuBACK =.*/yaepghd.MenuBACK = 1/g' $SETUPCONF;
+   fi
+
+# default yaepghd.SwitchOk = 1
+
+   if ! grep -q '^yaepghd.SwitchOk =.*' $SETUPCONF;then
+     echo "yaepghd.SwitchOk = 1" >> $SETUPCONF
+   else
+     sed -i 's/yaepghd.SwitchOk =.*/yaepghd.SwitchOk = 1/g' $SETUPCONF;
+   fi
+
 
 fi
