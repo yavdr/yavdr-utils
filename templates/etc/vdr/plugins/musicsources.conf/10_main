@@ -1,1 +1,1 @@
-/media/<?cs var:_("Music") ?>/;<?cs var:_("Music") ?>;0;*.mp3/*.ogg/*.wav/*.MP3/*.OGG/*.WAV/*.m3u/*.M3U/*.pls/*.PLS
+/media/<?cs var:_("Music") ?>;<?cs var:_("Music") ?>;0;*.mp3/*.ogg/*.wav/*.MP3/*.OGG/*.WAV/*.m3u/*.M3U/*.pls/*.PLS

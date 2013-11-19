@@ -3,3 +3,4 @@
 if [ ! "$(dbget vdr.frontend)" = "disabled" ]; then
   start launcher
 fi
+

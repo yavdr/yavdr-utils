@@ -1,0 +1,12 @@
+    <rootlogger>INFO</rootlogger>
+    <loggers>
+      <logger>
+        <category>tntnet</category>
+        <level>INFO</level>
+      </logger>
+    </loggers>
+    <file>/var/log/tntnet/tntnet.log</file>
+    <maxfilesize>1MB</maxfilesize>
+    <maxbackupindex>2</maxbackupindex>
+    <maxRequestSize>1048576</maxRequestSize>
+    <!-- <host>localhost:1234</host> --> <!--  # send log-messages with udp -->
