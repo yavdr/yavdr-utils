@@ -1,4 +1,4 @@
 #!/bin/bash
 
-stop openbox && start openbox &> /dev/null
+stop xorg-launcher && start xorg-launcher &> /dev/null
 

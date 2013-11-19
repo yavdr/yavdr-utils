@@ -9,7 +9,7 @@ description	"Userspace bootsplash utility"
 
 start on (starting mountall
           or (runlevel [016]
-              and stopped openbox))
+              and stopped xorg-launcher))
 
 expect fork
 kill timeout 60
