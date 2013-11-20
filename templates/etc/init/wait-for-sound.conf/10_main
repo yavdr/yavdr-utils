@@ -4,12 +4,12 @@ task
 
 script
 <?cs if:system.sound.type == "all" ?>
-  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?>-c<?cs var:item.card ?><?cs /each ?>
+  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?>-c<?cs var:item.card ?> <?cs /each ?>
 <?cs elif:system.sound.type == "passthrough" ?>
-  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == 'hdmi' ?>-c<?cs var:item.card ?><?cs /if ?><?cs /each ?>
+  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == 'hdmi' ?>-c<?cs var:item.card ?> <?cs /if ?><?cs /each ?>
 <?cs elif:system.sound.type == "spdif" ?>
-  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == system.sound.type ?>-c<?cs var:item.card ?><?cs /if ?><?cs /each ?>
+  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == system.sound.type ?>-c<?cs var:item.card ?> <?cs /if ?><?cs /each ?>
 <?cs else ?>
-  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == system.sound.type ?>-c<?cs var:item.card ?><?cs /if ?><?cs /each ?>
+  exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?><?cs if:name(item) == system.sound.type ?>-c<?cs var:item.card ?> <?cs /if ?><?cs /each ?>
 <?cs /if ?>
 end script
