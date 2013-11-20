@@ -11,7 +11,7 @@ setuid vdr
 setgid audio
 
 <?cs if:(vdr.frontend == "xbmc") ?>
-start on started vdr or stopped openbox-tools or started sound-device \
+start on stopped openbox-tools \
          or vdr-frontend-restart
 stop on stopping xorg-launcher
 nice -10
