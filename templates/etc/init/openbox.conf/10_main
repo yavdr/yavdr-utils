@@ -1,13 +1,9 @@
 <?cs if:(!?vdr.frontend || vdr.frontend != "disabled") ?>
-start on (filesystem and \
-          started dbus and \
-          (start-xorg or stopped udevtrigger))
-stop on runlevel [!2345]
+start on started xorg-launcher or xorg-started
+stop on stopping xorg-launcher
 
 respawn
 env DISPLAY=:1
-env XORGCONFIG=/etc/X11/xorg.conf.yavdr
-env xorg_driver
 
 script
 # D-bus
@@ -19,7 +15,7 @@ if [ -e /etc/default/locale ]; then
 . /etc/default/locale
 fi
 
-exec xinit /usr/bin/openbox --config-file /etc/openbox/rc.xml --startup "/sbin/initctl emit --no-wait openbox-started" -- :1 vt7
+exec /usr/bin/openbox --config-file /etc/openbox/rc.xml --startup "/sbin/initctl emit --no-wait openbox-started"
 end script
 
 <?cs /if ?>

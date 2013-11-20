@@ -2,14 +2,14 @@
 case $1 in
      hibernate|suspend)
          echo "vdr is going to sleep"
-	 stop openbox
+	 stop xorg-launcher
 	 start x
          ;;
      thaw|resume)
          echo "vdr gets started again"
          start vdr
 	 stop x
-	 start openbox
+	 start xorg-launcher
          ;;
      *)  echo "Irgendwer ruft mich total falsch auf."
          ;;
