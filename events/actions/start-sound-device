@@ -1,1 +1,2 @@
 start sound-device
+start wait-for-sound
