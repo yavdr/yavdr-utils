@@ -1,5 +1,5 @@
 <?cs def:get_card(type) ?><?cs each:item = system.hardware.alsa ?><?cs if:name(item) == type ?><?cs var:item.card ?><?cs /if ?><?cs /each ?><?cs /def ?>
-start on starting vdr
+start on (starting vdr or starting xbmc)
 task
 
 script
