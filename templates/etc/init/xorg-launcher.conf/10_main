@@ -23,7 +23,7 @@ if [ -e /etc/default/locale ]; then
 . /etc/default/locale
 fi
 
-exec /usr/bin/xorg-launch-helper :1 vt7
+exec /usr/bin/xorg-launch-helper -nolisten tcp -noreset :1 vt7
 end script
 
 <?cs /if ?>
