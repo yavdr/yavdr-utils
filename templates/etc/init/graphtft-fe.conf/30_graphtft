@@ -15,6 +15,6 @@ test -f /etc/default/graphtft-fe && . /etc/default/graphtft-fe
 
 GRAPHTFTFEOPTS="-W $TFT_WIDTH -H $TFT_HEIGHT $MORE_OPTIONS"
 
-exec /usr/bin/graphtft-fe $GRAPHTFTFEOPTS -h localhost
+exec on_vdr -c "/usr/bin/graphtft-fe $GRAPHTFTFEOPTS -h localhost"
 end script
 <?cs /if ?>
