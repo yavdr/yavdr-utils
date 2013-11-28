@@ -1,3 +1,0 @@
-<?cs if:(vdr.frontend == "softhddevice") ?>
-exec frontend
-<?cs /if ?>
