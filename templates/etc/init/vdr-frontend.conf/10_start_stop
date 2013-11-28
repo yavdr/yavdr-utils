@@ -1,5 +1,7 @@
 
-start on started vdr or stopped openbox-tools \
+#start on started vdr or stopped openbox-tools \
+start on stopped openbox-tools \
          or vdr-frontend-restart
-stop on stopping vdr or stopping xorg-launcher
+#stop on stopping vdr or stopping xorg-launcher
+stop on stopping xorg-launcher
 
