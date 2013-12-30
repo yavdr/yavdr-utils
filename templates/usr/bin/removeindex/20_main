@@ -1,7 +1,6 @@
+INDEXFILE="$1/index"
 
-INDEXFILE=$1/index
-
-if [ -e $INDEXFILE ] ; then
-    rm $INDEXFILE
+if [ -e "$INDEXFILE" ] ; then
+    rm "$INDEXFILE"
 fi
 
