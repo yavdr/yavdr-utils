@@ -9,6 +9,7 @@ case "$1" in
         adduser vdr plugdev
 
         chmod +x /usr/share/yavdr/events/actions/*
+        mkdir -p /etc/avahi-linker/
 
        /usr/bin/service tntnet restart || /bin/true
         [ -f /var/lib/yavdrdb.hdf ] && signal-event post-upgrade
