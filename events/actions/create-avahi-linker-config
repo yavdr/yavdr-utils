@@ -1,0 +1,27 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+import codecs
+import os
+import hdftool
+
+if __name__ == '__main__':
+    hdf = hdftool.HDF('/var/lib/yavdrdb.hdf')
+    entries = []
+    for entry in hdf.childrensByKey('system.net.media.video'):
+#        print 'system.net.media.video.{0}.{1}'.format(entry, 'local')
+        local = hdf.readKey('system.net.media.video.{0}.{1}'.format(entry, 'local'), "Error").decode('utf-8')
+        host = hdf.readKey('system.net.media.video.{0}.{1}'.format(entry, 'host'), "Error").decode('utf-8')
+        path = hdf.readKey('system.net.media.video.{0}.{1}'.format(entry, 'path'), "Error").decode('utf-8')
+        if "Error" in [local, host, path]:
+            print "config is broken"
+        else:
+            entries.append((local, host, path))
+
+    with codecs.open('/etc/avahi-linker/wfe-static.cfg', 'w', 'utf-8') as config:
+        for entry in entries:
+            local, host, path = entry
+            if path[0] == os.path.sep:
+                path = path[1:]
+            config.write(u'{0} = {1}\n'.format(local, os.path.join(host, path)))
+
