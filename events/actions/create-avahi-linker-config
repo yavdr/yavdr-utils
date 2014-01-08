@@ -19,6 +19,7 @@ if __name__ == '__main__':
             entries.append((local, host, path))
 
     with codecs.open('/etc/avahi-linker/wfe-static.cfg', 'w', 'utf-8') as config:
+        config.write(u'[vdr_static_mount]\n')
         for entry in entries:
             local, host, path = entry
             if path[0] == os.path.sep:
