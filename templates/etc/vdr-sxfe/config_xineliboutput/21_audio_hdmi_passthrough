@@ -1,4 +1,7 @@
-<?cs if:system.sound.type == "passthrough" ?>
+<?cs if:system.sound.type == "obsolete" ?>
+# system.sound.type at yavdrdb.hdf is obsolete (was "passthrough")
+# so this template snippet needs serious work
+# for now it will just be ignored...
 
 # Zu benutzender Audiotreiber
 # { auto  null  pulseaudio  alsa  oss  esd  file  none }, default: 0
