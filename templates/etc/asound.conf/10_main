@@ -1,12 +1,23 @@
-<?cs if:(system.sound.alsa.type != "" && system.sound.alsa.card != "") ?>
+<?cs if:(system.sound.output == "pcm") ?>
 pcm.!default {
-	type <?cs var:system.sound.alsa.type ?>
-	card <?cs var:system.sound.alsa.card ?>
-	<?cs if:(system.sound.alsa.device != "") ?>device <?cs var:system.sound.alsa.device ?><?cs /if ?>
+	type <?cs var:system.sound.pcm.type ?>
+	card <?cs var:system.sound.pcm.card ?>
+	<?cs if:(system.sound.pcm.device != "") ?>device <?cs var:system.sound.pcm.device ?><?cs /if ?>
 }
 
 ctl.!default {
-	type <?cs var:system.sound.alsa.type ?>
-	card <?cs var:system.sound.alsa.card ?>
+	type <?cs var:system.sound.pcm.type ?>
+	card <?cs var:system.sound.pcm.card ?>
+}
+<?cs elif:(system.sound.output == "passthrough") ?>
+pcm.!default {
+	type <?cs var:system.sound.passthrough.type ?>
+	card <?cs var:system.sound.passthrough.card ?>
+	<?cs if:(system.sound.passthrough.device != "") ?>device <?cs var:system.sound.passthrough.device ?><?cs /if ?>
+}
+
+ctl.!default {
+	type <?cs var:system.sound.passthrough.type ?>
+	card <?cs var:system.sound.passthrough.card ?>
 }
 <?cs /if ?>

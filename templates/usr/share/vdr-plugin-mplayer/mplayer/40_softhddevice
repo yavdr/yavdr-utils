@@ -1,7 +1,9 @@
 <?cs if:(vdr.backend == "softhddevice") ?>
 export DISPLAY=:1
 
-CMDLINE="/usr/bin/mplayer -osdlevel 1 -vo vdpau -vc ffh264vdpau,ffmpeg12vdpau,ffvc1vdpau,ffwmv3vdpau,ffodivx, -fs -monitoraspect 16:9 -ao alsa:device=<?cs var:system.sound.alsa.type ?>=<?cs var:system.sound.alsa.card ?>.<?cs var:system.sound.alsa.device ?> -cache 8192 -slave -nolirc  -ontop yes -v -noconfig all -idx"
+<?cs def:get_card() ?><?cs if:(system.sound.output == "pcm") ?><?cs var:system.sound.pcm.type ?>=<?cs var:system.sound.pcm.card ?>.<?cs var:system.sound.pcm.device ?><?cs elif:(system.sound.output == "passthrough") ?><?cs var:system.sound.passthrough.type ?>=<?cs var:system.sound.passthrough.card ?>.<?cs var:system.sound.passthrough.device ?><?cs /if ?><?cs /def ?>
+
+CMDLINE="/usr/bin/mplayer -osdlevel 1 -vo vdpau -vc ffh264vdpau,ffmpeg12vdpau,ffvc1vdpau,ffwmv3vdpau,ffodivx, -fs -monitoraspect 16:9 -ao alsa:device=<?cs call:get_card() ?> -cache 8192 -slave -nolirc  -ontop yes -v -noconfig all -idx"
 AUDIOSET="/usr/bin/iecset audio 1"
 FILE="$1"
 $AUDIOSET

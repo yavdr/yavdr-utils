@@ -2,8 +2,10 @@ start on (starting vdr-frontend or starting xbmc)
 task
 
 script
-<?cs if:system.sound.alsa.card != "" ?>
-  exec wait-for-sound-device -n<?cs var:system.sound.alsa.card ?>
+<?cs if:system.sound.output != "pcm" ?>
+  exec wait-for-sound-device -n<?cs var:system.sound.pcm.card ?>
+<?cs elif:system.sound.output != "passthrough" ?>
+  exec wait-for-sound-device -n<?cs var:system.sound.passthrough.card ?>
 <?cs elif:system.sound.type == "all" ?>
   exec wait-for-sound-device <?cs each:item = system.hardware.alsa ?>-c<?cs var:item.card ?> <?cs /each ?>
 <?cs elif:system.sound.type == "passthrough" ?>

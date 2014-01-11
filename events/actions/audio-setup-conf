@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "x$(dbget system.sound.output)" = "xpcm" ] ; then
+vdr-dbus-send /Setup setup.Set string:'xineliboutput.Audio.Speakers' variant:string:'Stereo 2.0' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioPassthrough' variant:string:'0' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioDownmix' variant:string:'1' &> /dev/null
+elif [ "x$(dbget system.sound.output)" = "xpassthrough" ] ; then
+vdr-dbus-send /Setup setup.Set string:'xineliboutput.Audio.Speakers' variant:string:'Pass Through' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioPassthrough' variant:string:'1' &> /dev/null
+vdr-dbus-send /Setup setup.Set string:'softhddevice.AudioDownmix' variant:string:'0' &> /dev/null
+fi
+
