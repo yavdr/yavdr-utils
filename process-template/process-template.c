@@ -123,7 +123,7 @@ int process_template(HDF *hdf, char *infile, char *outfile)
 
 int scandirfilter(const struct dirent *entry)
 {
-  return entry->d_name[0] - '.' && entry->d_name[strlen(entry->d_name) - 1] != '~;';
+  return entry->d_name[0] - '.' && entry->d_name[strlen(entry->d_name) - 1] != '~';
 }
 
 int write_segment(int templatefd, char *segmentname) 
