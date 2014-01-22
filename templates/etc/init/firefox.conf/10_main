@@ -1,10 +1,13 @@
 description     "Firefox Daemon"
 author          "Steffen Barszus <steffenbpunkt@gmail.com>"
 
+env URL=""
+export URL
+
 script
 export PATH=/usr/local/bin:/usr/bin:/bin
 export HOME=/home/<?cs var:user ?>
-exec su -c "/usr/bin/firefox" <?cs var:user ?>
+exec su -c "/usr/bin/firefox $URL" <?cs var:user ?>
 end script
 
 pre-start script
