@@ -2,8 +2,8 @@
 end script
 
 nice -10
-setuid vdr
-setgid vdr
+#setuid vdr
+#setgid vdr
 
 
 #env XINE_BUFFER_LOG=1
