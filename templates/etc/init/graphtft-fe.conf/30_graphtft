@@ -8,7 +8,7 @@ start wait-for-job-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=ru
 TFT_SIZE=`xrandr -q -d $DISPLAY | grep " connected"|cut -d ' ' -f 3`
 TFT_WIDTH=`echo $TFT_SIZE | cut -d 'x' -f1`
 TFT_HEIGHT=`echo $TFT_SIZE | cut -d 'x' -f2 | cut -d '+' -f1`
-MORE_OPTIONS="-c 10 -n -r"
+MORE_OPTIONS="-c 10 -r"
 
 # override default settings
 test -f /etc/default/graphtft-fe && . /etc/default/graphtft-fe
