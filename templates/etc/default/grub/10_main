@@ -33,6 +33,8 @@ GRUB_CMDLINE_LINUX=""
 # note that you can use only modes which your graphic card supports via VBE
 # you can see them in real GRUB with the command `vbeinfo'
 #GRUB_GFXMODE=640x480
+GRUB_GFXMODE=1024x768,auto
+GRUB_GFXPAYLOAD_LINUX=keep
 
 # Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
 #GRUB_DISABLE_LINUX_UUID=true
