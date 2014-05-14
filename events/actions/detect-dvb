@@ -88,8 +88,8 @@ if  check_pci "18c3:abc3" \
  || check_pci "dd01:0020" \
  || check_pci "dd01:0021" \
  || check_pci "dd01:0030" \
- || check_pci "dd01:0040" \
  || check_pci "dd01:0032" \
+ || check_pci "dd01:0040" \
  || check_pci "dd01:db03" ; then
   SOURCE="S2/C/T"
   DRIVER="media-build-experimental-dkms"
