@@ -1,20 +1,20 @@
 #!/bin/bash
 
 cat <<EOF >/etc/apt/sources.list.d/yavdr.list
-deb http://ppa.launchpad.net/yavdr/unstable-main/ubuntu precise main
-deb http://ppa.launchpad.net/yavdr/unstable-vdr/ubuntu precise main
-deb http://ppa.launchpad.net/yavdr/unstable-xbmc/ubuntu precise main
-deb http://ppa.launchpad.net/yavdr/unstable-yavdr/ubuntu precise main
+deb http://ppa.launchpad.net/yavdr/unstable-main/ubuntu trusty main
+deb http://ppa.launchpad.net/yavdr/unstable-vdr/ubuntu trusty main
+deb http://ppa.launchpad.net/yavdr/unstable-xbmc/ubuntu trusty main
+deb http://ppa.launchpad.net/yavdr/unstable-yavdr/ubuntu trusty main
 
-deb-src http://ppa.launchpad.net/yavdr/unstable-main/ubuntu precise main
-deb-src http://ppa.launchpad.net/yavdr/unstable-vdr/ubuntu precise main
-deb-src http://ppa.launchpad.net/yavdr/unstable-xbmc/ubuntu precise main
-deb-src http://ppa.launchpad.net/yavdr/unstable-yavdr/ubuntu precise main
+deb-src http://ppa.launchpad.net/yavdr/unstable-main/ubuntu trusty main
+deb-src http://ppa.launchpad.net/yavdr/unstable-vdr/ubuntu trusty main
+deb-src http://ppa.launchpad.net/yavdr/unstable-xbmc/ubuntu trusty main
+deb-src http://ppa.launchpad.net/yavdr/unstable-yavdr/ubuntu trusty main
 EOF
 
 cat <<EOF >/etc/apt/sources.list.d/ubuntu-partner.list
-deb http://archive.canonical.com/ubuntu precise partner
-deb-src http://archive.canonical.com/ubuntu precise partner
+deb http://archive.canonical.com/ubuntu trusty partner
+deb-src http://archive.canonical.com/ubuntu trusty partner
 EOF
 
 cat <<EOF | apt-key add -
