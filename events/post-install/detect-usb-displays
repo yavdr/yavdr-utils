@@ -1,0 +1,26 @@
+#!/bin/bash
+
+############################################################################################################
+# hardware detection for yavdr
+# author: Alexander Grothe <seahawk1986@hotmail.com>
+############################################################################################################
+
+# detect helper
+check_usb() {
+  lsusb | grep -i -q "$1"
+}
+
+check_module() {
+  lsmod | grep -q "$1"
+}
+############################################################################################################
+
+# detect: Futuba MDM166A Fluorescent Display
+if check_usb "19c2:6a11"; then
+  apt-get install -y vdr-plugin-targavfd
+fi
+
+# detect: iMON LCDs
+if check_usb "15c2:0038" || check_usb "15c2:ffdc"; then
+  apt-get install -y vdr-plugin-imonlcd
+fi
