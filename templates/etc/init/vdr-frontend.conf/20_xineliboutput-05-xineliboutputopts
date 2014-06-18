@@ -1,4 +1,4 @@
-XINELIBOUTPUTOPTS="--post tvtime:method=use_vo_driver --reconnect --audio=alsa --syslog --silent --tcp"
+XINELIBOUTPUTOPTS="--post tvtime:method=use_vo_driver --reconnect --audio=alsa --syslog --silent --tcp --nocec"
 if [ $(imvirt) = "VirtualBox" ]; then
 XINELIBOUTPUTOPTS="-V xshm $XINELIBOUTPUTOPTS"
 fi
