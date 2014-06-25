@@ -17,7 +17,6 @@ vdr-plugin-cdplayer
 vdr-plugin-chanorg
 vdr-plugin-cinebars
 vdr-plugin-clock
-vdr-plugin-dbus2vdr
 vdr-plugin-devstatus
 vdr-plugin-director
 vdr-plugin-dvbsddevice
