@@ -1,18 +1,14 @@
 libxine-atmo-plugin
-vdr-plugin-alcd
 vdr-plugin-androvdr
-vdr-plugin-arghdirector
 vdr-plugin-atmo
 vdr-plugin-atscepg
 vdr-plugin-autosort
 vdr-plugin-autostart
 vdr-plugin-avards
-vdr-plugin-bewegung
 vdr-plugin-bgprocess
 vdr-plugin-block
 vdr-plugin-burn
 vdr-plugin-calc
-vdr-plugin-cdda
 vdr-plugin-cdplayer
 vdr-plugin-chanorg
 vdr-plugin-cinebars
@@ -25,6 +21,7 @@ vdr-plugin-dvd
 vdr-plugin-dvdswitch
 vdr-plugin-dynamite
 vdr-plugin-eepg
+vdr-plugin-epg2vdr
 vdr-plugin-epgsync
 vdr-plugin-epgfixer
 vdr-plugin-examples
@@ -35,6 +32,7 @@ vdr-plugin-fepg
 vdr-plugin-filebrowser
 vdr-plugin-freecell
 vdr-plugin-fritzbox
+vdr-plugin-gamepad
 vdr-plugin-games
 vdr-plugin-graphlcd
 vdr-plugin-graphtftng
@@ -53,7 +51,6 @@ vdr-plugin-music
 vdr-plugin-newsticker
 vdr-plugin-noepg
 vdr-plugin-nordlichtsepg
-vdr-plugin-osdpip
 vdr-plugin-osdserver
 vdr-plugin-osdteletext
 vdr-plugin-osdtest256
@@ -75,13 +72,14 @@ vdr-plugin-reelchannelscan
 vdr-plugin-remote
 vdr-plugin-remoteosd
 vdr-plugin-remotetimers
-vdr-plugin-rotorng
 vdr-plugin-rssreader
 vdr-plugin-scheduler
+vdr-plugin-scraper2vdr
 vdr-plugin-serial
 vdr-plugin-skinelchi
 vdr-plugin-skinenigmang
 vdr-plugin-skinflat
+vdr-plugin-skinflatplus
 vdr-plugin-skinnopacity
 vdr-plugin-skinsoppalusikka
 vdr-plugin-sleeptimer
@@ -113,6 +111,7 @@ vdr-plugin-vdrrip
 vdr-plugin-vnsiserver
 vdr-plugin-vompserver
 vdr-plugin-webvideo
+vdr-plugin-xvdr
 vdr-plugin-zappilot
 vdr-plugin-zaphistory
 vdr-plugin-yaepghd
