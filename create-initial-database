@@ -1,6 +1,10 @@
 #!/bin/bash
 
 touch /var/lib/yavdrdb.hdf
+if [[ "$(imvirt)" != "Physical" ]]; then 
+  sed -i 's/softhddevice/xineliboutput/' /usr/share/yavdr/defaults/vdr-setup.hdf
+fi
+
 for i in /usr/share/yavdr/defaults/*.hdf; do
   while read LINE ; do 
 	dbset "$LINE"
