@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [[ "$(imvirt)" == "VirtualBox" ]]; then
+  apt-get install -y virtualbox-guest-x11 dkms
+fi
