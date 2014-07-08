@@ -29,7 +29,7 @@ else
 fi
 
 if [[ "$(imvirt)" == "VirtualBox" ]]; then
-  ./etc/X11/Xsession.d/98vboxadd-xclient
+  bash /etc/X11/Xsession.d/98vboxadd-xclient
 fi
 
 end script
