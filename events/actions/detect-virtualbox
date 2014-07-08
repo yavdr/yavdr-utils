@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$(imvirt)" == "VirtualBox" ]]; then
-  apt-get install -y virtualbox-guest-x11 dkms
+  apt-get install -y virtualbox-guest-dkms virtualbox-guest-x11 dkms
   dbset vdr.setup=sxfe
   dbset vdr.frontend=sxfe
   dbset vdr.backend=xineliboutput
