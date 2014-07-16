@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# autoinstall recommended drivers
+ubuntu-drivers autoinstall
