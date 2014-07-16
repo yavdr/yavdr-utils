@@ -1,15 +1,6 @@
 #!/bin/bash
 
 touch /var/lib/yavdrdb.hdf
-if [[ "$(imvirt)" != "Physical" ]]; then 
-  (
-  cat <<EOF
-setup = sxfe
-frontend = sxfe
-backend = xineliboutput
-EOF
-  ) > /usr/share/yavdr/defaults/vdr-setup.hdf
-fi
 
 for i in /usr/share/yavdr/defaults/*.hdf; do
   while read LINE ; do 
