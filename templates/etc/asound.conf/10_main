@@ -1,3 +1,15 @@
+<?cs if:(system.sound.alsacard != "" && system.sound.alsadevice != "") ?>
+pcm.!default {
+	type hw
+	card <?cs var:system.sound.alsacard ?>
+	device <?cs var:system.sound.alsadevice ?>
+}
+
+ctl.!default {
+	type hw
+	card <?cs var:system.sound.alsacard ?>
+}
+<?cs else ?>
 <?cs if:(system.sound.type != "analog" || system.sound.type != "") ?>
 <?cs if:(system.sound.type == "hdmi" || system.sound.type == "passthrough") ?> pcm.!default {
 	type hw
@@ -92,5 +104,6 @@ pcm.pulse {
 ctl.pulse {
    type pulse
 }
+<?cs /if ?>
 <?cs /if ?>
 <?cs /if ?>

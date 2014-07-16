@@ -1,4 +1,10 @@
 #!/bin/bash
 
+alsa=`dbget system.sound.alsa`
+card=`expr match "$alsa" '.*\:CARD\=\(.*\),.*'`
+dev=`expr match "$alsa" '.*,DEV\=\(.*\)'`
+dbset system.sound.alsacard=$card
+dbset system.sound.alsadevice=$dev
+
 process-template /etc/asound.conf 
 
