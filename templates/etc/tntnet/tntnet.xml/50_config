@@ -1,0 +1,6 @@
+  <daemon>0</daemon>
+  <user>root</user>
+  <group>root</group>
+  <pidfile>/var/run/tntnet.pid</pidfile>
+  <!--<mimeDb>/etc/tntnet/mime.conf</mimeDb> -->
+  <!--<documentRoot>/var/www</documentRoot>-->

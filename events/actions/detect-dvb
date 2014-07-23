@@ -7,15 +7,15 @@
 
 # detect helper
 check_pci() {
-  lspci -nv | grep -q "Subsystem: $1"
+  lspci -nv | grep -i -q "Subsystem: $1"
 }
 
 check_pci2() {
-  lspci -n | awk '{ print $3 }' | grep -q "$1"
+  lspci -n | awk '{ print $3 }' | grep -i -q "$1"
 }
 
 check_usb() {
-  lsusb | grep -q "$1"
+  lsusb | grep -i -q "$1"
 }
 
 check_module() {
@@ -70,11 +70,36 @@ if check_pci "1ADE:2032"; then
   DRIVER="linux-media-dkms"
 fi
 
-# Digital Devices
-if check_pci "dd01:0011" || check_pci "dd01:0002" ; then
+# Digital Devices, Satix
+if  check_pci "18c3:abc3" \
+ || check_pci "18c3:abc4" \
+ || check_pci "18c3:ab04" \
+ || check_pci "18c3:dd00" \
+ || check_pci "18c3:ab05" \
+ || check_pci "18c3:dd10" \
+ || check_pci "18c3:dd20" \
+ || check_pci "18c3:db01" \
+ || check_pci "18c3:db02" \
+ || check_pci "dd01:0001" \
+ || check_pci "dd01:0002" \
+ || check_pci "dd01:0004" \
+ || check_pci "dd01:0010" \
+ || check_pci "dd01:0011" \
+ || check_pci "dd01:0020" \
+ || check_pci "dd01:0021" \
+ || check_pci "dd01:0030" \
+ || check_pci "dd01:0040" \
+ || check_pci "dd01:db03" ; then
   SOURCE="S2/C/T"
-  DRIVER="linux-media-dkms"
+  DRIVER="media-build-experimental-dkms"
 fi
+
+# detect: Hauppauge 930c
+if  check_usb "2040:1605" ; then
+  SOURCE="C"
+  DRIVER="media-build-experimental-dkms"
+fi
+
 
 # install driver
 if [ -n "$DRIVER" ]; then
@@ -84,11 +109,6 @@ fi
 # detect: Sundtek Sticks
 if check_usb "eb1a:5"; then
   apt-get install -y yavdr-hardware-sundtek
-fi
-
-# detect: Hauppauge 930c
-if check_usb "2040:1605"; then
-  apt-get install -y linux-media-dkms
 fi
 
 
