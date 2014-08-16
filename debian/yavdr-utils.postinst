@@ -16,6 +16,7 @@ case "$1" in
         if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
             . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
         fi
+        rm -f /etc/update-motd.d/91-release-upgrade
         ;;
     triggered)
         SIGNAL_EVENT_NOTRIGGER="y"
