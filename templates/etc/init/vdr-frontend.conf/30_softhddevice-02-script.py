@@ -262,7 +262,7 @@ class Settings():
 
         if typeev == 1 and code == 115: # code 115 = KEY_VOLUMEUP
            remote.sendkey("Volume+") 
-	if typeev == 1 and code == 114: # code 115 = KEY_VOLUMEDOWN
+        if typeev == 1 and code == 114: # code 115 = KEY_VOLUMEDOWN
            remote.sendkey("Volume-")
         if typeev == 1 and code == 113 and value == 1: # code 115 = KEY_MUTE
            remote.sendkey("Mute")
