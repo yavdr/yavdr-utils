@@ -16,7 +16,7 @@ export key_power
 env graphtftng_view=NonLiveTv
 export graphtftng_view
 # Start frontend always detached:
-# possible values: 0 (attach frontend at manual start) and 1 (always start detached)
+# possible values: 0 (attach frontend at manual start), 1 (always start detached) or 2 (always attach frontend - CAUTION: after attaching VDR thinks user is active)
 env start_always_detached=0
 export start_always_detached
 <?cs /if ?>
