@@ -1,0 +1,1 @@
+name=restfulapi on %h,type=_http._tcp,port=8002,subtype=_vdr_restfulapi._sub._http._tcp

@@ -1,0 +1,1 @@
+name=vdr-live on %h,type=_https._tcp,port=8443,subtype=_vdr_live._sub._https._tcp

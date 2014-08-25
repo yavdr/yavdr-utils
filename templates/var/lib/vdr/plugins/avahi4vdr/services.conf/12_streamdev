@@ -1,0 +1,1 @@
+name=streamdev-server on %h,type=_http._tcp,port=3000,subtype=_vdr_streamdevserver._sub._http._tcp
