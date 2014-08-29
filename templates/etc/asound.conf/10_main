@@ -97,11 +97,11 @@ pcm.receiver {
 
 <?cs /if ?>
 
-<?cs if:system.sound.type == "pulseaudio" ?>
-pcm.pulse {
+<?cs if:system.sound.type == "pulse" ?>
+pcm.!default {
    type pulse
 }
-ctl.pulse {
+ctl.!default {
    type pulse
 }
 <?cs /if ?>

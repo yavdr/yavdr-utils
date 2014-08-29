@@ -7,4 +7,5 @@ dbset system.sound.alsacard=$card
 dbset system.sound.alsadevice=$dev
 
 process-template /etc/asound.conf 
+process-template /etc/init/pulseaudio.override
 
