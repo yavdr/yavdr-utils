@@ -1,0 +1,4 @@
+description     "pavucontrol"
+author          "Lars Hanisch <dvb@flensrocker.de>"
+
+exec su -c "DISPLAY=:1 /usr/bin/pavucontrol" vdr
