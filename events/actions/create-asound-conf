@@ -8,4 +8,5 @@ dbset system.sound.alsadevice=$dev
 
 process-template /etc/asound.conf 
 process-template /etc/init/pulseaudio.override
+process-template /etc/init/pavucontrol.conf
 
