@@ -14,10 +14,6 @@ env XORGCONFIG=/etc/X11/xorg.conf.yavdr
 env xorg_driver
 
 script
-# D-bus
-if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-       eval `dbus-launch --sh-syntax --exit-with-session`
-fi
 
 if [ -e /etc/default/locale ]; then
 . /etc/default/locale
