@@ -22,5 +22,8 @@ fi
 exec /usr/bin/xorg-launch-helper -nolisten tcp -noreset :1 vt7
 end script
 
+post-stop script
+  sleep 1
+end script
 <?cs /if ?>
 
