@@ -1,5 +1,5 @@
 <?cs if:(system.x11.dualhead.enabled == "1") ?>
-start on openbox-started
+start on started xorg-launcher
 <?cs /if ?>
 
 env DISPLAY=:1.1
