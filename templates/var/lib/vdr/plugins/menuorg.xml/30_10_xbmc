@@ -1,1 +1,1 @@
-        <command name="XBMC" execute="/usr/share/vdr/menuorg-appswitcher standalone=yes app=xbmc &amp;> /dev/null " />
+        <command name="Kodi" execute="/usr/share/vdr/menuorg-appswitcher standalone=yes app=kodi &amp;> /dev/null " />

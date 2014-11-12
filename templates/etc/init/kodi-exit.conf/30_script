@@ -1,9 +1,9 @@
 script
 # log the status with which we left xbmc
-logger -t "XBMC" "XBMC exit with exit status $EXIT_STATUS, $EXIT_SIGNAL, ENV: $(env) ."
+logger -t "Kodi" "Kodi exit with exit status $EXIT_STATUS, $EXIT_SIGNAL, ENV: $(env) ."
 # kill xbmc.bin ghost process
-if pidof xbmc.bin &> /dev/null ; then
-	killall -9 xbmc.bin ||:
+if pidof kodi.bin &> /dev/null ; then
+	killall -9 kodi.bin ||:
 fi
 # in case we want to shutdown do it, else make sure default rate is set in all cases
 case $EXIT_STATUS in
@@ -14,10 +14,10 @@ case $EXIT_STATUS in
         echo 0 > /tmp/xbmc-active
         case "$(vdr-dbus-send /Shutdown shutdown.ConfirmShutdown boolean:true | grep -m 1 int32 | egrep -e "[[:digit:]]{3}" -o)" in 
             990|250)
-                logger -t "xbmc-exit.conf" "VDR ready to shutdown, sending POWER signal to VDR"
+                logger -t "kodi-exit.conf" "VDR ready to shutdown, sending POWER signal to VDR"
                 vdr-dbus-send /Remote remote.HitKey string:'Power' || /bin/true
                 ;; 
-            *)  logger -t "xbmc-exit.conf" "can't shutdown, restarting XBMC"
+            *)  logger -t "kodi-exit.conf" "can't shutdown, restarting XBMC"
                 signal-event reset-display-rate
                 /sbin/initctl emit --no-wait vdr-frontend-restart
                 ;; 

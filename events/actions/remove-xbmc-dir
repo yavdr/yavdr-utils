@@ -1,4 +1,3 @@
 #!/bin/bash
 
-
-rm -fr /var/lib/vdr/.xbmc
+rm -fr /var/lib/vdr/.kodi

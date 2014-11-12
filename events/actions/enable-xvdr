@@ -6,10 +6,10 @@ fi
 
 export LANG
 
-mkdir -p /var/lib/vdr/.xbmc/userdata/Database/
-mkdir -p /var/lib/vdr/.xbmc/userdata/keymaps
+mkdir -p /var/lib/vdr/.kodi/userdata/Database/
+mkdir -p /var/lib/vdr/.kodi/userdata/keymaps
 
-#sqlite3  /var/lib/vdr/.xbmc/userdata/Database/TV20.db<<EOF
+#sqlite3  /var/lib/vdr/.kodi/userdata/Database/TV20.db<<EOF
 #PRAGMA foreign_keys=OFF;
 #BEGIN TRANSACTION;
 #CREATE TABLE version (idVersion integer, iCompressCount integer);
@@ -34,7 +34,7 @@ mkdir -p /var/lib/vdr/.xbmc/userdata/keymaps
 #COMMIT;
 #EOF
 
-#sqlite3  /var/lib/vdr/.xbmc/userdata/Database/Addons15.db<<EOF
+#sqlite3  /var/lib/vdr/.kodi/userdata/Database/Addons15.db<<EOF
 #PRAGMA foreign_keys=OFF;
 #BEGIN TRANSACTION;
 #CREATE TABLE version (idVersion integer, iCompressCount integer);
@@ -69,10 +69,10 @@ mkdir -p /var/lib/vdr/.xbmc/userdata/keymaps
 #EOF
 
 
-chown -R vdr:vdr /var/lib/vdr/.xbmc
+chown -R vdr:vdr /var/lib/vdr/.kodi
 
-process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/sources.xml
-process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/Lircmap.xml
-process-template --owner=vdr --group=vdr /var/lib/vdr/.xbmc/userdata/guisettings.xml
-process-template --owner vdr --group vdr /var/lib/vdr/.xbmc/userdata/keymaps/remote.xml
+#process-template --owner=vdr --group=vdr /var/lib/vdr/.kodi/userdata/sources.xml
+process-template --owner=vdr --group=vdr /var/lib/vdr/.kodi/userdata/Lircmap.xml
+#process-template --owner=vdr --group=vdr /var/lib/vdr/.kodi/userdata/guisettings.xml
+process-template --owner vdr --group vdr /var/lib/vdr/.kodi/userdata/keymaps/remote.xml
 
