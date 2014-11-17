@@ -3,6 +3,5 @@
 SERVICES="nodm lirc dkms_autoinstaller inputlirc halevt tntnet acpi-support"
 
 for S in $SERVICES; do
-  /usr/sbin/update-rc.d -f $S remove 2>/dev/null >/dev/null
-  rm -f /etc/init.d/$S 2>/dev/null
+  /usr/sbin/update-rc.d $S disable 2>/dev/null >/dev/null
 done
