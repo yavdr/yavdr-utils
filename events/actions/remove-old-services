@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVICES="nodm lirc dkms_autoinstaller inputlirc halevt tntnet acpi-support"
+SERVICES="lirc tntnet"
 
 for S in $SERVICES; do
   /usr/sbin/update-rc.d $S disable 2>/dev/null >/dev/null
