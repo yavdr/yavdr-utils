@@ -12,7 +12,7 @@ find_templates () {
 ) | sort | uniq > /tmp/template-list.$$
 
 if [ -f $TEMPLATELIST ]; then
-  for LINE in $(grep -Fxvf /tmp/template-list.$$ $TEMPLATELIST); do 
+  for LINE in $(grep -Fxvf /tmp/template-list.$$ $TEMPLATELIST); do
     if [ -f $LINE ]; then
       logger -i -s "$0 - remove stale templated file $LINE"
       rm -f $LINE
