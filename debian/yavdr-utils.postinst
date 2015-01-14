@@ -17,6 +17,9 @@ case "$1" in
         if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
             . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
         fi
+
+        /bin/sh /usr/lib/vdr/vdr-groups.sh --add yavdr-utils
+
         ;;
     triggered)
         SIGNAL_EVENT_NOTRIGGER="y"
