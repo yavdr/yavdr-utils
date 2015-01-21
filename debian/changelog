@@ -1,3 +1,16 @@
+yavdr-utils (0.3.1.3-1yavdr0) trusty; urgency=medium
+
+  * add vdr to dependencies because of vdr-groups
+
+ -- Lars Hanisch <dvb@flensrocker.de>  Wed, 14 Jan 2015 20:38:43 +0100
+
+yavdr-utils (0.3.1.3-0yavdr0) trusty; urgency=medium
+
+  * add template and actions for vdr group membership
+    if pulseaudio is activated, vdr is added to group pulse-access
+
+ -- Lars Hanisch <dvb@flensrocker.de>  Wed, 14 Jan 2015 20:09:55 +0100
+
 yavdr-utils (0.3.1.2-0yavdr0) precise; urgency=medium
 
   * add /etc/tntnet/tntnet.xml for tntnet 2.2

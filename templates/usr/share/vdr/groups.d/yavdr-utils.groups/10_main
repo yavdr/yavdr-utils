@@ -1,0 +1,3 @@
+<?cs if:system.sound.type == "pulse" ?>
+pulse-access
+<?cs /if ?>

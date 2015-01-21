@@ -1,4 +1,4 @@
 #!/bin/bash
 
 process-template --mode 755 /etc/acpi/powerbtn.sh
-process-template --node 644 /etc/acpi/events/powerbtn
+process-template --mode 644 /etc/acpi/events/powerbtn
