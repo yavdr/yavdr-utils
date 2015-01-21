@@ -1,0 +1,1 @@
+export DISPLAY=:1<?cs var:vdr.tempdisplay ?>
