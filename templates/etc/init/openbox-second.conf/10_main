@@ -1,5 +1,6 @@
 <?cs if:(system.x11.dualhead.enabled == "1") ?>
 start on started xorg-launcher
+stop on stopping xorg-launcher
 <?cs /if ?>
 
 env DISPLAY=:1.1
