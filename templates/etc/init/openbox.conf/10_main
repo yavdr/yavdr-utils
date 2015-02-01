@@ -3,7 +3,7 @@ start on started xorg-launcher or xorg-started
 stop on stopping xorg-launcher
 
 respawn
-env DISPLAY=:1
+env DISPLAY=:1.0
 
 script
 # D-bus

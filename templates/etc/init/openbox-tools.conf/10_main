@@ -2,7 +2,7 @@ start on openbox-started
 
 task
 
-env DISPLAY=:1
+env DISPLAY=:1.0
 export DISPLAY
 
 script
@@ -14,7 +14,7 @@ script
 <?cs /if ?>
 
 #switch off powersaving 
-xset -dpms s off -display :1 
+xset -dpms s off -display $DISPLAY
 
 #set local for environment
 if [ -e /etc/default/locale ] ; then 

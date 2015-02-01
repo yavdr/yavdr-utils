@@ -7,8 +7,10 @@ env DISPLAY=:1.1
 export DISPLAY
 
 pre-start script
-DISPLAY=:1.1 hsetroot -center /usr/share/yavdr/images/yavdr_logo.png ||:
-xset -dpms s off -display :1.1
+until xset -dpms s off -display $DISPLAY; do
+  sleep 1
+done
+hsetroot -center /usr/share/yavdr/images/yavdr_logo.png ||:
 end script 
 
 exec /usr/bin/openbox --config-file /etc/openbox/rc.xml
