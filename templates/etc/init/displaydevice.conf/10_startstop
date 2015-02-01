@@ -1,2 +1,3 @@
-start on local-filesystems  #mounted MOUNTPOINT=/ reicht nicht
-stop on runlevel [!2345]
+manual
+#start on local-filesystems  #mounted MOUNTPOINT=/ reicht nicht
+#stop on runlevel [!2345]
