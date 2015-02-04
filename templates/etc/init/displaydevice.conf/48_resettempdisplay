@@ -1,2 +1,2 @@
 # reset tempdisplay
-/usr/bin/dbset "vdr.tempdisplay=.0"
+/usr/bin/dbset "vdr.tempdisplay="
