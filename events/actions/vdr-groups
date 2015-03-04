@@ -1,4 +1,6 @@
 #!/bin/bash
 
+/bin/sh /usr/lib/vdr/vdr-groups.sh --remove yavdr-utils
 process-template /usr/share/vdr/groups.d/yavdr-utils.groups
+/bin/sh /usr/lib/vdr/vdr-groups.sh --add yavdr-utils
 
