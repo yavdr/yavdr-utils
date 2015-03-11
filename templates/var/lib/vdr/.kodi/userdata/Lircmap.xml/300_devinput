@@ -24,6 +24,7 @@
 		<nine>KEY_9</nine>
 		<info>KEY_INFO</info>
 		<play>KEY_PLAY</play>
+		<play>KEY_PLAYPAUSE</play>
 		<pause>KEY_PAUSE</pause>
 		<stop>KEY_STOP</stop>
 		<record>KEY_RECORD</record>
