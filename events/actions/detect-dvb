@@ -39,7 +39,7 @@ DRIVER=""
 if check_pci "13c2:300a" || check_pci "13c2:300b"; then
   # ist kein treiber gewählt, so installiere den v4l
   SOURCE="SAT"
-  DRIVER="linux-media-dkms"
+  DRIVER="media-build-experimental-dkms"
   dbset vdr.setup="hdff"
   dbset vdr.frontend="disabled"
   dbset vdr.backend="hdff"
@@ -67,7 +67,7 @@ fi
 # DVBWorld DVB-S2 PCIE2006
 if check_pci "1ADE:2032"; then
   SOURCE="SAT"
-  DRIVER="linux-media-dkms"
+  DRIVER="media-build-experimental-dkms"
 fi
 
 # Digital Devices, Satix
