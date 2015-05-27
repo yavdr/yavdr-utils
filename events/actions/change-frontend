@@ -143,9 +143,4 @@ else
 fi
 
 # disable vdr if needed
-if [ "$(dbget vdr.backend)" = "disabled" ]; then
-  echo "manual" > /etc/init/vdr.override
-else
-  echo "expect stop" > /etc/init/vdr.override
-fi
-
+process-template /etc/init/vdr.override
