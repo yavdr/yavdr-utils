@@ -1,22 +1,12 @@
 #!/bin/bash
-ORDER_CONF=/etc/vdr/plugins/order.conf
-
-append_plugin () {
-  echo $1 >> $ORDER_CONF
-}
 
 enable_plugin () {
-  if grep -q "$1\$" $ORDER_CONF; then
-    sed -i -e "s/.*$1\$/$1/" $ORDER_CONF
-  fi
+		vdrctl enable "$1" 2>&1 >> /tmp/change-frontend
 }
 
 disable_plugin () {
-  if ! grep -q "$1\$" $ORDER_CONF; then
-    append_plugin "-$1"
-  else
-    sed -i -e "s/.*$1\$/-$1/" $ORDER_CONF
-  fi
+		vdrctl disable "$1" 2>&1 >> /tmp/change-frontend
+
 }
 
 if [ "$(dbget vdr.backend)" = "xineliboutput" ]; then
@@ -32,7 +22,7 @@ if [ "$(dbget vdr.backend)" = "xineliboutput" ]; then
   enable_plugin "suspendoutput"
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
 
 elif [ "$(dbget vdr.backend)" = "xine" ]; then
   disable_plugin "dvbhddevice"
@@ -41,13 +31,13 @@ elif [ "$(dbget vdr.backend)" = "xine" ]; then
   disable_plugin "dummydevice"
   enable_plugin "xine"
   disable_plugin "xineliboutput"
-  disable_plugin "softhddevice"  
+  disable_plugin "softhddevice"
   enable_plugin "menuorg"
   enable_plugin "yaepghd"
   enable_plugin "suspendoutput"
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
 
 elif [ "$(dbget vdr.backend)" = "softhddevice" ]; then
   disable_plugin "dvbhddevice"
@@ -63,7 +53,7 @@ elif [ "$(dbget vdr.backend)" = "softhddevice" ]; then
   enable_plugin "suspendoutput"
   enable_plugin "imonlcd"
   enable_plugin "lcdproc"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
 
 elif [ "$(dbget vdr.backend)" = "streaming" ]; then
   disable_plugin "dvbhddevice"
@@ -80,7 +70,7 @@ elif [ "$(dbget vdr.backend)" = "streaming" ]; then
   disable_plugin "menuorg"
   disable_plugin "yaepghd"
   disable_plugin "suspendoutput"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
 
 elif [ "$(dbget vdr.backend)" = "hdff" ] || [ "$(dbget vdr.backend)" = "sdff" ]; then
   if [ "$(dbget vdr.backend)" = "sdff" ]; then
@@ -93,17 +83,15 @@ elif [ "$(dbget vdr.backend)" = "hdff" ] || [ "$(dbget vdr.backend)" = "sdff" ];
   disable_plugin "dummydevice"
   disable_plugin "xine"
   disable_plugin "xineliboutput"
-  disable_plugin "softhddevice"  
+  disable_plugin "softhddevice"
   enable_plugin "lcdproc"
   enable_plugin "imonlcd"
   #enable_plugin "iptv"
-#  enable_plugin "text2skin"
   enable_plugin "menuorg"
   enable_plugin "yaepghd"
-#  enable_plugin "extrecmenu"
   enable_plugin "suspendoutput"
   disable_plugin "pvr350"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
 
 elif [ "$(dbget vdr.backend)" = "pvr350" ]; then
 
@@ -118,14 +106,13 @@ fi
   disable_plugin "dummydevice"
   disable_plugin "xine"
   disable_plugin "xineliboutput"
-  disable_plugin "softhddevice"  
+  disable_plugin "softhddevice"
   #enable_plugin "iptv"
-  enable_plugin "\*dynamite"
+  enable_plugin "dynamite"
   enable_plugin "lcdproc"
   enable_plugin "imonlcd"
   enable_plugin "menuorg"
   enable_plugin "yaepghd"
-#  enable_plugin "extrecmenu"
   enable_plugin "pvr350"
 
 fi
