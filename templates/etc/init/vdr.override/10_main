@@ -1,0 +1,3 @@
+<?cs (if:vdr.backend == "disabled") ?>manual<?cs else ?>expect stop<?cs /if ?>
+
+
