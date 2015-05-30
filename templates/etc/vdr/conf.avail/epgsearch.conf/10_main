@@ -1,0 +1,3 @@
+[epgsearch]
+# make epgsearch use the external svdrpsend, this seem to be more stable
+-f /usr/bin/svdrpsend
