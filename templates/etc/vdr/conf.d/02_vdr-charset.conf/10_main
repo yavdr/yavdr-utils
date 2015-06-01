@@ -1,0 +1,4 @@
+<?cs if:(vdr.epg.charset_override && vdr.epg.charset_override !="") ?>
+[vdr]
+--chartab=<?cs var:vdr.epg.charset_override ?>
+<?cs /if ?>
