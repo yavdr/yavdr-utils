@@ -1,0 +1,3 @@
+<?cs if:(vdr.frontend == "xbmc") ?>
+--lirc
+<?cs /if ?>
