@@ -1,2 +1,3 @@
 [softhddevice]
--D <?cs var:mixer ?>
+-D
+<?cs var:mixer ?>
