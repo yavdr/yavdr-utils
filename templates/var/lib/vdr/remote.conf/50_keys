@@ -93,3 +93,6 @@ XKeySym.Channel+   Prior
 XKeySym.Channel-   Next
 XKeySym.Channel+   KP_Prior
 XKeySym.Channel-   KP_Next
+XKeySym.Volume+    XF86AudioRaiseVolume
+XKeySym.Volume-    XF86AudioLowerVolume
+XKeySym.Mute       XF86AudioMute
