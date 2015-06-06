@@ -97,6 +97,6 @@ XKeySym.Volume+    XF86AudioRaiseVolume
 XKeySym.Volume-    XF86AudioLowerVolume
 XKeySym.Mute       XF86AudioMute
 XKeySym.Stop       XF86AudioStop
-XKeySym.PlayPause  XF86AudioPlay
+XKeySym.Play/Pause  XF86AudioPlay
 XKeySym.Prev       XF86AudioPrev
 XKeySym.Next       XF86AudioNext
