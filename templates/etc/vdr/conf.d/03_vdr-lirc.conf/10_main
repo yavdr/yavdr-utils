@@ -1,4 +1,4 @@
-<?cs if:(vdr.frontend == "xbmc") ?>
+<?cs if:(vdr.frontend != "xbmc") ?>
 [vdr]
 --lirc
 <?cs /if ?>
