@@ -1,17 +1,11 @@
 #!/bin/bash
 
 enable_plugin () {
-  if grep -q "$1\$" $ORDER_CONF; then
-    sed -i -e "s/.*$1\$/$1/" $ORDER_CONF
-  fi
+		vdrctl enable "$1" 2>&1 >> /tmp/change-remoted
 }
 
 disable_plugin () {
-  if ! grep -q "$1\$" $ORDER_CONF; then
-    append_plugin "-$1"
-  else
-    sed -i -e "s/.*$1\$/-$1/" $ORDER_CONF
-  fi
+		vdrctl disable "$1" 2>&1 >> /tmp/change-remoted
 }
 
 REMOTE=`dbget system.remoted`
