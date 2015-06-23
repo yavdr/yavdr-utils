@@ -5,15 +5,15 @@ ORDER_CONF=/etc/vdr/plugins/order.conf
 PLUGIN=`echo $3 | cut -f3- -d- -`
 
 append_plugin () {
-  echo $1 >> $ORDER_CONF
+  #echo $1 >> $ORDER_CONF
 }
 
 enable_plugin () {
-		vdrctl enable "$1" 2>&1 >> /tmp/change-frontend
+		vdrctl enable "$1" 2>&1 >> /tmp/change-order-conf
 }
 
 disable_plugin () {
-		vdrctl disable "$1" 2>&1 >> /tmp/change-frontend
+		vdrctl disable "$1" 2>&1 >> /tmp/change-order-conf
 
 }
 
