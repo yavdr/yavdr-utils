@@ -7,7 +7,8 @@ tar czf /var/lib/vdr/yavdr-backup/yavdr-utils.tar.gz \
 /var/lib/vdr/setup.conf \
 /etc/vdr/plugins/externalplayer.conf \
 /etc/X11/xorg.conf.yavdr \
-/etc/vdr/plugins/order.conf \
+/etc/vdr/conf.avail/* \
+/etc/vdr/conf.d/* \
 /var/lib/vdr/channels.conf \
 /etc/lirc/hardware.conf \
 /etc/lirc/lircd.conf \
