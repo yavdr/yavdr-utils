@@ -18,6 +18,6 @@ end script
 post-stop script
 /bin/rm -f /tmp/.standalone 
 vdr-dbus-send /Remote remote.Enable ||:
-/sbin/initctl emit --no-wait vdr-frontend-restart
+sudo /sbin/initctl emit --no-wait vdr-frontend-restart
 end script
 <?cs /if ?>
