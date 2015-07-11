@@ -7,6 +7,9 @@ export DISPLAY
 env HOME=/var/lib/vdr
 export HOME
 
+env GUISETTINGS=/var/lib/vdr/.kodi/userdata/guisettings.xml
+export GUISETTINGS
+
 setuid vdr
 setgid audio
 

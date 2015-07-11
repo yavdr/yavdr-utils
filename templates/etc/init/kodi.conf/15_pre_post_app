@@ -2,7 +2,7 @@ pre-start script
 <?cs if:(vdr.frontend != "xbmc") ?>
 vdr-dbus-send /Remote remote.Disable ||:
 if [ ! -z $STANDALONE ] ; then
-  touch /tmp/.standalone 
+  touch /tmp/.standalone
 fi
 <?cs /if ?>
 <?cs if:(vdr.frontend == "xbmc") ?>
@@ -11,12 +11,13 @@ fi
 #start wait-for-job-state WAIT_FOR=sound-device TARGET_GOAL=start WAIT_STATE=running WAITER=xbmc WAIT_FOREVER=1 ||:
 #start wait-for-job-state WAIT_FOR=openbox-tools TARGET_GOAL=stop WAIT_STATE=waiting WAITER=xbmc WAIT_FOREVER=1 ||:
 <?cs /if ?>
+/usr/bin/set-kodi-display ||:
 while [ ! -e /var/run/lirc/lircd ]; do sleep 1; done
 end script
 
 <?cs if:(vdr.frontend != "xbmc") ?>
 post-stop script
-/bin/rm -f /tmp/.standalone 
+/bin/rm -f /tmp/.standalone
 vdr-dbus-send /Remote remote.Enable ||:
 sudo /sbin/initctl emit --no-wait vdr-frontend-restart
 end script
