@@ -3,6 +3,9 @@
          <command name=<?cs call:quote(_("Switch temporarily to second screen")) ?> execute="sudo /usr/bin/signal-event change-display &amp;> /dev/null &amp;" />
 <?cs /if ?>
          <plugin name="femon" />
+         <plugin name="devstatus" />
+         <plugin name="epg2vdr" />
+         <plugin name="scraper2vdr" />
          <plugin name="sndctl" />
          <plugin name="suspendoutput" />
          <plugin name="recstatus" />
