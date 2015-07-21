@@ -1,0 +1,3 @@
+#!/bin/bash
+! ls /dev/dvb/adapter*  && ! /opt/bin/mediaclient --scan-network  | grep -q DVB \
+&& ! detect_sat2ip && dbget "system.net.other.$FOUND.ip"  && apt-get install vdr-plugin-streamdev-client 
