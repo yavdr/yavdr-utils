@@ -1,1 +1,1 @@
-<?cs if:system.x11.hud == "1" ?>HUDOPTS="--hud"<?cs else ?>HUDOPTS=""<?cs /if ?>
+<?cs if:system.x11.hud == "1" ?>HUDOPTS="--hud=opengl"<?cs else ?>HUDOPTS=""<?cs /if ?>
