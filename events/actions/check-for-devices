@@ -1,4 +1,4 @@
 #!/bin/bash
-[[ ! -e /dev/dvb/adapter* ]]   && ! /opt/bin/mediaclient --scan-network  | grep -q DVB \
+[[ ! -e /dev/dvb/adapter* ]] && ! /opt/bin/mediaclient --scan-network  | grep -q DVB \
 && ! detect_sat2ip && grep "streamdev = 1" /var/lib/yavdrdb.hdf \
 && apt-get install vdr-plugin-streamdev-client
