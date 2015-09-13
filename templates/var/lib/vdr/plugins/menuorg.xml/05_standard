@@ -19,6 +19,7 @@
         <plugin name="webvideo" /> 
         <plugin name="vodcatcher" />
         <plugin name="vcd" />
+        <plugin name="undelete" />
     </menu>
     <menu name=<?cs call:quote(_("Audio")) ?>>
         <plugin name="mp3" />
