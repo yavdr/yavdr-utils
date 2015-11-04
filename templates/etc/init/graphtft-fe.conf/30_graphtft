@@ -5,9 +5,8 @@ start wait-for-job-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITE
 start wait-for-job-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
 
 # get resolution 
-TFT_SIZE=`xrandr -q -d $DISPLAY | grep " connected"|cut -d ' ' -f 3`
-TFT_WIDTH=`echo $TFT_SIZE | cut -d 'x' -f1`
-TFT_HEIGHT=`echo $TFT_SIZE | cut -d 'x' -f2 | cut -d '+' -f1`
+TFT_SIZE=$(xrandr -q -d $DISPLAY | grep " connected " | grep -Po "[[:digit:]]+x[[:digit:]]+")
+read TFT_WIDTH TFT_HEIGHT <<<$(IFS="x"; echo $TFT_SIZE)
 MORE_OPTIONS="-c 10 -r"
 
 # override default settings
