@@ -10,6 +10,7 @@ process-template /etc/asound.conf
 process-template /etc/init/pulseaudio.override
 process-template /etc/init/pavucontrol.conf
 process-template /usr/share/pulseaudio/alsa-mixer/profile-sets/extra-hdmi.conf
+process-template /var/lib/vdr/plugins/menuorg.xml
 if [[ $(dbget system.sound.type) == pulse ]]; then
     start pulseaudio
  else
