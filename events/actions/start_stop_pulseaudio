@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ $(dbget system.sound.type) == pulse ]]; then
+    start pulseaudio
+else
+    stop pulseaudio
+fi
+
