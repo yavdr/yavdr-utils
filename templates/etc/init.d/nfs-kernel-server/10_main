@@ -96,7 +96,7 @@ case "$1" in
 		    log_warning_msg "Not starting: portmapper is not running"
 		    exit 0
 		fi
-		# *** custom script: Enable nfs services for avahi when ready *** #
+		# *** custom script: enable nfs services for avahi when ready *** #
 		for file in /etc/avahi/services/*.disabled; do
 			if grep -q "_nfs._tcp" "$file"; then
 				log_daemon_msg "rename $file to ${file%%.*}.service"
@@ -154,7 +154,7 @@ case "$1" in
 
   stop)
 	log_daemon_msg "Stopping $DESC"
-	# *** custom script: Enable nfs services for avahi when ready *** #
+	# *** custom script: disable nfs services for avahi when stopping nfs *** #
 	for file in /etc/avahi/services/*.service; do
 		if grep -q "_nfs._tcp" "$file"; then
 			log_daemon_msg "rename $file to ${file%%.*}.disabled"
