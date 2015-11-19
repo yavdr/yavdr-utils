@@ -59,7 +59,13 @@ do_mount() {
 # See how we were called.
 case "$1" in
   start)
-	if [ -f /etc/exports ]
+	export_files="/etc/exports"
+	for file in /etc/exports.d/*.exports ; do
+		if [ -f "$file" ]; then
+			export_files="$export_files $file"
+		fi
+	done
+	if [ -f /etc/exports ] && grep -q '^[[:space:]]*[^#]*/' $export_files
 	then
 		do_modprobe nfsd
 
@@ -83,19 +89,25 @@ case "$1" in
 		log_progress_msg "nfsd"
 
 		# See if rpcbind is running
-		/usr/sbin/rpcinfo -p >/dev/null 2>&1
+		$PREFIX/sbin/rpcinfo -p >/dev/null 2>&1
 		RET=$?
 		if [ $RET != 0 ]; then
 		    echo
 		    log_warning_msg "Not starting: portmapper is not running"
 		    exit 0
 		fi
-
+		# *** custom script: Enable nfs services for avahi when ready *** #
+		for file in /etc/avahi/services/*.disabled; do
+			if grep -q "_nfs._tcp" "$file"; then
+				log_daemon_msg "rename $file to ${file%%.*}.service"
+				mv "$file" "${file%%.*}.service"
+			fi
+		done
+		# *** End of custom part *** #
 		start-stop-daemon --start --oknodo --quiet \
 		    --nicelevel $RPCNFSDPRIORITY \
 		    --exec $PREFIX/sbin/rpc.nfsd -- $RPCNFSDOPTS $RPCNFSDCOUNT
 		RET=$?
-               /sbin/initctl emit nfs-server-startup
 		if [ $RET != 0 ]; then
 			log_end_msg $RET
 			exit $RET
@@ -110,9 +122,6 @@ case "$1" in
 			ClearAddr=yes
 		    }
 		fi
-
-		$PREFIX/sbin/rpcinfo -u localhost nfs 3 >/dev/null 2>&1 ||
-		    RPCMOUNTDOPTS="$RPCMOUNTDOPTS --no-nfs-version 3"
 
 		[ -z "$ClearAddr" ] || echo "nfsd 127.0.0.1 1" >/proc/net/rpc/auth.unix.ip/channel
 	
@@ -145,6 +154,14 @@ case "$1" in
 
   stop)
 	log_daemon_msg "Stopping $DESC"
+	# *** custom script: Enable nfs services for avahi when ready *** #
+	for file in /etc/avahi/services/*.service; do
+		if grep -q "_nfs._tcp" "$file"; then
+			log_daemon_msg "rename $file to ${file%%.*}.disabled"
+			mv "$file" "${file%%.*}.disabled"
+		fi
+	done
+	# *** End of custom part *** #
 
 	log_progress_msg "mountd"
 	start-stop-daemon --stop --oknodo --quiet \
@@ -166,8 +183,6 @@ case "$1" in
 		fi
 	fi
 
-        /sbin/initctl emit nfs-server-shutdown
-       sleep 5
 	log_progress_msg "nfsd"
 	start-stop-daemon --stop --oknodo --quiet \
 	    --name nfsd --user 0 --signal 2
