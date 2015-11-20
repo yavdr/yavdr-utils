@@ -1,3 +1,5 @@
-<?cs if:(vdr.backend == "disabled") ?>manual<?cs else ?>#expect stop<?cs /if ?>
+<?cs if:(vdr.backend == "disabled") ?>manual<?cs else ?>post-start script
+    on_vdr -o -e -c "logger -t vdr.conf vdr is ready"
+end script<?cs /if ?>
 
 
