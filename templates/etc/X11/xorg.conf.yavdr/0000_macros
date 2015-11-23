@@ -1,0 +1,1 @@
+<?cs def:fix_display_name(name) ?><?cs if:string.find(name, "TV")>=0 ?><?cs set:display="DFP" + string.slice(name, 2, 4) ?><?cs var:display ?><?cs else ?><?cs var:name ?><?cs /if ?><?cs /def ?>
