@@ -1,6 +1,6 @@
 # defaults entries
-<?cs if:(!?vdr.plugin.lifeguard.disable.aptitude || vdr.plugin.lifeguard.disable.aptitude != 1) ?>cmd     aptitude        <?cs var:_("Aptitude\ is\ still\ running.") ?><?cs /if ?> 
-<?cs if:(!?vdr.plugin.lifeguard.disable.xbmc || vdr.plugin.lifeguard.disable.xbmc != 1) ?>cmd     kodi.bin        <?cs var:_("Kodi\ is\ still\ running.") ?><?cs /if ?>
+<?cs if:(!?vdr.plugin.lifeguard.disable.apt || vdr.plugin.lifeguard.disable.apt != 1) ?>cmd     apt        <?cs var:_("Apt\ is\ still\ running.") ?><?cs /if ?> 
+<?cs if:(!?vdr.plugin.lifeguard.disable.kodi || vdr.plugin.lifeguard.disable.kodi != 1) ?>cmd     kodi.bin        <?cs var:_("Kodi\ is\ still\ running.") ?><?cs /if ?>
 
 <?cs if:(!?vdr.plugin.lifeguard.disable.nfs || vdr.plugin.lifeguard.disable.nfs != 1) ?>tcp     nfs             <?cs var:_("NFS\ Mount\ is\ still\ active") ?><?cs /if ?>
 <?cs if:(!?vdr.plugin.lifeguard.disable.ssh || vdr.plugin.lifeguard.disable.ssh != 1) ?>tcp     ssh             <?cs var:_("SSH\ Connection\ still\ open.") ?><?cs /if ?>

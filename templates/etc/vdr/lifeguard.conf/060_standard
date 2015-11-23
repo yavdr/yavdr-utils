@@ -1,6 +1,7 @@
 <?cs if:(vdr.plugin.lifeguard.enable != "false") ?>
-<?cs each:item = vdr.plugin.lifeguard.enable ?><?cs if:(!?vdr.plugin.lifeguard.disable[item] || vdr.plugin.lifeguard.disable[item] != 1) ?><?cs if:item == "aptitude" ?>cmd     aptitude        <?cs var:_("Aptitude\ is\ still\ running.") ?>
-<?cs /if ?><?cs if:item == "xbmc" ?>cmd     kodi.bin        <?cs var:_("Kodi\ is\ still\ running.") ?>
+<?cs each:item = vdr.plugin.lifeguard.enable ?><?cs if:(!?vdr.plugin.lifeguard.disable[item] || vdr.plugin.lifeguard.disable[item] != 1) ?><?cs if:item == "apt" ?>cmd     apt		<?cs var:_("Apt\ is\ still\ running.") ?>
+cmd     apt-get		<?cs var:_("apt-get\ is\ still\ running.") ?>
+<?cs /if ?><?cs if:item == "kodi" ?>cmd     kodi.bin        <?cs var:_("Kodi\ is\ still\ running.") ?>
 <?cs /if ?><?cs if:item == "nfs" ?>tcp     nfs             <?cs var:_("NFS\ Mount\ is\ still\ active") ?>
 <?cs /if ?><?cs if:item == "ssh" ?>tcp     ssh             <?cs var:_("SSH\ Connection\ still\ open.") ?>
 <?cs /if ?><?cs if:item == "ftp" ?>tcp     ftp             <?cs var:_("FTP\ Connection\ still\ open.") ?>
