@@ -1,0 +1,5 @@
+#!/bin/bash
+if [[ "$(dbget vdr.plugin.graphtft.enabled)" == "1" ]]; then
+  stop graphtft-fe
+  start graphtft-fe
+fi

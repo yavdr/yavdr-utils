@@ -1,5 +1,11 @@
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
 script
+
+# start graphtft-fe on other display if
+if [[ "$(dbget vdr.plugin.graphtft.enabled)" == "1" && "$(dbget vdr.tempdisplay)" == ".1" ]]; then
+  DISPLAY=:1
+  export DISPLAY
+fi
 # wait for vdr and Xorg (after wm started)
 # start wait-for-job-state WAIT_FOR=vdr TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
 # start wait-for-job-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
