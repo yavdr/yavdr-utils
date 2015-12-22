@@ -11,15 +11,21 @@ fi
 # start wait-for-job-state WAIT_FOR=openbox-second TARGET_GOAL=start WAIT_STATE=running WAITER=graphtft-fe WAIT_FOREVER=1 ||:
 
 # get resolution 
-TFT_SIZE=$(xrandr -q -d $DISPLAY | grep " connected " | grep -Po "[[:digit:]]+x[[:digit:]]+")
+TFT_SIZE=$(xrandr -q -d "$DISPLAY" | grep " connected " | grep -Po "[[:digit:]]+x[[:digit:]]+")
 read TFT_WIDTH TFT_HEIGHT <<<$(IFS="x"; echo $TFT_SIZE)
 MORE_OPTIONS="-c 10 -r"
 
 # override default settings
 test -f /etc/default/graphtft-fe && . /etc/default/graphtft-fe
 
-GRAPHTFTFEOPTS="-W $TFT_WIDTH -H $TFT_HEIGHT $MORE_OPTIONS"
-
-exec on_vdr -c "/usr/bin/graphtft-fe $GRAPHTFTFEOPTS -h localhost"
+# write "GRAPHTFT_FE=1" to /etc/default/graphtft-fe
+# and set "-d none" as output device in /etc/vdr/conf.avail/graphtftng.conf
+# if you want to use graphtft-fe instead of the new native x-frontend
+if [[ $GRAPHTFT_FE == 1 ]]; then
+  GRAPHTFTFEOPTS="-W $TFT_WIDTH -H $TFT_HEIGHT $MORE_OPTIONS"
+  exec on_vdr -c "/usr/bin/graphtft-fe $GRAPHTFTFEOPTS -h localhost"
+else
+  exec on_vdr -o -c "vdr-dbus-fast /Plugins/graphtftng plugin.SVDRPCommand string:DISP string:\"${DISPLAY} ${TFT_WIDTH}:${TFT_HEIGHT}\""
+fi
 end script
 <?cs /if ?>
