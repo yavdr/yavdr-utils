@@ -23,6 +23,10 @@ while [ ! -e /var/run/lirc/lircd ]; do sleep 1; done
 end script
 
 <?cs if:(vdr.frontend != "xbmc") ?>
+pre-stop script
+  kodi-send --action="Quit" ||:
+end script
+
 post-stop script
 /bin/rm -f /tmp/.standalone
 vdr-dbus-send /Remote remote.Enable ||:
