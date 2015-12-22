@@ -1,0 +1,1 @@
+<?cs if:system.sound.type == "pulse" ?>        <plugin name="pulsecontrol" /> <?cs /if ?>

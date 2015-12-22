@@ -1,2 +1,3 @@
 [graphtftng]
--d none
+-d xorg:1.1
+-o
