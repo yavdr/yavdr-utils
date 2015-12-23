@@ -13,7 +13,7 @@ fi
 <?cs /if ?>
 if [[ "$DISPLAY" == ":1.1" && "$(dbget vdr.tempdisplay)" == ".1" ]]; then
   DISPLAY=":1"
-elif [[ "$DISPLAY" == ":1" "$(dbget vdr.tempdisplay)" == ".1" ]]; then
+elif [[ "$DISPLAY" == ":1" && "$(dbget vdr.tempdisplay)" == ".1" ]]; then
   DISPLAY=":1$(dbget vdr.tempdisplay)"
 fi
 export DISPLAY
