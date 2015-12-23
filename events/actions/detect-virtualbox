@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$(imvirt)" == "VirtualBox" ]]; then
+if dmi-decode | grep "Version: VirtualBox" -q; then
   apt-get install -y virtualbox-guest-dkms virtualbox-guest-x11 dkms
   dbset vdr.setup=sxfe
   dbset vdr.frontend=sxfe
