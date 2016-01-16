@@ -1,5 +1,10 @@
 <?cs if:(vdr.plugin.graphtft.enabled == "1") ?>
 post-stop script 
+
+test -f /etc/default/graphtft-fe && . /etc/default/graphtft-fe
+if [[ $GRAPHTFT_FE != 1 ]]; then
+  vdr-dbus-fast /Plugins/graphtftng plugin.SVDRPCommand string:DETA string: ||:
+fi
 /usr/bin/hsetroot -center /usr/share/yavdr/images/yavdr_logo.png
 end script
 <?cs /if ?>
