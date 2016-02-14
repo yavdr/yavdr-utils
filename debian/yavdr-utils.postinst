@@ -12,11 +12,12 @@ case "$1" in
         mkdir -p /etc/avahi-linker/
 
        /usr/bin/service tntnet restart || /bin/true
-        [ -f /var/lib/yavdrdb.hdf ] && signal-event post-upgrade
         
         if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
-            . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
+            . /etc/yavdr/yavdr-release; /usr/bin/dbset "system.yavdr.version=${YAVDR_VERSION}";
         fi
+        
+        [ -f /var/lib/yavdrdb.hdf ] && signal-event post-upgrade
 
         /bin/sh /usr/lib/vdr/vdr-groups.sh --add yavdr-utils
 
