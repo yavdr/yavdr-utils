@@ -23,6 +23,7 @@ import gobject
 import sys
 import uinput
 import datetime
+import time
 from threading import Timer
 from optparse import OptionParser
 

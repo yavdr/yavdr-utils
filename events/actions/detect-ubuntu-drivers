@@ -1,4 +1,15 @@
 #!/bin/bash
+# detect helper
+#check_pci() {
+#  lspci -nv | grep -i -q "Subsystem: $1"
+#}
 
-# autoinstall recommended drivers
-ubuntu-drivers autoinstall
+# skip driver autoinstall for some older nvidia cards:
+#for nvidia_pci_id in "10de:0848" "10de:0849" "10de:0876"; do
+#    check_pci "$nvidia_pci_id" && exit 0
+#done
+# autoinstall recommended drivers, write installed packages to /etc/yavdr/autoinstalled
+ubuntu-drivers --package-list /etc/yavdr/autoinstalled autoinstall
+# remove other nvidia drivers
+#[ $(grep "^nvidia-[[:digit:]]\+" /etc/yavdr/autoinstalled | wc -l) -gt 0 ] && \
+#dpkg -l | grep -Po '(?<=^ii\s\s)nvidia-(?!settings)\w+' | grep -vf /etc/yavdr/autoinstalled | xargs apt-get remove -y

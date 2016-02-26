@@ -1,0 +1,3 @@
+if [[ ! -f /etc/X11/xorg.conf.yavdr ]]; then
+    process-template /etc/X11/xorg.conf.yavdr
+fi
