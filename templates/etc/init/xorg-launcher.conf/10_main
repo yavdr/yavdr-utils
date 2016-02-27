@@ -11,6 +11,16 @@ respawn
 env DISPLAY=:1
 env XORGCONFIG=/etc/X11/xorg.conf.yavdr
 
+pre-start script
+# if this is our first start, (re)create /etc/X11/xorg.conf.yavdr from templates
+[[ -e /etc/init/first-vdr-start.conf ]] && process-template /etc/X11/xorg.conf.yavdr
+
+# if xorg.conf.yavdr does not exist, create it
+if [[ ! -f /etc/X11/xorg.conf.yavdr ]]; then
+    process-template /etc/X11/xorg.conf.yavdr
+fi
+end script
+
 script
 
 if [ -e /etc/default/locale ]; then
