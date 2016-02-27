@@ -12,6 +12,8 @@ env DISPLAY=:1
 env XORGCONFIG=/etc/X11/xorg.conf.yavdr
 
 pre-start script
+# check if we got an nvidia card
+nvidia-smi && dbset "system.hardware.nvidia.detected=1" ||  dbset "system.hardware.nvidia.detected=0"
 # if this is our first start, (re)create /etc/X11/xorg.conf.yavdr from templates
 [[ -e /etc/init/first-vdr-start.conf ]] && process-template /etc/X11/xorg.conf.yavdr
 
