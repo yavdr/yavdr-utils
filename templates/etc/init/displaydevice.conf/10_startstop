@@ -1,1 +1,1 @@
-start on local-filesystems  #mounted MOUNTPOINT=/ reicht nicht
+start on runlevel[2345] and starting xorg-launcher  #mounted MOUNTPOINT=/ reicht nicht
