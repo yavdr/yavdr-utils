@@ -1,4 +1,5 @@
 XINELIBOUTPUTOPTS="--post tvtime:method=use_vo_driver --reconnect --audio=<?cs if:(system.sound.type == "pulse") ?>pulseaudio<?cs else ?>alsa<?cs /if ?> --syslog --silent --tcp --nocec"
-if [ $(imvirt) = "VirtualBox" ]; then
+machine="$(imvirt)"
+if [ "${machine}" = "VirtualBox" ] || [ "${machine}" = "Unknown" ] || [ ${machine} = "KVM" ]; then
 XINELIBOUTPUTOPTS="-V xshm $XINELIBOUTPUTOPTS"
 fi

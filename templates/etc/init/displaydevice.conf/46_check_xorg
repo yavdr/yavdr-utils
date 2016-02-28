@@ -1,0 +1,7 @@
+# if this is our first start, recreate /etc/X11/xorg.conf.yavdr
+[[ -e /etc/init/first-vdr-start.conf ]] && process-template /etc/X11/xorg.conf.yavdr
+
+if [[ ! -f /etc/X11/xorg.conf.yavdr ]]; then
+    process-template /etc/X11/xorg.conf.yavdr
+fi
+

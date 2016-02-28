@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ -x /usr/bin/dbset -a -f /etc/yavdr/yavdr-release ]; then 
+    . /etc/yavdr/yavdr-release; /usr/bin/dbset system.yavdr.version=$YAVDR_VERSION;
+fi
+
