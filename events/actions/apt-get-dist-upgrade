@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# see https://debian-handbook.info/browse/stable/sect.automatic-upgrades.html section 5.8.5
+# see https://debian-handbook.info/browse/stable/sect.automatic-upgrades.html section 6.8.5
 export DEBIAN_FRONTEND=noninteractive
 yes '' | apt-get -y -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" dist-upgrade
