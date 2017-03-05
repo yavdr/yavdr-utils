@@ -163,10 +163,14 @@ class main:
             gobject.io_add_watch(self.sock, gobject.IO_IN, self.handler)
             
     def handler(self, sock, *args):
-        try:
-             gobject.source_remove(self.timer)
-             #print "removed timer"
-        except: pass
+        if self.timer is not None:
+            try:
+                 gobject.source_remove(self.timer)
+                 #print "removed timer"
+            except:
+                pass
+            finally:
+                self.timer = None
         buf = self.sock.recv(1024)
         lines = string.split(buf, "\n")
         for line in lines[:-1]:
