@@ -1,1 +1,1 @@
-exec /usr/lib/kodi/kodi.bin --standalone --lircdev /var/run/lirc/lircd
+exec kodi --standalone --lircdev /var/run/lirc/lircd
