@@ -19,5 +19,8 @@ export graphtftng_view
 # possible values: 0 (attach frontend at manual start), 1 (always start detached) or 2 (always attach frontend - CAUTION: after attaching VDR thinks user is active)
 env start_always_detached=0
 export start_always_detached
+# use svdrp instead of dbus2vdr to detach the frontend (workaround for nvidia-304)
+env use_svdrp_for_detach=0
+export use_svdrp_for_detach
 <?cs /if ?>
 

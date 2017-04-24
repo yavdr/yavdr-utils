@@ -1,4 +1,4 @@
 #!/bin/bash
 
-mkdir -p /var/lib/vdr/.xbmc
-chown -R vdr:vdr /var/lib/vdr/.xbmc
+mkdir -p /var/lib/vdr/.kodi
+chown -R vdr:vdr /var/lib/vdr/.kodi
