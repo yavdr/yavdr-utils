@@ -8,5 +8,10 @@ if [ -r /etc/default/locale ]; then
 	export LANG LANGUAGE LC_CTYPE=$LANG
 fi
 
+NVDIA_DRIVER_VERSION=$(nvidia-smi 2> /dev/null | grep -Poi "(?<=Driver Version: )\d+") || :
+if [ "$NVDIA_DRIVER_VERSION" = "304" ]; then
+  export use_svdrp_for_detach=1
+fi
+
 exec on_vdr -c "python /usr/bin/frontend"
 
